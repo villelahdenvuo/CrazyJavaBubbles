@@ -12,6 +12,10 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <finalName>${project.artifactId}-${project.version}.jar</finalName>
+        <main.class>com.tuhoojabotti.crazyjavabubbles.Game</main.class>
+        <natives>${basedir}/target/natives/</natives>
+        <release.natives>natives/</release.natives>        
     </properties>
 
     <dependencies>
@@ -21,6 +25,16 @@
             <version>4.10</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.newdawn.slick</groupId>
+            <artifactId>slick</artifactId>
+            <version>0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lwjgl.lwjgl</groupId>
+            <artifactId>lwjgl</artifactId>
+            <version>2.9.1</version>
+        </dependency>        
     </dependencies>
     
     <build>
@@ -32,7 +46,21 @@
                     <target>1.7</target>
                 </configuration>
                 <version>2.5</version>
-            </plugin>
+            </plugin>            
+            <plugin>
+                <groupId>com.googlecode.mavennatives</groupId>
+                <artifactId>maven-nativedependencies-plugin</artifactId>
+                <version>0.0.5</version>
+                <executions>
+                    <execution>
+                        <id>unpacknatives</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>            
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
