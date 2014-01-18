@@ -4,3 +4,4 @@
  * 16.1.2014 &ndash; **4h** &ndash; *Uusi yritys repon pystytykseen*
    * Loput viikon yksi tehtävistä
    * LWJGL + Slick2D konffittu (tulee kiva release zip joka sisältää run.sh ja run.bat :clap:)
+ * 18.1.2014 &ndash; **5h** &ndash; *SplashScreen ja päävalikonalku*
