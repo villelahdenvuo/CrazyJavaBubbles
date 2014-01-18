@@ -59,6 +59,6 @@ public class Bubble extends Point2D.Double implements Drawable {
     @Override
     public void render(Graphics g) {
         g.setColor(color);
-        g.fillOval((int) x, (int) y, 20, 20);
+        g.fillOval((int) x, (int) y, 32, 32);
     }
 }

@@ -23,53 +23,55 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.gui;
 
-import org.newdawn.slick.AppGameContainer;
+import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
+import java.awt.Font;
+import java.util.ArrayList;
+import java.util.Random;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
  *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
-public class Application extends StateBasedGame {
+public class MainMenu extends BasicGameState {
 
-    // Game state identifiers
-    public static final int SPLASHSCREEN = 0;
-    public static final int MAINMENU = 1;
-    public static final int GAME = 2;
+    private final int ID;
+    private ArrayList<Bubble> renderables;
+    private Random rand;
+    private Text titleText;
 
-    // Application Properties
-    public static final int WIDTH = 800;
-    public static final int HEIGHT = 600;
-    public static final int FPS = 60;
-    public static final double VERSION = 1.0;
-
-    // Class Constructor
-    public Application(String appName) {
-        super(appName);
+    MainMenu(int id) {
+        ID = id;
     }
 
-    // Initialize your game states (calls init method of each gamestate, and set's the state ID)
     @Override
-    public void initStatesList(GameContainer gc) throws SlickException {
-        // The first state added will be the one that is loaded first, when the application is launched
-        this.addState(new SplashScreen(SPLASHSCREEN));
-        this.addState(new MainMenu(MAINMENU));
-//        this.addState(new Game(GAME));
+    public int getID() {
+        return ID;
     }
 
-    // Main Method
-    public void run() {
-        try {
-            AppGameContainer app = new AppGameContainer(this);
-            app.setDisplayMode(WIDTH, HEIGHT, false);
-            app.setTargetFrameRate(FPS);
-            app.setShowFPS(true);
-            app.start();
-        } catch (SlickException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+        renderables = new ArrayList<>();
+        rand = new Random();
+        
+        titleText = new Text("Calibri", Font.BOLD, 80);
+        titleText.setAlign(Text.ALIGN_CENTER);
     }
 
+    @Override
+    public void render(GameContainer gc, StateBasedGame game, Graphics gfx) throws SlickException {
+        gfx.setColor(Color.white);
+        titleText.draw(gc.getWidth() / 2, 50, "Crazy Bubbles");
+
+    }
+
+    @Override
+    public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
+
+    }
 }

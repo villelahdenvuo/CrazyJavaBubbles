@@ -21,18 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.tuhoojabotti.crazyjavabubbles.gui;
 
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Random;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.UnicodeFont;
+import org.newdawn.slick.font.effects.ColorEffect;
+import org.newdawn.slick.opengl.TextureImpl;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.BlobbyTransition;
+import org.newdawn.slick.state.transition.EmptyTransition;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
+import org.newdawn.slick.state.transition.RotateTransition;
+import org.newdawn.slick.state.transition.Transition;
 
 /**
  *
@@ -41,9 +53,11 @@ import org.newdawn.slick.state.StateBasedGame;
 public class SplashScreen extends BasicGameState {
 
     private final int ID;
-    private ArrayList<Bubble> renderables;
+    private ArrayList<Bubble> bubbles;
     private Random rand;
-    
+    private Text titleText;
+    private Text authorText;
+
     SplashScreen(int id) {
         ID = id;
     }
@@ -55,34 +69,49 @@ public class SplashScreen extends BasicGameState {
 
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        renderables = new ArrayList<>();
+        bubbles = new ArrayList<>();
         rand = new Random();
-        
-        for (int i = 0; i < 500; i++) {
-            renderables.add(new Bubble(rand.nextInt(gc.getScreenWidth())-20, -20-rand.nextInt(gc.getScreenHeight())));
+
+        titleText = new Text("Calibri", Font.BOLD, 80);
+        titleText.setAlign(Text.ALIGN_CENTER);
+        authorText = new Text("Calibri", Font.BOLD, 30);
+        authorText.setAlign(Text.ALIGN_CENTER);
+
+        for (int i = 0; i < 100; i++) {
+            bubbles.add(new Bubble(rand.nextInt(gc.getWidth()) - 20, -20 - rand.nextInt(gc.getHeight())));
         }
+
+        TextureImpl.bindNone();
     }
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics gfx) throws SlickException {
-        gfx.setColor(Color.white);
-        gfx.drawString("Hello!", 10, 30);
-        
-        for (Drawable drawable : renderables) {
+        gfx.setAntiAlias(true);
+        for (Drawable drawable : bubbles) {
             drawable.render(gfx);
         }
+        gfx.setAntiAlias(false);
+
+        titleText.draw(gc.getWidth() / 2, 50, "Crazy Bubbles");
+        authorText.draw(gc.getWidth() / 2, 160, "by Ville 'Tuhis' Lahdenvuo", Color.gray);
+        authorText.draw(gc.getWidth() / 2, 200, "for JavaLabra 2014", Color.gray);
     }
 
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
         long t = gc.getTime();
-        
-        for (Bubble b : renderables) {
-            b.setLocation(b.getX() + Math.sin(t / 100) * rand.nextDouble() * 10, b.getY() + 0.5 * i);
-            if (b.getY() > gc.getScreenHeight()) {
-                b.setLocation(rand.nextInt(gc.getScreenWidth())-20, -20-rand.nextInt(200));
+        boolean end = true;
+
+        for (Bubble b : bubbles) {
+            b.setLocation(b.getX() + Math.sin(t / 200) * rand.nextDouble() * 10, b.getY() + 0.6 * i);
+            if (b.getY() < 0) {
+                end = false;
             }
         }
+
+        if (end) {
+            sbg.enterState(Application.MAINMENU, new EmptyTransition(), new RotateTransition());
+        }
     }
-    
+
 }
