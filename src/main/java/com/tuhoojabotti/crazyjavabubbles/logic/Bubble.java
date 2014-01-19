@@ -23,11 +23,9 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.logic;
 
-import com.tuhoojabotti.crazyjavabubbles.gui.Drawable;
 import java.awt.geom.Point2D;
 import java.util.Random;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
 
 /**
  *
