@@ -40,14 +40,15 @@ public class Application extends StateBasedGame {
     public static final int GAME = 2;
 
     // Application Properties
+    public static final String NAME = "Crazy Bubbles";
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
     public static final int FPS = 60;
     public static final double VERSION = 1.0;
 
     // Class Constructor
-    public Application(String appName) {
-        super(appName);
+    public Application() {
+        super(NAME);
     }
 
     // Initialize your game states (calls init method of each gamestate, and set's the state ID)
