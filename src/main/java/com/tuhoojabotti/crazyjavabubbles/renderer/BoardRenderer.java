@@ -21,57 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.tuhoojabotti.crazyjavabubbles.logic;
+package com.tuhoojabotti.crazyjavabubbles.renderer;
 
-import com.tuhoojabotti.crazyjavabubbles.gui.Drawable;
-import java.awt.geom.Point2D;
-import java.util.Random;
-import org.newdawn.slick.Color;
+import com.tuhoojabotti.crazyjavabubbles.logic.*;
 import org.newdawn.slick.Graphics;
 
 /**
  *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
-public class Bubble extends Point2D.Double {
+public class BoardRenderer {
 
-    private Color color;
+    private Graphics gfx;
+    private BubbleRenderer bubbleRenderer;
 
-    public Bubble(int x, int y) {
-        super(x, y);
+    public BoardRenderer(Graphics gfx) {
+        this.gfx = gfx;
+        bubbleRenderer = new BubbleRenderer(gfx);
+    }
 
-        Random rand = new Random();
+    public void render(Board b, int x, int y) {
+        int br = RenderSettings.BUBBLE_RADIUS;
+        Bubble[][] bubbles = b.getBubbles();
 
-        switch (rand.nextInt(4)) {
-            case 0:
-                this.color = Color.red;
-                break;
-            case 1:
-                this.color = Color.blue;
-                break;
-            case 2:
-                this.color = Color.green;
-                break;
-            case 3:
-                this.color = Color.yellow;
-                break;
+        gfx.setAntiAlias(true);
+        for (int y2 = 0; y2 < bubbles.length; y2++) {
+            for (int x2 = 0; x2 < bubbles[0].length; x2++) {
+                bubbleRenderer.render(bubbles[y2][x2], x + x2 * br, y + y2 * br);
+            }
         }
+        gfx.setAntiAlias(false);
     }
-
-    public Bubble(Color color, int x, int y) {
-        super(x, y);
-        this.color = color;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public boolean equals(Bubble b) {
-        if (b == null) {
-            return false;
-        }
-        return color.equals(b.color);
-    }
-
 }

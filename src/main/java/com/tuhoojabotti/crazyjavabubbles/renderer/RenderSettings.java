@@ -21,57 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.tuhoojabotti.crazyjavabubbles.logic;
 
-import com.tuhoojabotti.crazyjavabubbles.gui.Drawable;
-import java.awt.geom.Point2D;
-import java.util.Random;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
+package com.tuhoojabotti.crazyjavabubbles.renderer;
 
 /**
  *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
-public class Bubble extends Point2D.Double {
-
-    private Color color;
-
-    public Bubble(int x, int y) {
-        super(x, y);
-
-        Random rand = new Random();
-
-        switch (rand.nextInt(4)) {
-            case 0:
-                this.color = Color.red;
-                break;
-            case 1:
-                this.color = Color.blue;
-                break;
-            case 2:
-                this.color = Color.green;
-                break;
-            case 3:
-                this.color = Color.yellow;
-                break;
-        }
-    }
-
-    public Bubble(Color color, int x, int y) {
-        super(x, y);
-        this.color = color;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public boolean equals(Bubble b) {
-        if (b == null) {
-            return false;
-        }
-        return color.equals(b.color);
-    }
-
+public class RenderSettings {
+    public static final int BUBBLE_RADIUS = 32;
 }

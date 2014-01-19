@@ -21,57 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.tuhoojabotti.crazyjavabubbles.logic;
+package com.tuhoojabotti.crazyjavabubbles.renderer;
 
-import com.tuhoojabotti.crazyjavabubbles.gui.Drawable;
-import java.awt.geom.Point2D;
-import java.util.Random;
-import org.newdawn.slick.Color;
+import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import org.newdawn.slick.Graphics;
 
 /**
  *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
-public class Bubble extends Point2D.Double {
+public class BubbleRenderer {
 
-    private Color color;
+    private Graphics gfx;
+    private int r = RenderSettings.BUBBLE_RADIUS;
 
-    public Bubble(int x, int y) {
-        super(x, y);
-
-        Random rand = new Random();
-
-        switch (rand.nextInt(4)) {
-            case 0:
-                this.color = Color.red;
-                break;
-            case 1:
-                this.color = Color.blue;
-                break;
-            case 2:
-                this.color = Color.green;
-                break;
-            case 3:
-                this.color = Color.yellow;
-                break;
-        }
+    public BubbleRenderer(Graphics gfx) {
+        this.gfx = gfx;
     }
 
-    public Bubble(Color color, int x, int y) {
-        super(x, y);
-        this.color = color;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public boolean equals(Bubble b) {
+    public void render(Bubble b, int x, int y) {
         if (b == null) {
-            return false;
+            return;
         }
-        return color.equals(b.color);
+        gfx.setColor(b.getColor());
+        gfx.fillOval(x, y, r, r);
     }
-
 }

@@ -21,57 +21,51 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.tuhoojabotti.crazyjavabubbles.logic;
 
-import com.tuhoojabotti.crazyjavabubbles.gui.Drawable;
-import java.awt.geom.Point2D;
-import java.util.Random;
-import org.newdawn.slick.Color;
+package com.tuhoojabotti.crazyjavabubbles.gui;
+
+import com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogic;
+import com.tuhoojabotti.crazyjavabubbles.renderer.CrazyGameRenderer;
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.StateBasedGame;
 
 /**
  *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
-public class Bubble extends Point2D.Double {
+public class CrazyGame extends BasicGameState {
+    
+    private final int ID;
+    private CrazyGameLogic logic;
+    private CrazyGameRenderer renderer;
 
-    private Color color;
-
-    public Bubble(int x, int y) {
-        super(x, y);
-
-        Random rand = new Random();
-
-        switch (rand.nextInt(4)) {
-            case 0:
-                this.color = Color.red;
-                break;
-            case 1:
-                this.color = Color.blue;
-                break;
-            case 2:
-                this.color = Color.green;
-                break;
-            case 3:
-                this.color = Color.yellow;
-                break;
-        }
+    CrazyGame(int id) {
+        ID = id;
     }
 
-    public Bubble(Color color, int x, int y) {
-        super(x, y);
-        this.color = color;
+    @Override
+    public int getID() {
+        return ID;
     }
 
-    public Color getColor() {
-        return color;
+    @Override
+    public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+        logic = new CrazyGameLogic();
+        logic.init();
+        logic.pop(5, 5);
+        renderer = new CrazyGameRenderer(gc.getGraphics());
     }
 
-    public boolean equals(Bubble b) {
-        if (b == null) {
-            return false;
-        }
-        return color.equals(b.color);
+    @Override
+    public void render(GameContainer gc, StateBasedGame sbg, Graphics grphcs) throws SlickException {
+        renderer.render(logic);
     }
 
+    @Override
+    public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
+    }
+    
 }

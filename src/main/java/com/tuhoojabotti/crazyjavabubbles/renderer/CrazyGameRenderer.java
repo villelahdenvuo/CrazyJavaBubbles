@@ -21,19 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package com.tuhoojabotti.crazyjavabubbles.renderer;
 
-package com.tuhoojabotti.crazyjavabubbles.logic;
+import com.tuhoojabotti.crazyjavabubbles.gui.Text;
+import com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogic;
+import java.awt.Font;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 
 /**
  *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
-public class Game {
+public class CrazyGameRenderer {
 
-    public Game() {
+    private Graphics gfx;
+    private BoardRenderer boardRenderer;
+    private Text scoreText;
+
+    public CrazyGameRenderer(Graphics gfx) {
+        this.gfx = gfx;
+        boardRenderer = new BoardRenderer(gfx);
+        try {
+            scoreText = new Text("Arial", Font.PLAIN, 16);
+        } catch (SlickException ex) {
+            Logger.getLogger(CrazyGameRenderer.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
-    public void start() {
+
+    public void render(CrazyGameLogic game) {
+        scoreText.draw(2, 2, "score: " + game.getScore());
         
+        boardRenderer.render(game.getBoard(), 10, 32);
     }
+
 }

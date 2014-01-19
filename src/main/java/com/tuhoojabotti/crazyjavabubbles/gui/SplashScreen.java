@@ -24,6 +24,7 @@
 package com.tuhoojabotti.crazyjavabubbles.gui;
 
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
+import com.tuhoojabotti.crazyjavabubbles.renderer.BubbleRenderer;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Random;
@@ -48,6 +49,7 @@ public class SplashScreen extends BasicGameState {
     private Random rand;
     private Text titleText;
     private Text authorText;
+    private BubbleRenderer bubbleRenderer;
 
     SplashScreen(int id) {
         ID = id;
@@ -68,6 +70,8 @@ public class SplashScreen extends BasicGameState {
         authorText = new Text("Calibri", Font.BOLD, 30);
         authorText.setAlign(Text.ALIGN_CENTER);
 
+        bubbleRenderer = new BubbleRenderer(gc.getGraphics());
+        
         for (int i = 0; i < 100; i++) {
             bubbles.add(new Bubble(rand.nextInt(gc.getWidth()) - 20, -20 - rand.nextInt(gc.getHeight())));
         }
@@ -78,8 +82,8 @@ public class SplashScreen extends BasicGameState {
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics gfx) throws SlickException {
         gfx.setAntiAlias(true);
-        for (Drawable drawable : bubbles) {
-            drawable.render(gfx);
+        for (Bubble bubble : bubbles) {
+            bubbleRenderer.render(bubble, (int) bubble.x, (int) bubble.y);
         }
         gfx.setAntiAlias(false);
 
@@ -94,14 +98,14 @@ public class SplashScreen extends BasicGameState {
         boolean end = true;
 
         for (Bubble b : bubbles) {
-            b.setLocation(b.getX() + Math.sin(t / 200) * rand.nextDouble() * 10, b.getY() + 0.6 * i);
+            b.setLocation(b.getX() + Math.sin(t / 200) * rand.nextDouble() * 10, b.getY() + 0.5 * i);
             if (b.getY() < 0) {
                 end = false;
             }
         }
 
         if (end) {
-            sbg.enterState(Application.MAINMENU, new EmptyTransition(), new RotateTransition());
+            sbg.enterState(Application.GAME, new EmptyTransition(), new RotateTransition());
         }
     }
 
