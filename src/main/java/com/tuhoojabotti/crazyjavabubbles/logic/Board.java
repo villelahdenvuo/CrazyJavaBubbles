@@ -23,8 +23,10 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.logic;
 
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Set;
 
 /**
  *
@@ -32,17 +34,28 @@ import org.newdawn.slick.Graphics;
  */
 public class Board {
 
-    private Bubble[][] bubbles;
-    private int width;
-    private int height;
+    private final Bubble[][] bubbles;
+    private Set<Bubble> selection;
+    private final int width;
+    private final int height;
 
+    /**
+     * Create new game board.
+     *
+     * @param w width
+     * @param h height
+     */
     public Board(int w, int h) {
         bubbles = new Bubble[h][w];
         width = w;
         height = h;
     }
 
+    /**
+     * Initialise game board.
+     */
     public void init() {
+        selection = new HashSet<>();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 bubbles[y][x] = new Bubble(x, y);
@@ -50,9 +63,81 @@ public class Board {
         }
     }
 
+    /**
+     * Pop (remove) selected {@link Bubble}s from the board.
+     *
+     * @return amount of bubbles popped
+     */
+    public int pop() {
+        // Can't pop if selection is smaller than 2.
+        if (selection.size() < 2) {
+            return -1;
+        }
+
+        // Remove selected bubbles from the board.
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (selection.contains(bubbles[y][x])) {
+                    bubbles[y][x] = null;
+                }
+            }
+        }
+
+        // Update bubble positions;
+        update();
+
+        return selection.size();
+    }
+
+    /**
+     * @return the bubbles on the board.
+     */
+    public Bubble[][] getBubbles() {
+        return bubbles;
+    }
+
+    /**
+     * Select {@link Bubble}s from the board.
+     *
+     * @param x
+     * @param y
+     */
+    public void select(int x, int y) {
+        updateSelection(x, y);
+
+        for (y = 0; y < height; y++) {
+            for (x = 0; x < width; x++) {
+                Bubble b = bubbles[y][x];
+                if (b != null) {
+                    b.setSelected(selection.contains(b));
+                }
+            }
+        }
+    }
+
+    /**
+     * Check if game is over.
+     * @return whether groups exist on the board or not.
+     */
+    public boolean hasMoreMoves() {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                Bubble b = bubbles[y][x];
+                if (b != null
+                        && (b.equals(get(x + 1, y))
+                        || b.equals(get(x - 1, y))
+                        || b.equals(get(x, y + 1))
+                        || b.equals(get(x, y - 1)))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private boolean isOnBoard(int x, int y) {
-        return x > 0 && x < width
-                && y > 0 && y < height && bubbles[y][x] != null;
+        return x >= 0 && x < width
+                && y >= 0 && y < height && bubbles[y][x] != null;
     }
 
     private Bubble get(int x, int y) {
@@ -62,42 +147,71 @@ public class Board {
         return bubbles[y][x];
     }
 
-    public int pop(int x, int y) {
-        int amount = 1;
+    private void updateSelection(int startX, int startY) {
+        selection.clear();
 
-        if (!isOnBoard(x, y)) {
-            return -1;
+        if (!isOnBoard(startX, startY)) {
+            return; // Nothing to select.
         }
 
-        Bubble current = bubbles[y][x];
-        bubbles[y][x] = null;
+        // Basically do a BFS on the board.
+        Queue<Bubble> queue = new LinkedList<>();
+        queue.add(get(startX, startY));
 
-        if (current.equals(get(x + 1, y))) {
-            amount += 1;
-            amount += pop(x + 1, y);
-        }
-        if (current.equals(get(x - 1, y))) {
-            amount += 1;
-            amount += pop(x - 1, y);
-        }
-        if (current.equals(get(x, y + 1))) {
-            amount += 1;
-            amount += pop(x, y + 1);
-        }
-        if (current.equals(get(x, y - 1))) {
-            amount += 1;
-            amount += pop(x, y - 1);
-        }
-        
-//        if (amount == 1) {
-//            bubbles[y][x] = current;
-//            return -1;
-//        }
+        while (!queue.isEmpty()) {
+            Bubble current = queue.poll();
+            int x = (int) current.x, y = (int) current.y;
 
-        return amount;
+            addIfOk(current, queue, x + 1, y);
+            addIfOk(current, queue, x - 1, y);
+            addIfOk(current, queue, x, y + 1);
+            addIfOk(current, queue, x, y - 1);
+            selection.add(current);
+        }
     }
 
-    public Bubble[][] getBubbles() {
-        return bubbles;
+    private void addIfOk(Bubble current, Queue<Bubble> queue, int x, int y) {
+        Bubble next = get(x, y);
+        if (current.equals(next) && !selection.contains(next)) {
+            queue.add(next);
+        }
+    }
+
+    private void update() {
+        boolean moved = false;
+
+        // Move bubbles down.
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                Bubble b = bubbles[y][x];
+                if (b == null && isOnBoard(x, y - 1)) {
+                    moved = true;
+                    moveBubble(get(x, y - 1), x, y);
+                }
+            }
+        }
+
+        // Move columns left.
+        for (int x = 0; x < width; x++) {
+            if (!isOnBoard(x, height - 1) && isOnBoard(x + 1, height - 1)) {
+                moved = true;
+                for (int y = 0; y < height; y++) {
+                    if (isOnBoard(x + 1, y)) {
+                        moveBubble(get(x + 1, y), x, y);
+                    }
+                }
+            }
+        }
+
+        // Run update until we didn't move anything.
+        if (moved) {
+            update();
+        }
+    }
+
+    private void moveBubble(Bubble b, int x, int y) {
+        bubbles[(int) b.y][(int) b.x] = null;
+        b.setLocation(x, y);
+        bubbles[y][x] = b;
     }
 }

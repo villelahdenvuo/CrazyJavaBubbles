@@ -21,20 +21,59 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.tuhoojabotti.crazyjavabubbles.renderer;
+
+package com.tuhoojabotti.crazyjavabubbles.logic;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
+ *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
-public class RenderSettings {
+public class BoardTest {
+    
+    Board board;
+    
+    public BoardTest() {
+    }
+    
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() {
+        board = new Board(24, 17);
+        board.init();
+    }
+    
+    @After
+    public void tearDown() {
+    }
 
     /**
-     * Size of the {@link Bubble}s.
+     * Test of init method, of class Board.
      */
-    public static final int BUBBLE_RADIUS = 32;
+    @Test
+    public void testInit() {
+        assertTrue(board.hasMoreMoves());
+    }
 
     /**
-     * Margin where to draw the {@link Board}.
+     * Test of pop method, of class Board.
      */
-    public static final int BOARD_MARGIN = 15;
+    @Test
+    public void testPopWithEmptySelection() {
+        int result = board.pop();
+        assertEquals(-1, result);
+    }
 }

@@ -28,48 +28,57 @@ import java.util.Random;
 import org.newdawn.slick.Color;
 
 /**
- *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class Bubble extends Point2D.Double {
 
-    private Color color;
+    private final Color color;
+    private boolean selected;
 
+    /**
+     * Create a new Bubble.
+     *
+     * @param x
+     * @param y
+     */
     public Bubble(int x, int y) {
         super(x, y);
+        selected = false;
 
-        Random rand = new Random();
-
-        switch (rand.nextInt(4)) {
-            case 0:
-                this.color = Color.red;
-                break;
-            case 1:
-                this.color = Color.blue;
-                break;
-            case 2:
-                this.color = Color.green;
-                break;
-            case 3:
-                this.color = Color.yellow;
-                break;
-        }
+        this.color = new Color[]{
+            Color.red, Color.blue, Color.green, Color.yellow
+        }[new Random().nextInt(4)];
     }
 
-    public Bubble(Color color, int x, int y) {
-        super(x, y);
-        this.color = color;
+    /**
+     * @param selected whether the bubble is selected or not
+     */
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
+    /**
+     * @return whether the bubble is selected or not
+     */
+    public boolean isSelected() {
+        return selected;
+    }
+
+    /**
+     * @return the colour of the bubble
+     */
     public Color getColor() {
         return color;
     }
 
+    /**
+     * @param b bubble to compare to
+     * @return whether two bubbles are the same colour or not
+     */
     public boolean equals(Bubble b) {
         if (b == null) {
             return false;
         }
         return color.equals(b.color);
     }
-
 }

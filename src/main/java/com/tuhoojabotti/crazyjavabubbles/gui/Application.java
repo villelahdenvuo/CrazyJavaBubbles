@@ -34,23 +34,59 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class Application extends StateBasedGame {
 
-    // Game state identifiers
+    /**
+     * The splash screen.
+     */
     public static final int SPLASHSCREEN = 0;
+
+    /**
+     * The main menu.
+     */
     public static final int MAINMENU = 1;
+
+    /**
+     * The game itself.
+     */
     public static final int GAME = 2;
 
-    // Application Properties
+    /**
+     * Name of the game, used as the title of the window.
+     */
     public static final String NAME = "Crazy Bubbles";
+
+    /**
+     * Width of the window.
+     */
     public static final int WIDTH = 800;
+
+    /**
+     * Height of the window.
+     */
     public static final int HEIGHT = 600;
+
+    /**
+     * Preferred framerate.
+     */
     public static final int FPS = 60;
+
+    /**
+     * Version of the game.
+     */
     public static final double VERSION = 1.0;
 
+    /**
+     * Creates a new Application.
+     */
     public Application() {
         super(NAME);
     }
 
-    // Initialize your game states (calls init method of each gamestate, and set's the state ID)
+    /**
+     * Calls init method of each game state, and set's the state ID.
+     *
+     * @param gc game container
+     * @throws SlickException
+     */
     @Override
     public void initStatesList(GameContainer gc) throws SlickException {
 //        this.addState(new SplashScreen(SPLASHSCREEN));
@@ -58,7 +94,9 @@ public class Application extends StateBasedGame {
         this.addState(new CrazyGame(GAME));
     }
 
-    // Main Method
+    /**
+     * Run the application.
+     */
     public void run() {
         try {
             AppGameContainer app = new AppGameContainer(this);

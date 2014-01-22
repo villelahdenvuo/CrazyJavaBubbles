@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.tuhoojabotti.crazyjavabubbles.logic;
+
+import java.awt.Point;
 
 /**
  *
@@ -31,26 +32,63 @@ package com.tuhoojabotti.crazyjavabubbles.logic;
 public class CrazyGameLogic {
 
     private int score;
-    private Board board;
-    
+    private final Board board;
+
+    /**
+     * Create new {@link CrazyGame} logic.
+     */
     public CrazyGameLogic() {
-        board = new Board(20, 15);
+        board = new Board(24, 17);
     }
-    
+
+    /**
+     * Initialise the logic.
+     */
     public void init() {
         board.init();
         score = 0;
     }
 
+    /**
+     * @return whether game is over.
+     */
+    public boolean isGameOver() {
+        return !board.hasMoreMoves();
+    }
+    
+    /**
+     * Returns score of the game.
+     *
+     * @return score of the game
+     */
     public int getScore() {
         return score;
     }
 
+    /**
+     * @return the game board
+     */
     public Board getBoard() {
         return board;
     }
-    
-    public void pop(int x, int y) {
-        board.pop(x, y);
+
+    /**
+     * Pop the currently selected {@link Bubble}s.
+     */
+    public void pop() {
+        int bubbles = board.pop();
+        
+        // Update score.
+        if (bubbles > 0) {
+            score += bubbles;
+        }
+    }
+
+    /**
+     * Update selection on the board.
+     * @param point where the selection starts
+     */
+    public void select(Point point) {
+        board.select(point.x, point.y);
     }
 }

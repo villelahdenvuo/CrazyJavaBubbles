@@ -23,10 +23,8 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.gui;
 
-import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
+import com.tuhoojabotti.crazyjavabubbles.renderer.TextRenderer;
 import java.awt.Font;
-import java.util.ArrayList;
-import java.util.Random;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -41,37 +39,62 @@ import org.newdawn.slick.state.StateBasedGame;
 public class MainMenu extends BasicGameState {
 
     private final int ID;
-    private ArrayList<Bubble> renderables;
-    private Random rand;
-    private Text titleText;
+    private TextRenderer titleText;
 
-    MainMenu(int id) {
-        ID = id;
+    /**
+     * Create a new main menu.
+     *
+     * @param ID the id of this game state
+     */
+    public MainMenu(int ID) {
+        this.ID = ID;
     }
 
+    /**
+     * @return the ID of this state
+     */
     @Override
     public int getID() {
         return ID;
     }
 
+    /**
+     * Initialise the main menu.
+     *
+     * @param gc game container
+     * @param sbg game itself
+     * @throws SlickException
+     */
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        renderables = new ArrayList<>();
-        rand = new Random();
-        
-        titleText = new Text("Calibri", Font.BOLD, 80);
-        titleText.setAlign(Text.ALIGN_CENTER);
+        titleText = new TextRenderer("Calibri", Font.BOLD, 80);
+        titleText.setHorizontalAlign(TextRenderer.ALIGN_CENTER);
     }
 
+    /**
+     * Render the main menu.
+     *
+     * @param gc game container
+     * @param game game itself
+     * @param gfx graphics controller
+     * @throws SlickException
+     */
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics gfx) throws SlickException {
         gfx.setColor(Color.white);
-        titleText.draw(gc.getWidth() / 2, 50, "Crazy Bubbles");
+        titleText.render(gc.getWidth() / 2, 50, "Crazy Bubbles");
 
     }
 
+    /**
+     * Update the main menu.
+     *
+     * @param gc game container
+     * @param sbg game itself
+     * @param i delta time
+     * @throws SlickException
+     */
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
-
     }
 }

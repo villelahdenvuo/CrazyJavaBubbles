@@ -23,6 +23,7 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.gui;
 
+import com.tuhoojabotti.crazyjavabubbles.renderer.TextRenderer;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import com.tuhoojabotti.crazyjavabubbles.renderer.BubbleRenderer;
 import java.awt.Font;
@@ -47,31 +48,46 @@ public class SplashScreen extends BasicGameState {
     private final int ID;
     private ArrayList<Bubble> bubbles;
     private Random rand;
-    private Text titleText;
-    private Text authorText;
+    private TextRenderer titleText;
+    private TextRenderer authorText;
     private BubbleRenderer bubbleRenderer;
 
-    SplashScreen(int id) {
-        ID = id;
+    /**
+     * Create a new splash screen.
+     *
+     * @param ID the ID of this state
+     */
+    public SplashScreen(int ID) {
+        this.ID = ID;
     }
 
+    /**
+     * @return the ID of this state
+     */
     @Override
     public int getID() {
         return ID;
     }
 
+    /**
+     * Initialise the splash screen.
+     *
+     * @param gc game container
+     * @param sbg game itself
+     * @throws SlickException
+     */
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         bubbles = new ArrayList<>();
         rand = new Random();
 
-        titleText = new Text("Calibri", Font.BOLD, 80);
-        titleText.setAlign(Text.ALIGN_CENTER);
-        authorText = new Text("Calibri", Font.BOLD, 30);
-        authorText.setAlign(Text.ALIGN_CENTER);
+        titleText = new TextRenderer("Calibri", Font.BOLD, 80);
+        titleText.setHorizontalAlign(TextRenderer.ALIGN_CENTER);
+        authorText = new TextRenderer("Calibri", Font.BOLD, 30);
+        authorText.setHorizontalAlign(TextRenderer.ALIGN_CENTER);
 
         bubbleRenderer = new BubbleRenderer(gc.getGraphics());
-        
+
         for (int i = 0; i < 100; i++) {
             bubbles.add(new Bubble(rand.nextInt(gc.getWidth()) - 20, -20 - rand.nextInt(gc.getHeight())));
         }
@@ -79,6 +95,14 @@ public class SplashScreen extends BasicGameState {
         TextureImpl.bindNone();
     }
 
+    /**
+     * Render the splash screen.
+     *
+     * @param gc game container
+     * @param game game itself
+     * @param gfx graphics controller
+     * @throws SlickException
+     */
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics gfx) throws SlickException {
         gfx.setAntiAlias(true);
@@ -87,11 +111,19 @@ public class SplashScreen extends BasicGameState {
         }
         gfx.setAntiAlias(false);
 
-        titleText.draw(gc.getWidth() / 2, 50, "Crazy Bubbles");
-        authorText.draw(gc.getWidth() / 2, 160, "by Ville 'Tuhis' Lahdenvuo", Color.gray);
-        authorText.draw(gc.getWidth() / 2, 200, "for JavaLabra 2014", Color.gray);
+        titleText.render(gc.getWidth() / 2, 50, "Crazy Bubbles");
+        authorText.render(gc.getWidth() / 2, 160, "by Ville 'Tuhis' Lahdenvuo", Color.gray);
+        authorText.render(gc.getWidth() / 2, 200, "for JavaLabra 2014", Color.gray);
     }
 
+    /**
+     * Update the splash screen.
+     *
+     * @param gc game container
+     * @param sbg game itself
+     * @param i delta time
+     * @throws SlickException
+     */
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
         long t = gc.getTime();
@@ -108,5 +140,4 @@ public class SplashScreen extends BasicGameState {
             sbg.enterState(Application.GAME, new EmptyTransition(), new RotateTransition());
         }
     }
-
 }

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.tuhoojabotti.crazyjavabubbles.gui;
+package com.tuhoojabotti.crazyjavabubbles.renderer;
 
 import java.awt.Font;
 import org.newdawn.slick.Color;
@@ -33,43 +33,83 @@ import org.newdawn.slick.font.effects.ColorEffect;
  *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
-public class Text {
+public class TextRenderer {
 
     public static final int ALIGN_LEFT = 0, ALIGN_RIGHT = 1, ALIGN_CENTER = 2;
+    public static final int ALIGN_TOP = 0, ALIGN_MIDDLE = 1, ALIGN_BOTTOM = 2;
     private final UnicodeFont U_FONT;
 
-    private int align = ALIGN_LEFT;
+    private int horizontalAlign = ALIGN_LEFT;
+    private int verticalAlign = ALIGN_TOP;
 
-    public Text(String f, int style, int size) throws SlickException {
-        Font font = new Font(f, style, size);
+    /**
+     * Create a new text renderer.
+     * 
+     * @param fontName font to use
+     * @param style style of the font (e.g. Font.BOLD)
+     * @param size size of the font
+     * @throws SlickException
+     */
+    public TextRenderer(String fontName, int style, int size) throws SlickException {
+        Font font = new Font(fontName, style, size);
         U_FONT = new UnicodeFont(font, font.getSize(), font.isBold(), font.isItalic());
         U_FONT.addAsciiGlyphs();
-        //uFont.addGlyphs(400, 600);
-
         U_FONT.getEffects().add(new ColorEffect(java.awt.Color.WHITE));
         U_FONT.loadGlyphs();
     }
 
-    public void setAlign(int align) {
-        this.align = align;
+    /**
+     * Set the horizontal alignment of the text.
+     * @param horizontalAlign
+     */
+    public void setHorizontalAlign(int horizontalAlign) {
+        this.horizontalAlign = horizontalAlign;
+    }
+    
+    /**
+     * Set the vertical alignment of the text.
+     * @param verticalAlign
+     */
+    public void setVerticalAlign(int verticalAlign) {
+        this.verticalAlign = verticalAlign;
     }
 
-    public void draw(int x, int y, String text) {
-        draw(x, y, text, Color.white);
+    /**
+     * Render a string with white colour.
+     * @param x
+     * @param y
+     * @param text the text to render
+     */
+    public void render(int x, int y, String text) {
+        render(x, y, text, Color.white);
     }
 
-    public void draw(int x, int y, String text, Color c) {
-        switch (align) {
-            case ALIGN_LEFT:
-                U_FONT.drawString(x, y, text, c);
-                break;
+    /**
+     * Render a string with any colour.
+     * @param x
+     * @param y
+     * @param text the text to render
+     * @param color the colour of the text
+     */
+    public void render(int x, int y, String text, Color color) {
+        switch (horizontalAlign) {
             case ALIGN_RIGHT:
-                U_FONT.drawString(x - U_FONT.getWidth(text), y, text, c);
+                x = x - U_FONT.getWidth(text);
                 break;
             case ALIGN_CENTER:
-                U_FONT.drawString(x - U_FONT.getWidth(text) / 2, y, text, c);
+                x = x - U_FONT.getWidth(text) / 2;
                 break;
         }
+        switch (verticalAlign) {
+            case ALIGN_BOTTOM:
+                y = y - U_FONT.getHeight(text);
+                break;
+            case ALIGN_MIDDLE:
+                y = y - U_FONT.getHeight(text) / 2;
+                break;
+        }
+
+        U_FONT.drawString(x, y, text, color);
     }
 
 }

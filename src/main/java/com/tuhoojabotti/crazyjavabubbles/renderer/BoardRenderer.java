@@ -24,6 +24,7 @@
 package com.tuhoojabotti.crazyjavabubbles.renderer;
 
 import com.tuhoojabotti.crazyjavabubbles.logic.*;
+import java.awt.Point;
 import org.newdawn.slick.Graphics;
 
 /**
@@ -32,14 +33,26 @@ import org.newdawn.slick.Graphics;
  */
 public class BoardRenderer {
 
-    private Graphics gfx;
-    private BubbleRenderer bubbleRenderer;
+    private final Graphics gfx;
+    private final BubbleRenderer bubbleRenderer;
 
-    public BoardRenderer(Graphics gfx) {
+    /**
+     * Create new {@link Board} renderer.
+     * 
+     * @param gfx the graphics controller
+     * @param mouse the mouse position
+     */
+    public BoardRenderer(Graphics gfx, Point mouse) {
         this.gfx = gfx;
-        bubbleRenderer = new BubbleRenderer(gfx);
+        bubbleRenderer = new BubbleRenderer(gfx, mouse);
     }
 
+    /**
+     * Render the board.
+     * @param b the board to render
+     * @param x
+     * @param y
+     */
     public void render(Board b, int x, int y) {
         int br = RenderSettings.BUBBLE_RADIUS;
         Bubble[][] bubbles = b.getBubbles();
