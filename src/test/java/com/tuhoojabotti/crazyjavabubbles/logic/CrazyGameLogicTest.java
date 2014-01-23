@@ -24,69 +24,50 @@
 package com.tuhoojabotti.crazyjavabubbles.logic;
 
 import java.awt.Point;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
-public class CrazyGameLogic {
+public class CrazyGameLogicTest {
 
-    private int score;
-    private final Board board;
-
-    /**
-     * Create new {@link CrazyGame} logic.
-     */
-    public CrazyGameLogic() {
-        board = new Board(24, 17);
+    public CrazyGameLogicTest() {
     }
 
-    /**
-     * Initialise the logic.
-     */
-    public void init() {
-        board.init();
-        score = 0;
+    private CrazyGameLogic logic;
+
+    @Before
+    public void setUp() {
+        logic = new CrazyGameLogic();
+        logic.init();
     }
 
-    /**
-     * @return whether game is over.
-     */
-    public boolean isGameOver() {
-        return !board.hasMoreMoves();
+    @After
+    public void tearDown() {
     }
 
-    /**
-     * Returns score of the game.
-     *
-     * @return score of the game
-     */
-    public int getScore() {
-        return score;
+    @Test
+    public void gameShouldEnd() {
+        Bubble[][] bubbles = logic.getBoard().getBubbles();
+        int i = 0;
+        while (!logic.isGameOver()) {
+            for (int y = 0; y < bubbles.length; y++) {
+                for (int x = 0; x < bubbles[0].length; x++) {
+                    logic.select(new Point(x, y));
+                    logic.pop();
+                }
+            }
+            i++;
+            if (i > 1000) {
+                fail("Game should end at some point.");
+            }
+        }
+
+        assertTrue("Score should be bigger than zero.", logic.getScore() > 0);
     }
 
-    /**
-     * @return the game board
-     */
-    public Board getBoard() {
-        return board;
-    }
-
-    /**
-     * Pop the currently selected {@link Bubble}s.
-     */
-    public void pop() {
-        int bubbles = board.pop();
-
-        score += bubbles;
-    }
-
-    /**
-     * Update selection on the board.
-     *
-     * @param point where the selection starts
-     */
-    public void select(Point point) {
-        board.select(point.x, point.y);
-    }
 }

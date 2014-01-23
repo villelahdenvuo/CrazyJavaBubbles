@@ -34,10 +34,10 @@ import java.util.Set;
  */
 public class Board {
 
-    private final Bubble[][] bubbles;
+    private Bubble[][] bubbles;
     private Set<Bubble> selection;
-    private final int width;
-    private final int height;
+    private int width;
+    private int height;
 
     /**
      * Create new game board.
@@ -71,7 +71,7 @@ public class Board {
     public int pop() {
         // Can't pop if selection is smaller than 2.
         if (selection.size() < 2) {
-            return -1;
+            return 0;
         }
 
         // Remove selected bubbles from the board.
@@ -89,11 +89,18 @@ public class Board {
         return selection.size();
     }
 
-    /**
-     * @return the bubbles on the board.
-     */
     public Bubble[][] getBubbles() {
         return bubbles;
+    }
+
+    public void setBubbles(Bubble[][] bubbls) {
+        bubbles = bubbls;
+        height = bubbles.length;
+        width = bubbles[0].length;
+    }
+
+    public Set<Bubble> getSelection() {
+        return selection;
     }
 
     /**
@@ -117,6 +124,7 @@ public class Board {
 
     /**
      * Check if game is over.
+     *
      * @return whether groups exist on the board or not.
      */
     public boolean hasMoreMoves() {

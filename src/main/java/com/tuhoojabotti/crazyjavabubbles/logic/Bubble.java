@@ -49,7 +49,19 @@ public class Bubble extends Point2D.Double {
             Color.red, Color.blue, Color.green, Color.yellow
         }[new Random().nextInt(4)];
     }
-
+    
+    /**
+     * Create a new Bubble.
+     *
+     * @param color color of the bubble
+     * @param x
+     * @param y
+     */
+    public Bubble(Color color, double x, double y) {
+        super(x, y);
+        this.color = color;
+    }
+    
     /**
      * @param selected whether the bubble is selected or not
      */

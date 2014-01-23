@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.tuhoojabotti.crazyjavabubbles.logic;
 
 import org.junit.After;
@@ -30,50 +29,213 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.newdawn.slick.Color;
 
 /**
  *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class BoardTest {
-    
+
     Board board;
-    
+
     public BoardTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
         board = new Board(24, 17);
         board.init();
     }
-    
+
     @After
     public void tearDown() {
     }
 
-    /**
-     * Test of init method, of class Board.
-     */
+    private void boardFromMatrix(Board board, char[][] chars) {
+        Bubble[][] bubbles = new Bubble[chars.length][chars[0].length];
+        for (int y = 0; y < chars.length; y++) {
+            for (int x = 0; x < chars[0].length; x++) {
+                Color c = Color.darkGray;
+                switch (chars[y][x]) {
+                    case 'r':
+                        c = Color.red;
+                        break;
+                    case 'g':
+                        c = Color.green;
+                        break;
+                    case 'b':
+                        c = Color.blue;
+                        break;
+                    case 'y':
+                        c = Color.yellow;
+                        break;
+                    case 'n':
+                        bubbles[y][x] = null;
+                        continue;
+                }
+                bubbles[y][x] = new Bubble(c, x, y);
+            }
+        }
+        board.setBubbles(bubbles);
+    }
+
     @Test
-    public void testInit() {
+    public void newBoardHasMoves() {
         assertTrue(board.hasMoreMoves());
     }
 
-    /**
-     * Test of pop method, of class Board.
-     */
     @Test
     public void testPopWithEmptySelection() {
         int result = board.pop();
-        assertEquals(-1, result);
+        assertEquals(0, result);
+    }
+
+    @Test
+    public void canNotPopOneBubble() {
+        boardFromMatrix(board, new char[][]{
+            {'b'}
+        });
+        board.select(0, 0);
+        int popped = board.pop();
+        assertEquals(0, popped);
+    }
+
+    @Test
+    public void hasMoreMovesWorks() {
+        boardFromMatrix(board, new char[][]{
+            {'b', 'n'}
+        });
+        assertFalse(board.hasMoreMoves());
+        boardFromMatrix(board, new char[][]{
+            {'g', 'r'},
+            {'y', 'b'}
+        });
+        assertFalse(board.hasMoreMoves());
+        boardFromMatrix(board, new char[][]{
+            {'n', 'n'},
+            {'n', 'n'}
+        });
+        assertFalse(board.hasMoreMoves());        
+        boardFromMatrix(board, new char[][]{
+            {'r', 'n'},
+            {'b', 'n'}
+        });
+        assertFalse(board.hasMoreMoves());    
+        boardFromMatrix(board, new char[][]{
+            {'r', 'n'},
+            {'b', 'b'}
+        });
+        assertTrue(board.hasMoreMoves());            
+    }
+
+    @Test
+    public void selectSelectsAll() {
+        boardFromMatrix(board, new char[][]{
+            {'r', 'r', 'r', 'r'},
+            {'r', 'r', 'r', 'r'},
+            {'r', 'r', 'r', 'r'},
+            {'r', 'r', 'r', 'r'}
+        });
+        board.select(0, 0);
+        assertEquals(4 * 4, board.getSelection().size());
+    }
+
+    @Test
+    public void popPopsAll() {
+        boardFromMatrix(board, new char[][]{
+            {'r', 'r', 'r', 'r'},
+            {'r', 'r', 'r', 'r'},
+            {'r', 'r', 'r', 'r'},
+            {'r', 'r', 'r', 'r'}
+        });
+        board.select(3, 3);
+        board.pop();
+        assertFalse(board.hasMoreMoves());
+    }
+
+    @Test
+    public void selectingSelectsBubblesButNotAll() {
+        boardFromMatrix(board, new char[][]{
+            {'r', 'r'}, // <- these should be selected
+            {'b', 'b'} // <- and these not
+        });
+        board.select(1, 0);
+        Bubble[][] bubbles = board.getBubbles();
+
+        for (Bubble item : bubbles[0]) {
+            assertTrue(item.isSelected());
+        }
+        for (Bubble item : bubbles[1]) {
+            assertFalse(item.isSelected());
+        }
+    }
+
+    @Test
+    public void selectOutsideBoardDoesNotCrash() {
+        boardFromMatrix(board, new char[][]{
+            {'r', 'r', 'r', 'r'},
+            {'r', 'r', 'r', 'r'},
+            {'r', 'r', 'r', 'r'},
+            {'r', 'r', 'r', 'r'}
+        });
+        board.select(-1, -1);
+        board.select(100, 10);
+    }
+
+    @Test
+    public void moveDownWorks() {
+        boardFromMatrix(board, new char[][]{
+            {'r', 'r', 'r', 'r'},
+            {'r', 'r', 'r', 'r'},
+            {'r', 'b', 'r', 'r'},
+            {'r', 'b', 'r', 'r'}
+        });
+        board.select(1, 2);
+        board.pop();
+        board.select(1, 0);
+        assertEquals(0, board.getSelection().size());
+        board.select(1, 1);
+        assertEquals(0, board.getSelection().size());
+    }
+
+    @Test
+    public void moveLeftWorks() {
+        boardFromMatrix(board, new char[][]{
+            {'r', 'b', 'r', 'r'},
+            {'r', 'b', 'r', 'r'},
+            {'r', 'b', 'r', 'r'},
+            {'r', 'b', 'r', 'r'}
+        });
+        board.select(1, 0);
+        board.pop();
+        board.select(3, 0);
+        assertEquals(0, board.getSelection().size());
+        board.select(3, 3);
+        assertEquals(0, board.getSelection().size());
+    }
+
+    @Test
+    public void moveLeftWorks2() {
+        boardFromMatrix(board, new char[][]{
+            {'r', 'b', 'n', 'b'},
+            {'r', 'b', 'n', 'b'},
+            {'r', 'b', 'r', 'b'},
+            {'r', 'b', 'r', 'b'}
+        });
+        board.select(1, 0);
+        board.pop();
+        board.select(3, 0);
+        assertEquals(0, board.getSelection().size());
+        board.select(3, 3);
+        assertEquals(0, board.getSelection().size());
     }
 }

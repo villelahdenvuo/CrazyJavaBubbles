@@ -1,0 +1,3287 @@
+<html>
+<head>
+<style type='text/css'>
+html, body, div, span, p, blockquote, pre {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+}
+
+body{
+	line-height: 1;
+	color: black;
+	background: white;
+	margin-left: 20px;
+}
+
+.src { 
+border: 1px solid #dddddd;
+padding-top: 10px;
+padding-right: 5px;
+padding-left: 5px;
+}
+
+
+.covered {background-color: #ddffdd}
+.uncovered {background-color: #ffdddd}
+.killed {background-color: #aaffaa}
+.survived {background-color: #ffaaaa}
+.uncertain {background-color: #dde7ef}
+.run_error {background-color: #dde7ef}
+.na {background-color: #eeeeee}
+.timed_out {background-color: #dde7ef}
+.non_viable {background-color: #aaffaa}
+.memory_error {background-color: #dde7ef}
+.not_started {background-color: #dde7ef; color : red}
+.no_coverage {background-color: #ffaaaa}
+
+</style>
+
+</head>
+<body>
+
+
+<h1>Board.java</h1>
+
+<table class="src">
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_1'/>
+1
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_1'></a>
+</td>
+<td class=''><pre><span  class=''>/*</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_2'/>
+2
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_2'></a>
+</td>
+<td class=''><pre><span  class=''> * The MIT License</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_3'/>
+3
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_3'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_4'/>
+4
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_4'></a>
+</td>
+<td class=''><pre><span  class=''> * Copyright 2014 Ville Lahdenvuo &#60;tuhoojabotti@gmail.com&#62;.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_5'/>
+5
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_5'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_6'/>
+6
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_6'></a>
+</td>
+<td class=''><pre><span  class=''> * Permission is hereby granted, free of charge, to any person obtaining a copy</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_7'/>
+7
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_7'></a>
+</td>
+<td class=''><pre><span  class=''> * of this software and associated documentation files (the &#34;Software&#34;), to deal</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_8'/>
+8
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_8'></a>
+</td>
+<td class=''><pre><span  class=''> * in the Software without restriction, including without limitation the rights</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_9'/>
+9
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_9'></a>
+</td>
+<td class=''><pre><span  class=''> * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_10'/>
+10
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_10'></a>
+</td>
+<td class=''><pre><span  class=''> * copies of the Software, and to permit persons to whom the Software is</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_11'/>
+11
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_11'></a>
+</td>
+<td class=''><pre><span  class=''> * furnished to do so, subject to the following conditions:</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_12'/>
+12
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_12'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_13'/>
+13
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_13'></a>
+</td>
+<td class=''><pre><span  class=''> * The above copyright notice and this permission notice shall be included in</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_14'/>
+14
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_14'></a>
+</td>
+<td class=''><pre><span  class=''> * all copies or substantial portions of the Software.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_15'/>
+15
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_15'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_16'/>
+16
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_16'></a>
+</td>
+<td class=''><pre><span  class=''> * THE SOFTWARE IS PROVIDED &#34;AS IS&#34;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_17'/>
+17
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_17'></a>
+</td>
+<td class=''><pre><span  class=''> * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_18'/>
+18
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_18'></a>
+</td>
+<td class=''><pre><span  class=''> * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_19'/>
+19
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_19'></a>
+</td>
+<td class=''><pre><span  class=''> * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_20'/>
+20
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_20'></a>
+</td>
+<td class=''><pre><span  class=''> * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_21'/>
+21
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_21'></a>
+</td>
+<td class=''><pre><span  class=''> * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_22'/>
+22
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_22'></a>
+</td>
+<td class=''><pre><span  class=''> * THE SOFTWARE.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_23'/>
+23
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_23'></a>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_24'/>
+24
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_24'></a>
+</td>
+<td class=''><pre><span  class=''>package com.tuhoojabotti.crazyjavabubbles.logic;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_25'/>
+25
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_25'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_26'/>
+26
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_26'></a>
+</td>
+<td class=''><pre><span  class=''>import java.util.HashSet;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_27'/>
+27
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_27'></a>
+</td>
+<td class=''><pre><span  class=''>import java.util.LinkedList;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_28'/>
+28
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_28'></a>
+</td>
+<td class=''><pre><span  class=''>import java.util.Queue;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_29'/>
+29
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_29'></a>
+</td>
+<td class=''><pre><span  class=''>import java.util.Set;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_30'/>
+30
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_30'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_31'/>
+31
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_31'></a>
+</td>
+<td class=''><pre><span  class=''>/**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_32'/>
+32
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_32'></a>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_33'/>
+33
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_33'></a>
+</td>
+<td class=''><pre><span  class=''> * @author Ville Lahdenvuo &#60;tuhoojabotti@gmail.com&#62;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_34'/>
+34
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_34'></a>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_35'/>
+35
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_35'></a>
+</td>
+<td class=''><pre><span  class=''>public class Board {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_36'/>
+36
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_36'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_37'/>
+37
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_37'></a>
+</td>
+<td class=''><pre><span  class=''>    private Bubble[][] bubbles;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_38'/>
+38
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_38'></a>
+</td>
+<td class=''><pre><span  class=''>    private Set&#60;Bubble&#62; selection;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_39'/>
+39
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_39'></a>
+</td>
+<td class=''><pre><span  class=''>    private int width;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_40'/>
+40
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_40'></a>
+</td>
+<td class=''><pre><span  class=''>    private int height;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_41'/>
+41
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_41'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_42'/>
+42
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_42'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_43'/>
+43
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_43'></a>
+</td>
+<td class=''><pre><span  class=''>     * Create new game board.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_44'/>
+44
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_44'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_45'/>
+45
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_45'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param w width</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_46'/>
+46
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_46'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param h height</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_47'/>
+47
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_47'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_48'/>
+48
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_48'></a>
+</td>
+<td class='covered'><pre><span  class=''>    public Board(int w, int h) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_49'/>
+49
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_49'></a>
+</td>
+<td class='covered'><pre><span  class=''>        bubbles = new Bubble[h][w];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_50'/>
+50
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_50'></a>
+</td>
+<td class='covered'><pre><span  class=''>        width = w;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_51'/>
+51
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_51'></a>
+</td>
+<td class='covered'><pre><span  class=''>        height = h;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_52'/>
+52
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_52'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_53'/>
+53
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_53'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_54'/>
+54
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_54'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_55'/>
+55
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_55'></a>
+</td>
+<td class=''><pre><span  class=''>     * initialize game board.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_56'/>
+56
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_56'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_57'/>
+57
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_57'></a>
+</td>
+<td class=''><pre><span  class=''>    public void init() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_58'/>
+58
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_58'></a>
+</td>
+<td class='covered'><pre><span  class=''>        selection = new HashSet&#60;&#62;();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_59'/>
+59
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_59'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        for (int y = 0; y &#60; height; y++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_60'/>
+60
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_60'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int x = 0; x &#60; width; x++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_61'/>
+61
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_61'></a>
+</td>
+<td class='covered'><pre><span  class=''>                bubbles[y][x] = new Bubble(x, y);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_62'/>
+62
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_62'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_63'/>
+63
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_63'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_64'/>
+64
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_64'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_65'/>
+65
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_65'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_66'/>
+66
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_66'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_67'/>
+67
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_67'></a>
+</td>
+<td class=''><pre><span  class=''>     * Pop (remove) selected {@link Bubble}s from the board.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_68'/>
+68
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_68'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_69'/>
+69
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_69'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return amount of bubbles popped</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_70'/>
+70
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_70'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_71'/>
+71
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_71'></a>
+</td>
+<td class=''><pre><span  class=''>    public int pop() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_72'/>
+72
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_72'></a>
+</td>
+<td class=''><pre><span  class=''>        // Can&#39;t pop if selection is smaller than 2.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_73'/>
+73
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_73'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (selection.size() &#60; 2) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_74'/>
+74
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_74'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            return 0;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_75'/>
+75
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_75'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_76'/>
+76
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_76'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_77'/>
+77
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_77'></a>
+</td>
+<td class=''><pre><span  class=''>        // Remove selected bubbles from the board.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_78'/>
+78
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_78'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        for (int y = 0; y &#60; height; y++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_79'/>
+79
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_79'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int x = 0; x &#60; width; x++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_80'/>
+80
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_80'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                if (selection.contains(bubbles[y][x])) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_81'/>
+81
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_81'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    bubbles[y][x] = null;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_82'/>
+82
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_82'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_83'/>
+83
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_83'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_84'/>
+84
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_84'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_85'/>
+85
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_85'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_86'/>
+86
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_86'></a>
+</td>
+<td class=''><pre><span  class=''>        // Update bubble positions;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_87'/>
+87
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_87'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        update();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_88'/>
+88
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_88'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_89'/>
+89
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_89'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return selection.size();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_90'/>
+90
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_90'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_91'/>
+91
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_91'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_92'/>
+92
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_92'></a>
+</td>
+<td class=''><pre><span  class=''>    public Bubble[][] getBubbles() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_93'/>
+93
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_93'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return bubbles;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_94'/>
+94
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_94'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_95'/>
+95
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_95'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_96'/>
+96
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_96'></a>
+</td>
+<td class=''><pre><span  class=''>    public void setBubbles(Bubble[][] bubbls) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_97'/>
+97
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_97'></a>
+</td>
+<td class='covered'><pre><span  class=''>        bubbles = bubbls;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_98'/>
+98
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_98'></a>
+</td>
+<td class='covered'><pre><span  class=''>        height = bubbles.length;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_99'/>
+99
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_99'></a>
+</td>
+<td class='covered'><pre><span  class=''>        width = bubbles[0].length;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_100'/>
+100
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_100'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_101'/>
+101
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_101'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_102'/>
+102
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_102'></a>
+</td>
+<td class=''><pre><span  class=''>    public Set&#60;Bubble&#62; getSelection() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_103'/>
+103
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_103'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return selection;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_104'/>
+104
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_104'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_105'/>
+105
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_105'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_106'/>
+106
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_106'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_107'/>
+107
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_107'></a>
+</td>
+<td class=''><pre><span  class=''>     * Select {@link Bubble}s from the board.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_108'/>
+108
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_108'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_109'/>
+109
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_109'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param x</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_110'/>
+110
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_110'></a>
+</td>
+<td class=''><pre><span  class=''>     * @param y</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_111'/>
+111
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_111'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_112'/>
+112
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_112'></a>
+</td>
+<td class=''><pre><span  class=''>    public void select(int x, int y) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_113'/>
+113
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_113'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        updateSelection(x, y);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_114'/>
+114
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_114'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_115'/>
+115
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_115'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        for (y = 0; y &#60; height; y++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_116'/>
+116
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_116'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (x = 0; x &#60; width; x++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_117'/>
+117
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_117'></a>
+</td>
+<td class='covered'><pre><span  class=''>                Bubble b = bubbles[y][x];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_118'/>
+118
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_118'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                if (b != null) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_119'/>
+119
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_119'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    b.setSelected(selection.contains(b));</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_120'/>
+120
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_120'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_121'/>
+121
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_121'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_122'/>
+122
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_122'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_123'/>
+123
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_123'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_124'/>
+124
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_124'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_125'/>
+125
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_125'></a>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_126'/>
+126
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_126'></a>
+</td>
+<td class=''><pre><span  class=''>     * Check if game is over.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_127'/>
+127
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_127'></a>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_128'/>
+128
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_128'></a>
+</td>
+<td class=''><pre><span  class=''>     * @return whether groups exist on the board or not.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_129'/>
+129
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_129'></a>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_130'/>
+130
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_130'></a>
+</td>
+<td class=''><pre><span  class=''>    public boolean hasMoreMoves() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_131'/>
+131
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_131'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        for (int y = 0; y &#60; height; y++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_132'/>
+132
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_132'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int x = 0; x &#60; width; x++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_133'/>
+133
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_133'></a>
+</td>
+<td class='covered'><pre><span  class=''>                Bubble b = bubbles[y][x];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_134'/>
+134
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_134'>9</a>
+</td>
+<td class='covered'><pre><span  class='survived'>                if (b != null</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_135'/>
+135
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_135'></a>
+</td>
+<td class=''><pre><span  class=''>                        &#38;&#38; (b.equals(get(x + 1, y))</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_136'/>
+136
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_136'></a>
+</td>
+<td class=''><pre><span  class=''>                        || b.equals(get(x - 1, y))</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_137'/>
+137
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_137'></a>
+</td>
+<td class=''><pre><span  class=''>                        || b.equals(get(x, y + 1))</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_138'/>
+138
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_138'></a>
+</td>
+<td class=''><pre><span  class=''>                        || b.equals(get(x, y - 1)))) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_139'/>
+139
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_139'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    return true;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_140'/>
+140
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_140'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_141'/>
+141
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_141'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_142'/>
+142
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_142'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_143'/>
+143
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_143'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return false;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_144'/>
+144
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_144'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_145'/>
+145
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_145'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_146'/>
+146
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_146'></a>
+</td>
+<td class=''><pre><span  class=''>    private boolean isOnBoard(int x, int y) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_147'/>
+147
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_147'>10</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return x &#62;= 0 &#38;&#38; x &#60; width</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_148'/>
+148
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_148'></a>
+</td>
+<td class=''><pre><span  class=''>                &#38;&#38; y &#62;= 0 &#38;&#38; y &#60; height &#38;&#38; bubbles[y][x] != null;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_149'/>
+149
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_149'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_150'/>
+150
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_150'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_151'/>
+151
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_151'></a>
+</td>
+<td class=''><pre><span  class=''>    private Bubble get(int x, int y) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_152'/>
+152
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_152'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (!isOnBoard(x, y)) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_153'/>
+153
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_153'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            return null;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_154'/>
+154
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_154'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_155'/>
+155
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_155'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        return bubbles[y][x];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_156'/>
+156
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_156'></a>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_157'/>
+157
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_157'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_158'/>
+158
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_158'></a>
+</td>
+<td class=''><pre><span  class=''>    private void updateSelection(int startX, int startY) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_159'/>
+159
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_159'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        selection.clear();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_160'/>
+160
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_160'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_161'/>
+161
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_161'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (!isOnBoard(startX, startY)) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_162'/>
+162
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_162'></a>
+</td>
+<td class='covered'><pre><span  class=''>            return; // Nothing to select.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_163'/>
+163
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_163'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_164'/>
+164
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_164'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_165'/>
+165
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_165'></a>
+</td>
+<td class=''><pre><span  class=''>        // Basically do a BFS on the board.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_166'/>
+166
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_166'></a>
+</td>
+<td class='covered'><pre><span  class=''>        Queue&#60;Bubble&#62; queue = new LinkedList&#60;&#62;();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_167'/>
+167
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_167'></a>
+</td>
+<td class='covered'><pre><span  class=''>        queue.add(get(startX, startY));</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_168'/>
+168
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_168'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_169'/>
+169
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_169'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        while (!queue.isEmpty()) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_170'/>
+170
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_170'></a>
+</td>
+<td class='covered'><pre><span  class=''>            Bubble current = queue.poll();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_171'/>
+171
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_171'></a>
+</td>
+<td class='covered'><pre><span  class=''>            int x = (int) current.x, y = (int) current.y;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_172'/>
+172
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_172'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_173'/>
+173
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_173'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            addIfOk(current, queue, x + 1, y);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_174'/>
+174
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_174'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            addIfOk(current, queue, x - 1, y);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_175'/>
+175
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_175'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            addIfOk(current, queue, x, y + 1);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_176'/>
+176
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_176'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            addIfOk(current, queue, x, y - 1);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_177'/>
+177
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_177'></a>
+</td>
+<td class='covered'><pre><span  class=''>            selection.add(current);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_178'/>
+178
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_178'></a>
+</td>
+<td class='covered'><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_179'/>
+179
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_179'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_180'/>
+180
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_180'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_181'/>
+181
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_181'></a>
+</td>
+<td class=''><pre><span  class=''>    private void addIfOk(Bubble current, Queue&#60;Bubble&#62; queue, int x, int y) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_182'/>
+182
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_182'></a>
+</td>
+<td class='covered'><pre><span  class=''>        Bubble next = get(x, y);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_183'/>
+183
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_183'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (current.equals(next) &#38;&#38; !selection.contains(next)) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_184'/>
+184
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_184'></a>
+</td>
+<td class='covered'><pre><span  class=''>            queue.add(next);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_185'/>
+185
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_185'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_186'/>
+186
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_186'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_187'/>
+187
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_187'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_188'/>
+188
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_188'></a>
+</td>
+<td class=''><pre><span  class=''>    private void update() {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_189'/>
+189
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_189'></a>
+</td>
+<td class='covered'><pre><span  class=''>        boolean moved = false;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_190'/>
+190
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_190'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_191'/>
+191
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_191'></a>
+</td>
+<td class=''><pre><span  class=''>        // Move bubbles down.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_192'/>
+192
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_192'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        for (int y = 0; y &#60; height; y++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_193'/>
+193
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_193'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int x = 0; x &#60; width; x++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_194'/>
+194
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_194'></a>
+</td>
+<td class='covered'><pre><span  class=''>                Bubble b = bubbles[y][x];</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_195'/>
+195
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_195'>3</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                if (b == null &#38;&#38; isOnBoard(x, y - 1)) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_196'/>
+196
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_196'></a>
+</td>
+<td class='covered'><pre><span  class=''>                    moved = true;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_197'/>
+197
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_197'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    moveBubble(get(x, y - 1), x, y);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_198'/>
+198
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_198'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_199'/>
+199
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_199'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_200'/>
+200
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_200'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_201'/>
+201
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_201'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_202'/>
+202
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_202'></a>
+</td>
+<td class=''><pre><span  class=''>        // Move columns left.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_203'/>
+203
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_203'>3</a>
+</td>
+<td class='covered'><pre><span  class='survived'>        for (int x = 0; x &#60; width; x++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_204'/>
+204
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_204'>5</a>
+</td>
+<td class='covered'><pre><span  class='survived'>            if (!isOnBoard(x, height - 1) &#38;&#38; isOnBoard(x + 1, height - 1)) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_205'/>
+205
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_205'></a>
+</td>
+<td class='covered'><pre><span  class=''>                moved = true;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_206'/>
+206
+</td>
+<td class='survived'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_206'>3</a>
+</td>
+<td class='covered'><pre><span  class='survived'>                for (int y = 0; y &#60; height; y++) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_207'/>
+207
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_207'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                    if (isOnBoard(x + 1, y)) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_208'/>
+208
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_208'>2</a>
+</td>
+<td class='covered'><pre><span  class='killed'>                        moveBubble(get(x + 1, y), x, y);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_209'/>
+209
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_209'></a>
+</td>
+<td class=''><pre><span  class=''>                    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_210'/>
+210
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_210'></a>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_211'/>
+211
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_211'></a>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_212'/>
+212
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_212'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_213'/>
+213
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_213'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_214'/>
+214
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_214'></a>
+</td>
+<td class=''><pre><span  class=''>        // Run update until we didn&#39;t move anything.</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_215'/>
+215
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_215'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (moved) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_216'/>
+216
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_216'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>            update();</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_217'/>
+217
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_217'></a>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_218'/>
+218
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_218'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_219'/>
+219
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_219'></a>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_220'/>
+220
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_220'></a>
+</td>
+<td class=''><pre><span  class=''>    private void moveBubble(Bubble b, int x, int y) {</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_221'/>
+221
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_221'></a>
+</td>
+<td class='covered'><pre><span  class=''>        bubbles[(int) b.y][(int) b.x] = null;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_222'/>
+222
+</td>
+<td class='killed'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_222'>1</a>
+</td>
+<td class='covered'><pre><span  class='killed'>        b.setLocation(x, y);</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_223'/>
+223
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_223'></a>
+</td>
+<td class='covered'><pre><span  class=''>        bubbles[y][x] = b;</span></pre></td></tr>
+
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_224'/>
+224
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_224'></a>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_225'/>
+225
+</td>
+<td class=''>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_225'></a>
+</td>
+<td class=''><pre><span  class=''>}</span></pre></td></tr>
+
+
+
+
+<tr><td></td><td></td><td><h2>Mutations</h2></td></tr>
+
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_59'>59</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_59'/> 
+
+<p class='KILLED'>Changed increment from 1 to -1 : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>changed conditional boundary : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_60'>60</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_60'/> 
+
+<p class='KILLED'>Changed increment from 1 to -1 : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>changed conditional boundary : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_73'>73</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_73'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>changed conditional boundary : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_74'>74</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_74'/> 
+
+<p class='KILLED'>replaced return of integer sized value with (x == 0 ? 1 : 0) : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_78'>78</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_78'/> 
+
+<p class='KILLED'>Changed increment from 1 to -1 : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>changed conditional boundary : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_79'>79</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_79'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_80'>80</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_80'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_87'>87</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_87'/> 
+
+<p class='KILLED'>removed call to com/tuhoojabotti/crazyjavabubbles/logic/Board::update : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_89'>89</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_89'/> 
+
+<p class='KILLED'>replaced return of integer sized value with (x == 0 ? 1 : 0) : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogicTest.gameShouldEnd(com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogicTest)</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_93'>93</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_93'/> 
+
+<p class='KILLED'>mutated return of Object value for com/tuhoojabotti/crazyjavabubbles/logic/Board::getBubbles to ( if (x != null) null else throw new RuntimeException ) : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_103'>103</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_103'/> 
+
+<p class='KILLED'>mutated return of Object value for com/tuhoojabotti/crazyjavabubbles/logic/Board::getSelection to ( if (x != null) null else throw new RuntimeException ) : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_113'>113</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_113'/> 
+
+<p class='KILLED'>removed call to com/tuhoojabotti/crazyjavabubbles/logic/Board::updateSelection : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_115'>115</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_115'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>changed conditional boundary : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_116'>116</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_116'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>changed conditional boundary : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_118'>118</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_118'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_119'>119</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_119'/> 
+
+<p class='KILLED'>removed call to com/tuhoojabotti/crazyjavabubbles/logic/Bubble::setSelected : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_131'>131</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_131'/> 
+
+<p class='KILLED'>Changed increment from 1 to -1 : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>changed conditional boundary : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_132'>132</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_132'/> 
+
+<p class='KILLED'>Changed increment from 1 to -1 : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>changed conditional boundary : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_134'>134</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_134'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='SURVIVED'>Replaced integer addition with subtraction : SURVIVED</p> <p class='SURVIVED'>Replaced integer addition with subtraction : SURVIVED</p> <p class='SURVIVED'>Replaced integer subtraction with addition : SURVIVED</p> <p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='SURVIVED'>Replaced integer subtraction with addition : SURVIVED</p> <p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_139'>139</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_139'/> 
+
+<p class='KILLED'>replaced return of integer sized value with (x == 0 ? 1 : 0) : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_143'>143</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_143'/> 
+
+<p class='KILLED'>replaced return of integer sized value with (x == 0 ? 1 : 0) : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_147'>147</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_147'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>changed conditional boundary : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>replaced return of integer sized value with (x == 0 ? 1 : 0) : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>changed conditional boundary : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>changed conditional boundary : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>changed conditional boundary : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_152'>152</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_152'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_153'>153</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_153'/> 
+
+<p class='KILLED'>mutated return of Object value for com/tuhoojabotti/crazyjavabubbles/logic/Board::get to ( if (x != null) null else throw new RuntimeException ) : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_155'>155</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_155'/> 
+
+<p class='KILLED'>mutated return of Object value for com/tuhoojabotti/crazyjavabubbles/logic/Board::get to ( if (x != null) null else throw new RuntimeException ) : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_159'>159</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_159'/> 
+
+<p class='KILLED'>removed call to java/util/Set::clear : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_161'>161</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_161'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_169'>169</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_169'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_173'>173</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_173'/> 
+
+<p class='KILLED'>removed call to com/tuhoojabotti/crazyjavabubbles/logic/Board::addIfOk : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>Replaced integer addition with subtraction : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_174'>174</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_174'/> 
+
+<p class='KILLED'>removed call to com/tuhoojabotti/crazyjavabubbles/logic/Board::addIfOk : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>Replaced integer subtraction with addition : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_175'>175</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_175'/> 
+
+<p class='KILLED'>removed call to com/tuhoojabotti/crazyjavabubbles/logic/Board::addIfOk : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>Replaced integer addition with subtraction : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_176'>176</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_176'/> 
+
+<p class='KILLED'>Replaced integer subtraction with addition : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>removed call to com/tuhoojabotti/crazyjavabubbles/logic/Board::addIfOk : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_183'>183</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_183'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_192'>192</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_192'/> 
+
+<p class='KILLED'>Changed increment from 1 to -1 : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>changed conditional boundary : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_193'>193</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_193'/> 
+
+<p class='KILLED'>changed conditional boundary : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>Changed increment from 1 to -1 : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_195'>195</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_195'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>Replaced integer subtraction with addition : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_197'>197</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_197'/> 
+
+<p class='KILLED'>Replaced integer subtraction with addition : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>removed call to com/tuhoojabotti/crazyjavabubbles/logic/Board::moveBubble : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_203'>203</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_203'/> 
+
+<p class='KILLED'>Changed increment from 1 to -1 : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='SURVIVED'>changed conditional boundary : SURVIVED</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_204'>204</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_204'/> 
+
+<p class='KILLED'>Replaced integer subtraction with addition : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='SURVIVED'>negated conditional : SURVIVED</p> <p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='SURVIVED'>Replaced integer subtraction with addition : SURVIVED</p> <p class='KILLED'>Replaced integer addition with subtraction : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_206'>206</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_206'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='SURVIVED'>changed conditional boundary : SURVIVED</p> <p class='TIMED_OUT'>Changed increment from 1 to -1 : TIMED_OUT</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_207'>207</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_207'/> 
+
+<p class='KILLED'>Replaced integer addition with subtraction : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_208'>208</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_208'/> 
+
+<p class='KILLED'>Replaced integer addition with subtraction : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> <p class='KILLED'>removed call to com/tuhoojabotti/crazyjavabubbles/logic/Board::moveBubble : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_215'>215</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_215'/> 
+
+<p class='KILLED'>negated conditional : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_216'>216</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_216'/> 
+
+<p class='KILLED'>removed call to com/tuhoojabotti/crazyjavabubbles/logic/Board::update : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@19f3aa9a_222'>222</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@19f3aa9a_222'/> 
+
+<p class='KILLED'>removed call to com/tuhoojabotti/crazyjavabubbles/logic/Bubble::setLocation : KILLED -> com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest</p> 
+</td>
+</tr>
+
+</table>
+
+
+<h2>Active mutators</h2>
+<ul>
+
+<li class='mutator'>INCREMENTS_MUTATOR</li>
+
+<li class='mutator'>CONDITIONALS_BOUNDARY_MUTATOR</li>
+
+<li class='mutator'>RETURN_VALS_MUTATOR</li>
+
+<li class='mutator'>VOID_METHOD_CALL_MUTATOR</li>
+
+<li class='mutator'>INVERT_NEGS_MUTATOR</li>
+
+<li class='mutator'>MATH_MUTATOR</li>
+
+<li class='mutator'>NEGATE_CONDITIONALS_MUTATOR</li>
+
+</ul>
+
+<h2>Tests examined</h2>
+<ul>
+<li>com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogicTest.gameShouldEnd(com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogicTest) (93 ms)</li><li>com.tuhoojabotti.crazyjavabubbles.logic.BoardTest.com.tuhoojabotti.crazyjavabubbles.logic.BoardTest (38 ms)</li>
+</ul>
+
+<br/>
+
+Report generated by <a href='http://pitest.org'>PIT</a> 0.30
+
+</body>
+</html>

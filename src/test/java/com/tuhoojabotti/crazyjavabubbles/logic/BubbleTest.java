@@ -23,70 +23,35 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.logic;
 
-import java.awt.Point;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+import org.newdawn.slick.Color;
 
 /**
  *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
-public class CrazyGameLogic {
+public class BubbleTest {
 
-    private int score;
-    private final Board board;
-
-    /**
-     * Create new {@link CrazyGame} logic.
-     */
-    public CrazyGameLogic() {
-        board = new Board(24, 17);
+    public BubbleTest() {
     }
 
-    /**
-     * Initialise the logic.
-     */
-    public void init() {
-        board.init();
-        score = 0;
+    private Bubble bubble;
+
+    @Before
+    public void setUp() {
+        bubble = new Bubble(Color.yellow, 0, 1);
     }
 
-    /**
-     * @return whether game is over.
-     */
-    public boolean isGameOver() {
-        return !board.hasMoreMoves();
+    @After
+    public void tearDown() {
     }
 
-    /**
-     * Returns score of the game.
-     *
-     * @return score of the game
-     */
-    public int getScore() {
-        return score;
+    @Test
+    public void testGetColor() {
+        assertEquals(Color.yellow, bubble.getColor());
     }
 
-    /**
-     * @return the game board
-     */
-    public Board getBoard() {
-        return board;
-    }
-
-    /**
-     * Pop the currently selected {@link Bubble}s.
-     */
-    public void pop() {
-        int bubbles = board.pop();
-
-        score += bubbles;
-    }
-
-    /**
-     * Update selection on the board.
-     *
-     * @param point where the selection starts
-     */
-    public void select(Point point) {
-        board.select(point.x, point.y);
-    }
 }

@@ -52,21 +52,11 @@ public class CrazyGame extends BasicGameState {
         ID = id;
     }
 
-    /**
-     * @return ID of this game state
-     */
     @Override
     public int getID() {
         return ID;
     }
 
-    /**
-     * Initialise everything.
-     *
-     * @param gc game container
-     * @param sbg game itself
-     * @throws SlickException
-     */
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         mousePosition = new Point();
@@ -75,27 +65,11 @@ public class CrazyGame extends BasicGameState {
         renderer = new CrazyGameRenderer(gc.getGraphics(), gc, mousePosition);
     }
 
-    /**
-     * Update game graphics
-     *
-     * @param gc game container
-     * @param sbg game itself
-     * @param gfx graphics controller
-     * @throws SlickException
-     */
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics gfx) throws SlickException {
         renderer.render(logic);
     }
 
-    /**
-     * Update the game logic
-     *
-     * @param gc game container
-     * @param sbg game itself
-     * @param i delta time
-     * @throws SlickException
-     */
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
         logic.select(getMousePositionOnBoard());
@@ -105,39 +79,16 @@ public class CrazyGame extends BasicGameState {
         }
     }
 
-    /**
-     * A listener for mouse movements.
-     *
-     * @param oldx
-     * @param oldy
-     * @param newx
-     * @param newy
-     */
     @Override
     public void mouseMoved(int oldx, int oldy, int newx, int newy) {
         mousePosition.move(newx, newy);
     }
 
-    /**
-     * A listener for mouse drag movements.
-     *
-     * @param oldx
-     * @param oldy
-     * @param newx
-     * @param newy
-     */
     @Override
     public void mouseDragged(int oldx, int oldy, int newx, int newy) {
         mousePosition.move(newx, newy);
     }
 
-    /**
-     * A listener for mouse release events.
-     *
-     * @param button
-     * @param x
-     * @param y
-     */
     @Override
     public void mouseReleased(int button, int x, int y) {
         mousePosition.move(x, y);
