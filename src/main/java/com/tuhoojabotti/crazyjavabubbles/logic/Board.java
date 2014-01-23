@@ -52,7 +52,7 @@ public class Board {
     }
 
     /**
-     * Initialise game board.
+     * initialize game board.
      */
     public void init() {
         selection = new HashSet<>();

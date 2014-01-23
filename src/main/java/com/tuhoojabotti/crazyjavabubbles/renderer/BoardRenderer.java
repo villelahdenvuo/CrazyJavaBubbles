@@ -57,12 +57,12 @@ public class BoardRenderer {
         int br = RenderSettings.BUBBLE_RADIUS;
         Bubble[][] bubbles = b.getBubbles();
 
-        gfx.setAntiAlias(true);
+//        gfx.setAntiAlias(true);
         for (int y2 = 0; y2 < bubbles.length; y2++) {
             for (int x2 = 0; x2 < bubbles[0].length; x2++) {
                 bubbleRenderer.render(bubbles[y2][x2], x + x2 * br, y + y2 * br);
             }
         }
-        gfx.setAntiAlias(false);
+//        gfx.setAntiAlias(false);
     }
 }
