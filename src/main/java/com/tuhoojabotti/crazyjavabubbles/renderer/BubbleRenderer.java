@@ -24,7 +24,8 @@
 package com.tuhoojabotti.crazyjavabubbles.renderer;
 
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
-import java.awt.Point;
+import java.awt.geom.Point2D;
+import java.util.Random;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
@@ -36,52 +37,98 @@ public class BubbleRenderer {
 
     private final Graphics gfx;
     private final int r = RenderSettings.BUBBLE_RADIUS;
-    private final Point mousePosition;
+    private final Point2D.Float mousePosition;
+    private Bubble bubble;
+    private Color inColor;
+    private Point2D.Float position;
+    private Point2D.Float velocity;
 
     /**
      * Create a {@link Bubble} renderer with mouse interaction.
      *
+     * @param bubble the bubble to render
      * @param gfx graphics controller
      * @param mouse mouse position
      */
-    public BubbleRenderer(Graphics gfx, Point mouse) {
+    public BubbleRenderer(Bubble bubble, Graphics gfx, Point2D.Float mouse) {
+        Random rand = new Random();
+        
+        this.bubble = bubble;
         this.gfx = gfx;
         mousePosition = mouse;
+        position = new Point2D.Float(RenderSettings.BOARD_MARGIN + bubble.x * r
+                + 50 - rand.nextInt(100), 0);
+        velocity = new Point2D.Float(0,0);
+        
+        Color color = bubble.getColor();
+        java.awt.Color tempColor = new java.awt.Color(color.r, color.g, color.b)
+                .darker().darker();
+        inColor = new Color(tempColor.getRGB());
     }
 
     /**
      * Create a {@link Bubble} renderer without mouse interaction.
      *
+     * @param bubble the bubble to render
      * @param gfx graphics controller
      */
-    public BubbleRenderer(Graphics gfx) {
-        this.gfx = gfx;
-        mousePosition = new Point(-1000, -1000);
+    public BubbleRenderer(Bubble bubble, Graphics gfx) {
+        this(bubble, gfx, new Point2D.Float(-1000, -1000));
     }
 
+    public void applyForce(Point2D.Float point, float power) {
+        double angle = Math.atan2(point.y - position.y, point.x - position.x);
+        
+        velocity.x -= power * (float) Math.cos(angle);
+        velocity.y -= power * (float) Math.sin(angle);
+    }
+    
     /**
      * Render a {@link Bubble}.
      *
-     * @param b the bubble to render
-     * @param x
-     * @param y
+     * @param x board's x-coordinate
+     * @param y board's y-coordinate
      */
-    public void render(Bubble b, int x, int y) {
-        if (b == null) {
+    public void render(int x, int y) {
+        if (bubble.isPopped()) {
             return;
         }
-
-        double d = mousePosition.distance(x + r / 2, y + r / 2);
-        float inR = b.isSelected()
+        updatePosition(x, y);
+        
+        double d = mousePosition.distance(position.x + r / 2, position.y + r / 2);
+        float inR = bubble.isSelected()
                 ? 16 : (float) Math.max(4, r / 3.f - 10 / d * 50);
 
-        Color color = b.getColor();
-        java.awt.Color inColor = new java.awt.Color(color.r, color.g, color.b)
-                .darker().darker();
-
-        gfx.setColor(color);
-        gfx.fillOval(x, y, r, r);
-        gfx.setColor(b.isSelected() ? new Color(inColor.getRGB()) : Color.black);
-        gfx.fillOval(x + r / 2 - inR / 2, y + r / 2 - inR / 2, inR, inR);
+        gfx.setColor(bubble.getColor());
+        gfx.fillOval(position.x, position.y, r, r);
+        gfx.setColor(bubble.isSelected() ? inColor : Color.black);
+        gfx.fillOval(position.x + r / 2 - inR / 2, position.y + r / 2 - inR / 2, inR, inR);
+        
+        if (RenderSettings.DEBUG) {
+            gfx.setColor(Color.gray);
+            gfx.drawRect(x + bubble.x * r, y + bubble.y * r, r, r);
+        }
+    }
+    
+    private void updatePosition(int x, int y) {
+        float smooth = 0.07f + bubble.y / 100f;
+        double angle = Math.atan2(mousePosition.y - position.y, mousePosition.x - position.x);
+        
+        position.x += velocity.x;
+        position.y += velocity.y;
+        
+        float newX = ((x + bubble.x * r) - position.x),
+              newY = ((y + bubble.y * r) - position.y);
+        
+        velocity.x = curveValue(newX, velocity.x, smooth) + 0.4f * (float) Math.cos(angle);
+        velocity.y = curveValue(newY, velocity.y, smooth) + 0.4f * (float) Math.sin(angle);
+        
+        
+//        velocity.x += 0.4f * (float) Math.cos(angle);
+//        velocity.y += 0.4f * (float) Math.sin(angle);
+    }
+    
+    private float curveValue(float newValue, float oldValue, float smooth) {
+        return oldValue + (newValue - oldValue) * smooth;
     }
 }

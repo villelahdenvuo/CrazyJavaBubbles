@@ -16,6 +16,7 @@ Any value defined here will override the pom.xml file value but is only applicab
         <netbeans.hint.license>mit</netbeans.hint.license>
     </properties>
     <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+        <word>board's</word>
         <word>color</word>
         <word>framerate</word>
         <word>init</word>

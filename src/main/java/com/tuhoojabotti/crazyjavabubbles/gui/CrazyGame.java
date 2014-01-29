@@ -27,6 +27,7 @@ import com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogic;
 import com.tuhoojabotti.crazyjavabubbles.renderer.CrazyGameRenderer;
 import com.tuhoojabotti.crazyjavabubbles.renderer.RenderSettings;
 import java.awt.Point;
+import java.awt.geom.Point2D;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -42,10 +43,11 @@ public class CrazyGame extends BasicGameState {
     private final int ID;
     private CrazyGameLogic logic;
     private CrazyGameRenderer renderer;
-    private Point mousePosition;
+    private Point2D.Float mousePosition;
 
     /**
      * Create a new CrazyGame.
+     *
      * @param id of the game state
      */
     public CrazyGame(int id) {
@@ -59,10 +61,10 @@ public class CrazyGame extends BasicGameState {
 
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        mousePosition = new Point();
+        mousePosition = new Point2D.Float();
         logic = new CrazyGameLogic();
         logic.init();
-        renderer = new CrazyGameRenderer(gc.getGraphics(), gc, mousePosition);
+        renderer = new CrazyGameRenderer(logic.getBoard(), gc.getGraphics(), gc, mousePosition);
     }
 
     @Override
@@ -73,7 +75,7 @@ public class CrazyGame extends BasicGameState {
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
         logic.select(getMousePositionOnBoard());
-        
+
         if (logic.isGameOver()) {
             gc.exit();
         }
@@ -81,27 +83,32 @@ public class CrazyGame extends BasicGameState {
 
     @Override
     public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-        mousePosition.move(newx, newy);
+        mousePosition.setLocation(newx, newy);
     }
 
     @Override
     public void mouseDragged(int oldx, int oldy, int newx, int newy) {
-        mousePosition.move(newx, newy);
+        mousePosition.setLocation(newx, newy);
     }
 
     @Override
     public void mouseReleased(int button, int x, int y) {
-        mousePosition.move(x, y);
+        mousePosition.setLocation(x, y);
         if (button == 0) {
-            logic.pop();
+            int count = logic.pop();
+            if (count > 0) {
+                renderer.explode(mousePosition, count);
+            }
         }
     }
 
     private Point getMousePositionOnBoard() {
         int margin = RenderSettings.BOARD_MARGIN,
                 r = RenderSettings.BUBBLE_RADIUS;
-        return new Point(Math.round((mousePosition.x - margin) / r),
-                Math.round((mousePosition.y - margin) / r));
+
+        return new Point(
+                Math.round((mousePosition.x - margin - r / 2) / r),
+                Math.round((mousePosition.y - margin - r / 2) / r));
     }
 
 }

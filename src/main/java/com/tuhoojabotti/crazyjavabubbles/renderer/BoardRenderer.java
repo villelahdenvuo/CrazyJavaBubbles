@@ -25,6 +25,8 @@ package com.tuhoojabotti.crazyjavabubbles.renderer;
 
 import com.tuhoojabotti.crazyjavabubbles.logic.*;
 import java.awt.Point;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import org.newdawn.slick.Graphics;
 
 /**
@@ -34,35 +36,60 @@ import org.newdawn.slick.Graphics;
 public class BoardRenderer {
 
     private final Graphics gfx;
-    private final BubbleRenderer bubbleRenderer;
+    private final Board board;
+    private final ArrayList<BubbleRenderer> bubbleRenderers;
 
     /**
      * Create new {@link Board} renderer.
      * 
+     * @param board the game board to render
      * @param gfx the graphics controller
      * @param mouse the mouse position
      */
-    public BoardRenderer(Graphics gfx, Point mouse) {
+    public BoardRenderer(Board board, Graphics gfx, Point2D.Float mouse) {
+        this.board = board;
         this.gfx = gfx;
-        bubbleRenderer = new BubbleRenderer(gfx, mouse);
+        
+        Bubble[][] bubbles = board.getBubbles();
+        bubbleRenderers = new ArrayList<>();
+        
+        for (int y = 0; y < bubbles.length; y++) {
+            for (int x = 0; x < bubbles[0].length; x++) {
+                bubbleRenderers.add(new BubbleRenderer(bubbles[y][x], gfx, mouse));
+            }
+        }
     }
 
     /**
+     * Create a forceful explosion.
+     * 
+     * @param point origin of the explosion
+     * @param power power of the explosion
+     */
+    public void explode(Point2D.Float point, float power) {
+        for (BubbleRenderer bubbleRenderer : bubbleRenderers) {
+            bubbleRenderer.applyForce(point, power);
+        }
+    }
+    
+    /**
      * Render the board.
-     * @param b the board to render
      * @param x
      * @param y
      */
-    public void render(Board b, int x, int y) {
-        int br = RenderSettings.BUBBLE_RADIUS;
-        Bubble[][] bubbles = b.getBubbles();
+    public void render(int x, int y) {
+//        Bubble[][] bubbles = board.getBubbles();
 
-//        gfx.setAntiAlias(true);
-        for (int y2 = 0; y2 < bubbles.length; y2++) {
-            for (int x2 = 0; x2 < bubbles[0].length; x2++) {
-                bubbleRenderer.render(bubbles[y2][x2], x + x2 * br, y + y2 * br);
-            }
+        for (BubbleRenderer bubbleRenderer : bubbleRenderers) {
+            bubbleRenderer.render(x, y);
         }
+        
+//        gfx.setAntiAlias(true);
+//        for (int y2 = 0; y2 < bubbles.length; y2++) {
+//            for (int x2 = 0; x2 < bubbles[0].length; x2++) {
+//                bubbleRenderer.render(bubbles[y2][x2], x + x2 * br, y + y2 * br);
+//            }
+//        }
 //        gfx.setAntiAlias(false);
     }
 }

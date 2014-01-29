@@ -30,10 +30,11 @@ import org.newdawn.slick.Color;
 /**
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
-public class Bubble extends Point2D.Double {
+public class Bubble extends Point2D.Float {
 
     private final Color color;
     private boolean selected;
+    private boolean popped;
 
     /**
      * Create a new Bubble.
@@ -44,6 +45,7 @@ public class Bubble extends Point2D.Double {
     public Bubble(int x, int y) {
         super(x, y);
         selected = false;
+        popped = false;
 
         this.color = new Color[]{
             Color.red, Color.blue, Color.green, Color.yellow
@@ -57,9 +59,17 @@ public class Bubble extends Point2D.Double {
      * @param x
      * @param y
      */
-    public Bubble(Color color, double x, double y) {
+    public Bubble(Color color, float x, float y) {
         super(x, y);
         this.color = color;
+    }
+    
+    public void pop() {
+        popped = true;
+    }
+
+    public boolean isPopped() {
+        return popped;
     }
     
     /**

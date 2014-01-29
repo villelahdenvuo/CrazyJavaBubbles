@@ -23,9 +23,11 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.renderer;
 
+import com.tuhoojabotti.crazyjavabubbles.logic.Board;
 import com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogic;
 import java.awt.Font;
 import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.GameContainer;
@@ -50,10 +52,10 @@ public class CrazyGameRenderer {
      * @param gc game container
      * @param mouse mouse position
      */
-    public CrazyGameRenderer(Graphics gfx, GameContainer gc, Point mouse) {
+    public CrazyGameRenderer(Board board, Graphics gfx, GameContainer gc, Point2D.Float mouse) {
         this.gfx = gfx;
         gameContainer = gc;
-        boardRenderer = new BoardRenderer(gfx, mouse);
+        boardRenderer = new BoardRenderer(board, gfx, mouse);
         try {
             scoreText = new TextRenderer("Arial", Font.PLAIN, 16);
             scoreText.setVerticalAlign(TextRenderer.ALIGN_BOTTOM);
@@ -62,16 +64,20 @@ public class CrazyGameRenderer {
         }
     }
 
+    public void explode(Point2D.Float point, float power) {
+        boardRenderer.explode(point, power);
+    }
+    
     /**
      * Render the game.
      *
-     * @param game game itself
+     * @param game game logic
      */
     public void render(CrazyGameLogic game) {
         scoreText.render(2, gameContainer.getHeight() - 2, "score: "
                 + game.getScore());
 
-        boardRenderer.render(game.getBoard(), RenderSettings.BOARD_MARGIN,
+        boardRenderer.render(RenderSettings.BOARD_MARGIN,
                 RenderSettings.BOARD_MARGIN);
     }
 

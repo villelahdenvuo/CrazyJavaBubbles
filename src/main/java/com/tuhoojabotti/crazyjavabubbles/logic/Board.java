@@ -38,6 +38,7 @@ public class Board {
     private Set<Bubble> selection;
     private int width;
     private int height;
+    private boolean hasMoreMoves;
 
     /**
      * Create new game board.
@@ -56,10 +57,16 @@ public class Board {
      */
     public void init() {
         selection = new HashSet<>();
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                bubbles[y][x] = new Bubble(x, y);
+        hasMoreMoves = false;
+        
+        // Randomize board until we have moves left. (Should just take one loop.)
+        while(!hasMoreMoves) {
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    bubbles[y][x] = new Bubble(x, y);
+                }
             }
+            updateHasMoreMoves();
         }
     }
 
@@ -78,6 +85,7 @@ public class Board {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (selection.contains(bubbles[y][x])) {
+                    bubbles[y][x].pop();
                     bubbles[y][x] = null;
                 }
             }
@@ -97,6 +105,7 @@ public class Board {
         bubbles = bubbls;
         height = bubbles.length;
         width = bubbles[0].length;
+        updateHasMoreMoves();
     }
 
     public Set<Bubble> getSelection() {
@@ -128,21 +137,9 @@ public class Board {
      * @return whether groups exist on the board or not.
      */
     public boolean hasMoreMoves() {
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                Bubble b = bubbles[y][x];
-                if (b != null
-                        && (b.equals(get(x + 1, y))
-                        || b.equals(get(x - 1, y))
-                        || b.equals(get(x, y + 1))
-                        || b.equals(get(x, y - 1)))) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return hasMoreMoves;
     }
-
+    
     private boolean isOnBoard(int x, int y) {
         return x >= 0 && x < width
                 && y >= 0 && y < height && bubbles[y][x] != null;
@@ -210,7 +207,10 @@ public class Board {
                 }
             }
         }
-
+        
+        // Something changed, update this.
+        updateHasMoreMoves();
+        
         // Run update until we didn't move anything.
         if (moved) {
             update();
@@ -222,4 +222,21 @@ public class Board {
         b.setLocation(x, y);
         bubbles[y][x] = b;
     }
+    
+    private void updateHasMoreMoves() {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                Bubble b = bubbles[y][x];
+                if (b != null
+                        && (b.equals(get(x + 1, y))
+                        || b.equals(get(x - 1, y))
+                        || b.equals(get(x, y + 1))
+                        || b.equals(get(x, y - 1)))) {
+                    hasMoreMoves = true;
+                    return;
+                }
+            }
+        }
+        hasMoreMoves = false;
+    }    
 }

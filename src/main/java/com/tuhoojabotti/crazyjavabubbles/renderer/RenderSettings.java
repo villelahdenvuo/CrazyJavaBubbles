@@ -37,4 +37,9 @@ public class RenderSettings {
      * Margin where to draw the {@link Board}.
      */
     public static final int BOARD_MARGIN = 15;
+    
+    /**
+     * Render debug stuff on the screen.
+     */
+    public static final boolean DEBUG = false;
 }

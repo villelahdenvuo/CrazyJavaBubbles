@@ -86,7 +86,7 @@ public class SplashScreen extends BasicGameState {
         authorText = new TextRenderer("Calibri", Font.BOLD, 30);
         authorText.setHorizontalAlign(TextRenderer.ALIGN_CENTER);
 
-        bubbleRenderer = new BubbleRenderer(gc.getGraphics());
+        //bubbleRenderer = new BubbleRenderer(gc.getGraphics());
 
         for (int i = 0; i < 100; i++) {
             bubbles.add(new Bubble(rand.nextInt(gc.getWidth()) - 20, -20 - rand.nextInt(gc.getHeight())));
@@ -106,9 +106,9 @@ public class SplashScreen extends BasicGameState {
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics gfx) throws SlickException {
         gfx.setAntiAlias(true);
-        for (Bubble bubble : bubbles) {
-            bubbleRenderer.render(bubble, (int) bubble.x, (int) bubble.y);
-        }
+//        for (Bubble bubble : bubbles) {
+//            bubbleRenderer.render(bubble, (int) bubble.x, (int) bubble.y);
+//        }
         gfx.setAntiAlias(false);
 
         titleText.render(gc.getWidth() / 2, 50, "Crazy Bubbles");

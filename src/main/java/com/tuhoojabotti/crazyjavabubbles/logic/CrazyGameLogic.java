@@ -74,11 +74,14 @@ public class CrazyGameLogic {
 
     /**
      * Pop the currently selected {@link Bubble}s.
+     * @return how many bubbles were popped
      */
-    public void pop() {
+    public int pop() {
         int bubbles = board.pop();
 
         score += bubbles;
+        
+        return bubbles;
     }
 
     /**
