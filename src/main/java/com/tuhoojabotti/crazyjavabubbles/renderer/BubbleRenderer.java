@@ -78,10 +78,10 @@ public class BubbleRenderer {
 
     public void applyForce(Point2D.Float point, float power) {
         double angle = Math.atan2(point.y - position.y, point.x - position.x);
-        double dist = point.distance(position.x, position.y) / 100;
+        double dist = point.distance(position.x, position.y) / 60;
 
-        velocity.x -= power / dist * (float) Math.cos(angle) * 2;
-        velocity.y -= power / dist * (float) Math.sin(angle);
+        velocity.x -= power / (1 + dist) * (float) Math.cos(angle) * 10;
+        velocity.y -= power / (1 + dist) * (float) Math.sin(angle) * 5;
     }
 
     /**
@@ -99,10 +99,11 @@ public class BubbleRenderer {
         double d = mousePosition.distance(position.x + r / 2, position.y + r / 2);
         float inR = bubble.isSelected()
                 ? 16 : (float) Math.max(4, r / 3.f - 10 / d * 50);
+        float outR = (float) (r / (1 + position.distance(x + bubble.x * r, y + bubble.y * r) / 100));
 
         // Outer circle
         gfx.setColor(bubble.getColor());
-        gfx.fillOval(position.x, position.y, r, r);
+        gfx.fillOval(position.x, position.y, outR, outR);
         // Inner circle
         gfx.setColor(bubble.isSelected() ? inColor : Color.black);
         gfx.fillOval(position.x + r / 2 - inR / 2, position.y + r / 2 - inR / 2, inR, inR);

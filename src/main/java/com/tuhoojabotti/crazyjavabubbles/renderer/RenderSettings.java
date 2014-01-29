@@ -33,13 +33,13 @@ public class RenderSettings {
      */
     public static final int BUBBLE_RADIUS = 32;
 
-    public static final float BUBBLE_WOBBLE = 0.07f;
-    
+    public static final float BUBBLE_WOBBLE = 0.05f;
+
     /**
      * Margin where to draw the {@link Board}.
      */
     public static final int BOARD_MARGIN = 15;
-    
+
     /**
      * Render debug stuff on the screen.
      */
