@@ -54,4 +54,8 @@ public class BubbleTest {
         assertEquals(Color.yellow, bubble.getColor());
     }
 
+    @Test
+    public void testIsPopped() {
+        assertFalse(bubble.isPopped());
+    }
 }
