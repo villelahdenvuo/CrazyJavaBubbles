@@ -88,6 +88,10 @@ public class BoardTest {
         board.setBubbles(bubbles);
     }
 
+    private int selectionSize() {
+        return board.getSelection().size();
+    }
+
     @Test
     public void newBoardHasMoves() {
         assertTrue(board.hasMoreMoves());
@@ -124,17 +128,24 @@ public class BoardTest {
             {'n', 'n'},
             {'n', 'n'}
         });
-        assertFalse(board.hasMoreMoves());        
+        assertFalse(board.hasMoreMoves());
         boardFromMatrix(board, new char[][]{
             {'r', 'n'},
             {'b', 'n'}
         });
-        assertFalse(board.hasMoreMoves());    
+        assertFalse(board.hasMoreMoves());
         boardFromMatrix(board, new char[][]{
             {'r', 'n'},
             {'b', 'b'}
         });
-        assertTrue(board.hasMoreMoves());            
+        assertTrue(board.hasMoreMoves());
+        // Invalid game state.
+        boardFromMatrix(board, new char[][]{
+            {'n', 'n', 'n'},
+            {'n', 'b', 'n'},
+            {'n', 'n', 'n'}
+        });
+        assertFalse(board.hasMoreMoves());
     }
 
     @Test
@@ -146,7 +157,7 @@ public class BoardTest {
             {'r', 'r', 'r', 'r'}
         });
         board.select(0, 0);
-        assertEquals(4 * 4, board.getSelection().size());
+        assertEquals(4 * 4, selectionSize());
     }
 
     @Test
@@ -157,8 +168,10 @@ public class BoardTest {
             {'r', 'r', 'r', 'r'},
             {'r', 'r', 'r', 'r'}
         });
+        Bubble testBubble = board.getBubbles()[1][1];
         board.select(3, 3);
         board.pop();
+        assertTrue(testBubble.isPopped());
         assertFalse(board.hasMoreMoves());
     }
 
@@ -202,9 +215,9 @@ public class BoardTest {
         board.select(1, 2);
         board.pop();
         board.select(1, 0);
-        assertEquals(0, board.getSelection().size());
+        assertEquals(0, selectionSize());
         board.select(1, 1);
-        assertEquals(0, board.getSelection().size());
+        assertEquals(0, selectionSize());
     }
 
     @Test
@@ -218,9 +231,9 @@ public class BoardTest {
         board.select(1, 0);
         board.pop();
         board.select(3, 0);
-        assertEquals(0, board.getSelection().size());
+        assertEquals(0, selectionSize());
         board.select(3, 3);
-        assertEquals(0, board.getSelection().size());
+        assertEquals(0, selectionSize());
     }
 
     @Test
@@ -234,8 +247,40 @@ public class BoardTest {
         board.select(1, 0);
         board.pop();
         board.select(3, 0);
-        assertEquals(0, board.getSelection().size());
+        assertEquals(0, selectionSize());
         board.select(3, 3);
-        assertEquals(0, board.getSelection().size());
+        assertEquals(0, selectionSize());
+        board.select(1, 0);
+        assertEquals(0, selectionSize());
+        board.select(1, 1);
+        assertEquals(0, selectionSize());
+    }
+
+    @Test
+    public void updateWorks() {
+        boardFromMatrix(board, new char[][]{
+            {'n', 'n', 'r', 'r'}
+        });
+        board.select(0, 0);
+        assertEquals(0, selectionSize());
+        board.select(1, 0);
+        assertEquals(0, selectionSize());
+
+        board.select(2, 0);
+        assertEquals(2, selectionSize());
+        board.select(3, 0);
+        assertEquals(2, selectionSize());
+
+        board.update();
+
+        board.select(0, 0);
+        assertEquals(2, selectionSize());
+        board.select(1, 0);
+        assertEquals(2, selectionSize());
+
+        board.select(2, 0);
+        assertEquals(0, selectionSize());
+        board.select(3, 0);
+        assertEquals(0, selectionSize());
     }
 }

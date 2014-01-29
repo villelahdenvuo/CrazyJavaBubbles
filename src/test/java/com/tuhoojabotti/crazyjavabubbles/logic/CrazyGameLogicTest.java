@@ -24,6 +24,8 @@
 package com.tuhoojabotti.crazyjavabubbles.logic;
 
 import java.awt.Point;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -62,7 +64,7 @@ public class CrazyGameLogicTest {
                 }
             }
             i++;
-            if (i > 1000) {
+            if (i > 100) {
                 fail("Game should end at some point.");
             }
         }
@@ -70,4 +72,17 @@ public class CrazyGameLogicTest {
         assertTrue("Score should be bigger than zero.", logic.getScore() > 0);
     }
 
+    @Test
+    public void popShouldReturnBubbleCount() {
+        Bubble[][] bubbles = logic.getBoard().getBubbles();
+        for (int y = 0; y < bubbles.length; y++) {
+            for (int x = 0; x < bubbles[0].length; x++) {
+                logic.select(new Point(x, y));
+                Set<Bubble> selection = logic.getBoard().getSelection();
+                if (selection.size() > 1) {
+                    assertEquals(selection.size(), logic.pop());
+                }
+            }
+        }
+    }
 }
