@@ -7,3 +7,4 @@
  * 18.1.2014 &ndash; **5h** &ndash; *SplashScreen ja päävalikonalku*
  * 22.1.2014 &ndash; **7h** &ndash; *Pelilogiikka ja dokumentaatio kuntoon*
  * 23.1.2014 &ndash; **2h** &ndash; *Testaus kuntoon ja luokkakaavio*
+ * 29.1.2014 &ndash; **5h** &ndash; *Parannettu testausta, optimoitu logiikkaa, lisätty fysiikat*
