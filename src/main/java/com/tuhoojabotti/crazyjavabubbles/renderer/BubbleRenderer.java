@@ -52,14 +52,14 @@ public class BubbleRenderer {
      */
     public BubbleRenderer(Bubble bubble, Graphics gfx, Point2D.Float mouse) {
         Random rand = new Random();
-        
+
         this.bubble = bubble;
         this.gfx = gfx;
         mousePosition = mouse;
         position = new Point2D.Float(RenderSettings.BOARD_MARGIN + bubble.x * r
                 + 50 - rand.nextInt(100), 0);
-        velocity = new Point2D.Float(0,0);
-        
+        velocity = new Point2D.Float(0, 0);
+
         Color color = bubble.getColor();
         java.awt.Color tempColor = new java.awt.Color(color.r, color.g, color.b)
                 .darker().darker();
@@ -78,11 +78,12 @@ public class BubbleRenderer {
 
     public void applyForce(Point2D.Float point, float power) {
         double angle = Math.atan2(point.y - position.y, point.x - position.x);
-        
-        velocity.x -= power * 2 * (float) Math.cos(angle);
-        velocity.y -= power * (float) Math.sin(angle);
+        double dist = point.distance(position.x, position.y) / 100;
+
+        velocity.x -= power / dist * (float) Math.cos(angle) * 2;
+        velocity.y -= power / dist * (float) Math.sin(angle);
     }
-    
+
     /**
      * Render a {@link Bubble}.
      *
@@ -94,40 +95,42 @@ public class BubbleRenderer {
             return;
         }
         updatePosition(x, y);
-        
+
         double d = mousePosition.distance(position.x + r / 2, position.y + r / 2);
         float inR = bubble.isSelected()
                 ? 16 : (float) Math.max(4, r / 3.f - 10 / d * 50);
 
+        // Outer circle
         gfx.setColor(bubble.getColor());
         gfx.fillOval(position.x, position.y, r, r);
+        // Inner circle
         gfx.setColor(bubble.isSelected() ? inColor : Color.black);
         gfx.fillOval(position.x + r / 2 - inR / 2, position.y + r / 2 - inR / 2, inR, inR);
-        
+
+        // Debug box
         if (RenderSettings.DEBUG) {
             gfx.setColor(Color.gray);
             gfx.drawRect(x + bubble.x * r, y + bubble.y * r, r, r);
+            gfx.drawLine(x + bubble.x * r + r / 2, y + bubble.y * r + r / 2,
+                    position.x + r / 2, position.y + r / 2);
         }
     }
-    
+
     private void updatePosition(int x, int y) {
-        float smooth = 0.07f + bubble.y / 100f;
+        float smooth = RenderSettings.BUBBLE_WOBBLE + bubble.y / 80f;
         double angle = Math.atan2(mousePosition.y - position.y, mousePosition.x - position.x);
-        
+
+        // Move Bubble according to it's velocity.
         position.x += velocity.x;
         position.y += velocity.y;
-        
-        float newX = ((x + bubble.x * r) - position.x),
-              newY = ((y + bubble.y * r) - position.y);
-        
-        velocity.x = curveValue(newX, velocity.x, smooth) + 0.4f * (float) Math.cos(angle);
-        velocity.y = curveValue(newY, velocity.y, smooth) + 0.4f * (float) Math.sin(angle);
-        
-        
-//        velocity.x += 0.4f * (float) Math.cos(angle);
-//        velocity.y += 0.4f * (float) Math.sin(angle);
+
+        // Update velocity towards real position + towards mouse cursor.
+        velocity.x = curveValue((x + bubble.x * r) - position.x, velocity.x, smooth)
+                + 0.4f * (float) Math.cos(angle);
+        velocity.y = curveValue((y + bubble.y * r) - position.y, velocity.y, smooth)
+                + 0.4f * (float) Math.sin(angle);
     }
-    
+
     private float curveValue(float newValue, float oldValue, float smooth) {
         return oldValue + (newValue - oldValue) * smooth;
     }

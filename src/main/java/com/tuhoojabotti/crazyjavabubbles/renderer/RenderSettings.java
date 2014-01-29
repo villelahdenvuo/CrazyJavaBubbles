@@ -33,6 +33,8 @@ public class RenderSettings {
      */
     public static final int BUBBLE_RADIUS = 32;
 
+    public static final float BUBBLE_WOBBLE = 0.07f;
+    
     /**
      * Margin where to draw the {@link Board}.
      */
