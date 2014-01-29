@@ -79,7 +79,7 @@ public class BubbleRenderer {
     public void applyForce(Point2D.Float point, float power) {
         double angle = Math.atan2(point.y - position.y, point.x - position.x);
         
-        velocity.x -= power * (float) Math.cos(angle);
+        velocity.x -= power * 2 * (float) Math.cos(angle);
         velocity.y -= power * (float) Math.sin(angle);
     }
     
