@@ -32,41 +32,27 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
  *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
-public class CrazyGame extends BasicGameState {
+public class CrazyGame extends GameWrapper {
 
-    private final int ID;
     private CrazyGameLogic logic;
     private CrazyGameRenderer renderer;
-    private Vector2f mousePosition;
-    private boolean exitRequested;
 
-    /**
-     * Create a new CrazyGame.
-     *
-     * @param id of the game state
-     */
-    public CrazyGame(int id) {
-        ID = id;
+    public CrazyGame(int ID) {
+        super(ID);
     }
-
-    @Override
-    public int getID() {
-        return ID;
-    }
-
+    
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        mousePosition = new Vector2f();
+        super.init(gc, sbg);
         logic = new CrazyGameLogic();
         logic.init();
-        renderer = new CrazyGameRenderer(logic.getBoard(), gc.getGraphics(), gc, mousePosition);
+        renderer = new CrazyGameRenderer(logic.getBoard(), gc.getGraphics(), gc, super.mousePosition);
     }
 
     @Override
@@ -76,9 +62,7 @@ public class CrazyGame extends BasicGameState {
 
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-        if (exitRequested) {
-            gc.exit();
-        }
+        super.update(gc, sbg, delta);
         
         renderer.update(delta);
         logic.select(getMousePositionOnBoard());
@@ -86,16 +70,6 @@ public class CrazyGame extends BasicGameState {
         if (logic.isGameOver()) {
             // TODO
         }
-    }
-
-    @Override
-    public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-        mousePosition.set(newx, newy);
-    }
-
-    @Override
-    public void mouseDragged(int oldx, int oldy, int newx, int newy) {
-        mousePosition.set(newx, newy);
     }
 
     @Override
@@ -109,17 +83,6 @@ public class CrazyGame extends BasicGameState {
             }
         }
     }
-
-    @Override
-    public void keyPressed(int key, char c) {
-        switch(key) {
-            case 1: exitRequested = true; break;
-        }
-        //LOG.info("Pressed: " + key + "; " + c);
-    }
-    private static final Logger LOG = Logger.getLogger(CrazyGame.class.getName());
-
-    
     
     private Point getMousePositionOnBoard() {
         int margin = RenderSettings.BOARD_MARGIN,

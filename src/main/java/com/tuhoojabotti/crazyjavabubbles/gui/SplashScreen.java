@@ -176,7 +176,7 @@ public class SplashScreen extends BasicGameState {
         }
 
         if (authorPos.x > gc.getWidth() * 1.6f) {
-            sbg.enterState(Application.MAINMENU, new FadeOutTransition(), new EmptyTransition());
+            sbg.enterState(Application.GAME, new FadeOutTransition(), new EmptyTransition());
         }
     }
 }
