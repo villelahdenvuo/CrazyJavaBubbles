@@ -24,9 +24,9 @@
 package com.tuhoojabotti.crazyjavabubbles.renderer;
 
 import com.tuhoojabotti.crazyjavabubbles.logic.*;
-import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 /**
@@ -78,18 +78,20 @@ public class BoardRenderer {
      * @param y
      */
     public void render(int x, int y) {
-//        Bubble[][] bubbles = board.getBubbles();
-
         for (BubbleRenderer bubbleRenderer : bubbleRenderers) {
             bubbleRenderer.render(x, y);
         }
+    }
+
+    public void update(int delta) {
+        ArrayList<BubbleRenderer> popped = new ArrayList<>();
         
-//        gfx.setAntiAlias(true);
-//        for (int y2 = 0; y2 < bubbles.length; y2++) {
-//            for (int x2 = 0; x2 < bubbles[0].length; x2++) {
-//                bubbleRenderer.render(bubbles[y2][x2], x + x2 * br, y + y2 * br);
-//            }
-//        }
-//        gfx.setAntiAlias(false);
+        for (BubbleRenderer bubbleRenderer : bubbleRenderers) {
+            if (bubbleRenderer.update(delta)) {
+                popped.add(bubbleRenderer);
+            }
+        }
+        
+        bubbleRenderers.removeAll(popped);
     }
 }

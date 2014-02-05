@@ -33,12 +33,14 @@ public class CrazyGameLogic {
 
     private int score;
     private final Board board;
+    private final Point lastSelection;
 
     /**
      * Create new {@link CrazyGame} logic.
      */
     public CrazyGameLogic() {
         board = new Board(24, 17);
+        lastSelection = new Point(-1, -1);
     }
 
     /**
@@ -74,13 +76,14 @@ public class CrazyGameLogic {
 
     /**
      * Pop the currently selected {@link Bubble}s.
+     *
      * @return how many bubbles were popped
      */
     public int pop() {
         int bubbles = board.pop();
 
         score += bubbles;
-        
+
         return bubbles;
     }
 
@@ -90,6 +93,14 @@ public class CrazyGameLogic {
      * @param point where the selection starts
      */
     public void select(Point point) {
+        // Update selection only if mouse has moved.
+        if (!lastSelection.equals(point)) {
+            board.select(point.x, point.y);
+            lastSelection.setLocation(point);
+        }
+    }
+
+    public void forceSelect(Point point) {
         board.select(point.x, point.y);
     }
 }

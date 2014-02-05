@@ -73,7 +73,8 @@ public class CrazyGame extends BasicGameState {
     }
 
     @Override
-    public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
+    public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+        renderer.update(delta);
         logic.select(getMousePositionOnBoard());
 
         if (logic.isGameOver()) {
@@ -97,6 +98,7 @@ public class CrazyGame extends BasicGameState {
         if (button == 0) {
             int count = logic.pop();
             if (count > 0) {
+                logic.forceSelect(getMousePositionOnBoard());
                 renderer.explode(mousePosition, count);
             }
         }
