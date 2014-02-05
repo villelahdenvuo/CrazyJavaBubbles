@@ -33,6 +33,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Vector2f;
 
 /**
  *
@@ -54,20 +55,20 @@ public class CrazyGameRenderer {
      * @param gc game container
      * @param mouse mouse position
      */
-    public CrazyGameRenderer(Board board, Graphics gfx, GameContainer gc, Point2D.Float mouse) {
+    public CrazyGameRenderer(Board board, Graphics gfx, GameContainer gc, Vector2f mouse) {
         this.gfx = gfx;
         gameContainer = gc;
         boardRenderer = new BoardRenderer(board, gfx, mouse);
 
         try {
-            scoreText = new TextRenderer("Arial", Font.PLAIN, 16);
-            scoreText.setVerticalAlign(TextRenderer.ALIGN_BOTTOM);
+            scoreText = new TextRenderer("Courier New", Font.PLAIN, 16);
+            //scoreText.setVerticalAlign(TextRenderer.ALIGN_BOTTOM);
         } catch (SlickException ex) {
             Logger.getLogger(CrazyGameRenderer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void explode(Point2D.Float point, float power) {
+    public void explode(Vector2f point, float power) {
         boardRenderer.explode(point, power);
     }
 
@@ -83,18 +84,17 @@ public class CrazyGameRenderer {
         gfx.setColor(new Color(1f, 1f, 1f, 0.5f));
         gfx.fillRect(0, gameContainer.getHeight() - 28, gameContainer.getWidth(), 28);
 
-        int textY = gameContainer.getHeight() - 8;
+        int textY = gameContainer.getHeight() - 20;
 
-        scoreText.render(gameContainer.getWidth() - 70, textY, "fps: " + gameContainer.getFPS());
-        scoreText.render(gameContainer.getWidth() - 170, textY, "ms: " + deltaTime);
+        scoreText.render(gameContainer.getWidth() - 100, textY, "fps: " + gameContainer.getFPS());
+        scoreText.render(gameContainer.getWidth() - 180, textY, "ms: " + deltaTime);
 
-        scoreText.render(6, textY, "score: "
-                + game.getScore());
+        scoreText.render(6, textY, "score: " + game.getScore());
     }
 
     public void update(int delta) {
         deltaTime = delta;
-        boardRenderer.update(delta);
+        boardRenderer.update(gameContainer, delta);
     }
 
 }

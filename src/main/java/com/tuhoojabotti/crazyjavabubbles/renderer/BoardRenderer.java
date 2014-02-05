@@ -27,7 +27,9 @@ import com.tuhoojabotti.crazyjavabubbles.logic.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.geom.Vector2f;
 
 /**
  *
@@ -46,7 +48,7 @@ public class BoardRenderer {
      * @param gfx the graphics controller
      * @param mouse the mouse position
      */
-    public BoardRenderer(Board board, Graphics gfx, Point2D.Float mouse) {
+    public BoardRenderer(Board board, Graphics gfx, Vector2f mouse) {
         this.board = board;
         this.gfx = gfx;
         
@@ -66,7 +68,7 @@ public class BoardRenderer {
      * @param point origin of the explosion
      * @param power power of the explosion
      */
-    public void explode(Point2D.Float point, float power) {
+    public void explode(Vector2f point, float power) {
         for (BubbleRenderer bubbleRenderer : bubbleRenderers) {
             bubbleRenderer.applyForce(point, power);
         }
@@ -83,11 +85,11 @@ public class BoardRenderer {
         }
     }
 
-    public void update(int delta) {
+    public void update(GameContainer gc, int delta) {
         ArrayList<BubbleRenderer> popped = new ArrayList<>();
         
         for (BubbleRenderer bubbleRenderer : bubbleRenderers) {
-            if (bubbleRenderer.update(delta)) {
+            if (bubbleRenderer.update(gc, delta)) {
                 popped.add(bubbleRenderer);
             }
         }

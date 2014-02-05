@@ -46,9 +46,9 @@ public class Bubble extends Point2D.Float {
         super(x, y);
         selected = false;
         popped = false;
-
+        
         this.color = new Color[]{
-            Color.red, Color.blue, Color.green, Color.yellow
+            Color.red, new Color(0.4f, 0.6f, 1f), Color.green, Color.yellow
         }[new Random().nextInt(4)];
     }
     

@@ -102,6 +102,7 @@ public class Application extends StateBasedGame {
             AppGameContainer app = new AppGameContainer(this);
             app.setDisplayMode(WIDTH, HEIGHT, false);
             //app.setTargetFrameRate(FPS);
+            app.setShowFPS(false);
             app.start();
         } catch (SlickException e) {
             e.printStackTrace();

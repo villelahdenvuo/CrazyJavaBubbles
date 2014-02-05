@@ -173,6 +173,11 @@ public class Board {
             addIfOk(current, queue, x, y - 1);
             selection.add(current);
         }
+
+        // Can't select just one.
+        if (selection.size() == 1) {
+            selection.clear();
+        }
     }
 
     private void addIfOk(Bubble current, Queue<Bubble> queue, int x, int y) {
