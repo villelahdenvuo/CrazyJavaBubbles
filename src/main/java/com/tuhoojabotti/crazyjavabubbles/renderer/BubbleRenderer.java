@@ -24,10 +24,7 @@
 package com.tuhoojabotti.crazyjavabubbles.renderer;
 
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
-import java.awt.geom.Point2D;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -46,9 +43,9 @@ public class BubbleRenderer {
     private Bubble bubble;
     private Vector2f velocity;
     private Vector2f target;
-    Circle outCircle;
-    Circle inCircle;
-    Random rand;
+    private Circle outCircle;
+    private Circle inCircle;
+    private Random rand;
 
     /**
      * Create a {@link Bubble} renderer with mouse interaction.
@@ -59,22 +56,18 @@ public class BubbleRenderer {
      */
     public BubbleRenderer(Bubble bubble, Graphics gfx, Vector2f mouse) {
         rand = new Random();
-
         this.bubble = bubble;
         this.gfx = gfx;
         mousePosition = mouse;
+
         velocity = new Vector2f();
         target = new Vector2f();
-
-        Color color = bubble.getColor();
-        java.awt.Color tempColor = new java.awt.Color(color.r, color.g, color.b)
-                .darker().darker();
 
         outCircle = new Circle(0, 0, r / 2, 17);
         inCircle = new Circle(0, 0, r / 3, 17);
 
         outCircle.setLocation(RenderSettings.BOARD_MARGIN + bubble.x * r
-                + 100 - rand.nextInt(200), -100);
+                + 100 - rand.nextInt(200), -10);
     }
 
     /**
@@ -89,10 +82,10 @@ public class BubbleRenderer {
 
     public void applyForce(Vector2f point, float power) {
         double angle = Math.atan2(point.y - outCircle.getCenterY(), point.x - outCircle.getCenterX());
-        float distance = point.distance(outCircle.getLocation()) / 100;
+        float distance = Math.max(10, point.distance(outCircle.getLocation()));
 
-        velocity.x -= power / (1 + distance) * (float) Math.cos(angle) * 100;
-        velocity.y -= power / (1 + distance) * (float) Math.sin(angle) * 50;
+        velocity.x -= power / distance * (float) Math.cos(angle) * 200;
+        velocity.y -= power / distance * (float) Math.sin(angle) * 200;
     }
 
     /**
@@ -120,10 +113,13 @@ public class BubbleRenderer {
         }
     }
 
-    private float curveValue(float newValue, float oldValue, float smooth) {
-        return oldValue + (newValue - oldValue) * smooth;
-    }
-
+    /**
+     * Update the renderer.
+     * 
+     * @param gc game container
+     * @param delta delta time
+     * @return is bubble popped
+     */
     public boolean update(GameContainer gc, int delta) {
         float smooth = RenderSettings.BUBBLE_WOBBLE + bubble.y / 80f;
         int selected = bubble.isSelected() ? 1 : 0;
@@ -142,7 +138,7 @@ public class BubbleRenderer {
         // Move Bubble according to it's velocity.
         outCircle.setLocation(
                 outCircle.getLocation()
-                .add(velocity.scale(delta * 0.06f))
+                .add(velocity.scale(delta * 0.04f))
         );
 
         // Set hole size. It depends on mouse distance and selection.
@@ -160,5 +156,9 @@ public class BubbleRenderer {
         );
 
         return bubble.isPopped();
+    }
+
+    private float curveValue(float newValue, float oldValue, float smooth) {
+        return oldValue + (newValue - oldValue) * smooth;
     }
 }
