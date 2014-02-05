@@ -24,7 +24,6 @@
 package com.tuhoojabotti.crazyjavabubbles.renderer;
 
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
-import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.Random;
 import org.newdawn.slick.Color;
@@ -44,7 +43,7 @@ public class BubbleRenderer {
     private Bubble bubble;
     private Color inColor;
     private Vector2f velocity;
-    private Point target;
+    private Vector2f target;
     Circle bubbleShape;
     Circle innerShape;
 
@@ -62,7 +61,7 @@ public class BubbleRenderer {
         this.gfx = gfx;
         mousePosition = mouse;
         velocity = new Vector2f();
-        target = new Point(0, 0);
+        target = new Vector2f();
 
         Color color = bubble.getColor();
         java.awt.Color tempColor = new java.awt.Color(color.r, color.g, color.b)
@@ -101,16 +100,14 @@ public class BubbleRenderer {
      * @param y board's y-coordinate
      */
     public void render(int x, int y) {
-        target.move(x, y);
+        target.set(x + bubble.x * r, y + bubble.y * r);
 
         // Outer circle
         gfx.setColor(bubble.getColor());
         gfx.fill(bubbleShape);
-        //gfx.fillOval(position.x, position.y, outR, outR);
         // Inner circle
         gfx.setColor(bubble.isSelected() ? inColor : Color.black);
         gfx.fill(innerShape);
-        //gfx.fillOval(position.x + r / 2 - inR / 2, position.y + r / 2 - inR / 2, inR, inR);
 
         // Debug box
         if (RenderSettings.DEBUG) {
@@ -146,9 +143,9 @@ public class BubbleRenderer {
         );
 
         // Update velocity towards real position + towards mouse cursor.
-        velocity.x = curveValue((target.x + bubble.x * r) - bubbleShape.getX(), velocity.x, smooth)
+        velocity.x = curveValue(target.x - bubbleShape.getX(), velocity.x, smooth)
                 + 0.4f * (float) Math.cos(angle);
-        velocity.y = curveValue((target.y + bubble.y * r) - bubbleShape.getY(), velocity.y, smooth)
+        velocity.y = curveValue(target.y - bubbleShape.getY(), velocity.y, smooth)
                 + 0.4f * (float) Math.sin(angle);
 
         return bubble.isPopped();
