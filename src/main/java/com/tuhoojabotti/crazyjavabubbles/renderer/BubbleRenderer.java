@@ -77,7 +77,7 @@ public class BubbleRenderer {
      * @param gfx graphics controller
      */
     public BubbleRenderer(Bubble bubble, Graphics gfx) {
-        this(bubble, gfx, new Vector2f(-1000, -1000));
+        this(bubble, gfx, new Vector2f(-100000, -100000));
     }
 
     public void applyForce(Vector2f point, float power) {

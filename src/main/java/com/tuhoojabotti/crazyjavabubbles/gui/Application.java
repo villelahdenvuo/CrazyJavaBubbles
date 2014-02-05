@@ -89,8 +89,8 @@ public class Application extends StateBasedGame {
      */
     @Override
     public void initStatesList(GameContainer gc) throws SlickException {
-//        this.addState(new SplashScreen(SPLASHSCREEN));
-//        this.addState(new MainMenu(MAINMENU));
+        this.addState(new SplashScreen(SPLASHSCREEN));
+        this.addState(new MainMenu(MAINMENU));
         this.addState(new CrazyGame(GAME));
     }
 
@@ -101,8 +101,11 @@ public class Application extends StateBasedGame {
         try {
             AppGameContainer app = new AppGameContainer(this);
             app.setDisplayMode(WIDTH, HEIGHT, false);
-            app.setTargetFrameRate(FPS);
+            //app.setTargetFrameRate(FPS);
             app.setShowFPS(false);
+            app.setMaximumLogicUpdateInterval(20);
+            app.setMinimumLogicUpdateInterval(15);
+            app.setAlwaysRender(true);
             app.start();
         } catch (SlickException e) {
             e.printStackTrace();
