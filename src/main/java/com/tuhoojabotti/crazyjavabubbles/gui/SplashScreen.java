@@ -84,7 +84,7 @@ public class SplashScreen extends GameWrapper {
 
         for (int y = 0; y <= gc.getHeight() / r + 1; y++) {
             for (int x = 0; x < gc.getWidth() / r + 1; x++) {
-                if ((y < 8 || y > 10) && (y < 2 || y > 4 || x < 4 || x > 20)) {
+                if ((y < 8 || y > 10) && (y < 2 || y > 4 || x < 5 || x > 20)) {
                     Bubble b = new Bubble(x, y);
                     b.setSelected(true);
                     bubbles.add(b);

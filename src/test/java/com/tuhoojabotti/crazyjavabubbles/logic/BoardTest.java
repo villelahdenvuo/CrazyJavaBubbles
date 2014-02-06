@@ -271,7 +271,7 @@ public class BoardTest {
         board.select(3, 0);
         assertEquals(2, selectionSize());
 
-        board.update();
+        board.updateBubblePositions();
 
         board.select(0, 0);
         assertEquals(2, selectionSize());

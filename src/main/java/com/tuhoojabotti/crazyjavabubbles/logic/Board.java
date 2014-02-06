@@ -78,9 +78,8 @@ public class Board {
      * @return amount of bubbles popped
      */
     public int pop() {
-        // Can't pop if selection is smaller than 2.
         if (selection.size() < 2) {
-            return 0;
+            return 0; // Can't pop if selection is smaller than 2.
         }
 
         // Remove selected bubbles from the board.
@@ -93,9 +92,7 @@ public class Board {
             }
         }
 
-        // Update bubble positions;
-        update();
-
+        updateBubblePositions();
         return selection.size();
     }
 
@@ -197,14 +194,14 @@ public class Board {
     /**
      * Update board, just for testing purposes.
      */
-    protected void update() {
-        if (moveDown() || moveLeft()) {
-            update(); // Run update until we didn't move anything.
+    protected void updateBubblePositions() {
+        if (moveBubblesDown() || moveBubblesLeft()) {
+            updateBubblePositions(); // Run updateBubblePositions until we didn't move anything.
         }
         updateHasMoreMoves();
     }
 
-    private boolean moveDown() {
+    private boolean moveBubblesDown() {
         boolean moved = false;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -218,7 +215,7 @@ public class Board {
         return moved;
     }
 
-    private boolean moveLeft() {
+    private boolean moveBubblesLeft() {
         boolean moved = false;
         for (int x = 0; x < width; x++) {
             if (!isOnBoard(x, height - 1) && isOnBoard(x + 1, height - 1)) {
