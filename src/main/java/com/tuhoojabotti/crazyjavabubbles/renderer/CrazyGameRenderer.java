@@ -35,7 +35,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 
 /**
- *
+ * Renders the whole game.
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class CrazyGameRenderer {

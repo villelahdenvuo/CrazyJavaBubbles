@@ -28,6 +28,7 @@ import java.util.Random;
 import org.newdawn.slick.Color;
 
 /**
+ * A bubble on the game, all the information about it.
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class Bubble extends Point2D.Float {

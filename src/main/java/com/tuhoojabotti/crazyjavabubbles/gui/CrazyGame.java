@@ -33,7 +33,7 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 /**
- *
+ * The game state that handles updating and rendering of the game.
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class CrazyGame extends GameWrapper {
@@ -47,7 +47,6 @@ public class CrazyGame extends GameWrapper {
 
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        super.init(gc, sbg);
         logic = new CrazyGameLogic();
     }
 

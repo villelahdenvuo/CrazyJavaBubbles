@@ -32,7 +32,7 @@ import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Vector2f;
 
 /**
- *
+ * Renders the {@link Bubble} with cool physics.
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class BubbleRenderer {

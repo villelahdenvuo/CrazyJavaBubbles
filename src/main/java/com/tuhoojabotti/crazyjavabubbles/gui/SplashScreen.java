@@ -29,31 +29,25 @@ import com.tuhoojabotti.crazyjavabubbles.renderer.BubbleRenderer;
 import com.tuhoojabotti.crazyjavabubbles.renderer.RenderSettings;
 import java.awt.Font;
 import java.util.ArrayList;
-import java.util.Random;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.opengl.TextureImpl;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.EmptyTransition;
-import org.newdawn.slick.state.transition.FadeOutTransition;
 
 /**
- *
+ * A cool splash screen for the game!
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
-public class SplashScreen extends BasicGameState {
-
-    private final int ID;
+public class SplashScreen extends GameWrapper {
+    
     private ArrayList<BubbleRenderer> bubbleRenderers;
     private ArrayList<Bubble> bubbles;
-    private Random rand;
     private TextRenderer titleText;
     private TextRenderer authorText;
     private Vector2f mousePosition;
-    
+
     private Vector2f titlePos;
     private Vector2f authorPos;
 
@@ -63,15 +57,7 @@ public class SplashScreen extends BasicGameState {
      * @param ID the ID of this state
      */
     public SplashScreen(int ID) {
-        this.ID = ID;
-    }
-
-    /**
-     * @return the ID of this state
-     */
-    @Override
-    public int getID() {
-        return ID;
+        super(ID);
     }
 
     /**
@@ -85,14 +71,13 @@ public class SplashScreen extends BasicGameState {
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         bubbleRenderers = new ArrayList<>();
         bubbles = new ArrayList<>();
-        rand = new Random();
         mousePosition = new Vector2f();
 
         titleText = new TextRenderer("Calibri", Font.BOLD, 84);
         titleText.setHorizontalAlign(TextRenderer.ALIGN_CENTER);
         authorText = new TextRenderer("Calibri", Font.BOLD, 30);
         authorText.setHorizontalAlign(TextRenderer.ALIGN_CENTER);
-        
+
         int r = RenderSettings.BUBBLE_RADIUS;
 
         for (int y = 0; y <= gc.getHeight() / r; y++) {
@@ -111,13 +96,9 @@ public class SplashScreen extends BasicGameState {
 
     @Override
     public void enter(GameContainer gc, StateBasedGame game) throws SlickException {
+        setExitRequested(false);
         titlePos = new Vector2f(gc.getWidth() / 2, -200);
         authorPos = new Vector2f(-200, gc.getHeight() / 2 - 40);
-    }
-    
-    @Override
-    public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-        //mousePosition.set(newx, newy);
     }
 
     /**
@@ -134,16 +115,10 @@ public class SplashScreen extends BasicGameState {
             renderer.render(-1, -6);
         }
 
-//        Color shadow = new Color(0, 0, 0, 0.7f);
-
-//        titleText.render((int) titlePos.x - 3, (int) titlePos.y - 3, "Crazy Bubbles", shadow);
         titleText.render((int) titlePos.x, (int) titlePos.y, "Crazy Bubbles");
 
-//        authorText.render((int) authorPos.x - 2, (int) authorPos.y - 2, "by Ville 'Tuhis' Lahdenvuo", shadow);
         authorText.render((int) authorPos.x, (int) authorPos.y, "by Ville 'Tuhis' Lahdenvuo");
-//        authorText.render((int) authorPos.x - 2, (int) authorPos.y + 40 - 2, "for JavaLabra 2014", shadow);
         authorText.render((int) authorPos.x, (int) authorPos.y + 40, "for JavaLabra 2014");
-
     }
 
     /**
@@ -156,6 +131,10 @@ public class SplashScreen extends BasicGameState {
      */
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+        if (isExitRequested()) {
+            sbg.enterState(Application.GAME);
+        }
+        
         for (BubbleRenderer renderer : bubbleRenderers) {
             renderer.update(gc, delta);
         }
@@ -164,6 +143,10 @@ public class SplashScreen extends BasicGameState {
                 gc.getWidth() / 2 + (float) Math.cos(gc.getTime() / 100) * gc.getWidth(),
                 gc.getHeight() / 2 + (float) Math.sin(gc.getTime() / 100) * gc.getWidth());
 
+        updateTexts(gc);
+    }
+
+    private void updateTexts(GameContainer gc) {
         titlePos.y = titlePos.y + (56 - titlePos.y) * 0.05f;
 
         if (titlePos.y > 40) {
@@ -175,7 +158,7 @@ public class SplashScreen extends BasicGameState {
         }
 
         if (authorPos.x > gc.getWidth() + 200) {
-            sbg.enterState(Application.GAME, new FadeOutTransition(), new EmptyTransition());
+            setExitRequested(true);
         }
     }
 }

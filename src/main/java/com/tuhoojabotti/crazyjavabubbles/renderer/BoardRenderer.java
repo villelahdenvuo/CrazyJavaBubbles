@@ -30,7 +30,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Vector2f;
 
 /**
- *
+ * Renders the {@link Board}.
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class BoardRenderer {

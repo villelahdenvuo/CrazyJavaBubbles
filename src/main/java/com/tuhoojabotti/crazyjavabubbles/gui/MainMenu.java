@@ -33,68 +33,42 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
- *
+ * A game state for the main menu.
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
-public class MainMenu extends BasicGameState {
-
-    private final int ID;
+public class MainMenu extends GameWrapper {
     private TextRenderer titleText;
-
+    
     /**
      * Create a new main menu.
      *
      * @param ID the id of this game state
      */
     public MainMenu(int ID) {
-        this.ID = ID;
+        super(ID);
     }
 
-    /**
-     * @return the ID of this state
-     */
-    @Override
-    public int getID() {
-        return ID;
-    }
-
-    /**
-     * Initialise the main menu.
-     *
-     * @param gc game container
-     * @param sbg game itself
-     * @throws SlickException
-     */
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         titleText = new TextRenderer("Calibri", Font.BOLD, 80);
         titleText.setHorizontalAlign(TextRenderer.ALIGN_CENTER);
     }
 
-    /**
-     * Render the main menu.
-     *
-     * @param gc game container
-     * @param game game itself
-     * @param gfx graphics controller
-     * @throws SlickException
-     */
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics gfx) throws SlickException {
         gfx.setColor(Color.white);
         titleText.render(gc.getWidth() / 2, 50, "Crazy Bubbles");
-
     }
 
-    /**
-     * Update the main menu.
-     *
-     * @param gc game container
-     * @param sbg game itself
-     * @param i delta time
-     * @throws SlickException
-     */
+    @Override
+    public void mouseReleased(int button, int x, int y) {
+        
+    }
+
+    
+    
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
+        super.update(gc, sbg, i);
     }
 }

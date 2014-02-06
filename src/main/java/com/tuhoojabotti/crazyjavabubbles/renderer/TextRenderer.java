@@ -30,7 +30,7 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 
 /**
- *
+ * A simple text rendering utility.
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class TextRenderer {

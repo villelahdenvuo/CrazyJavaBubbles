@@ -31,7 +31,8 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
- *
+ * A wrapper for BasicGameState that handles some basic stuff like
+ * keeping track of the mouse.
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public abstract class GameWrapper extends BasicGameState {
@@ -41,6 +42,7 @@ public abstract class GameWrapper extends BasicGameState {
 
     public GameWrapper(int ID) {
         this.ID = ID;
+        mousePosition = new Vector2f();
     }
 
     @Override
@@ -48,11 +50,6 @@ public abstract class GameWrapper extends BasicGameState {
         return ID;
     }
     
-    @Override
-    public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        mousePosition = new Vector2f();
-    }
-
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
         if (exitRequested) {
@@ -79,5 +76,17 @@ public abstract class GameWrapper extends BasicGameState {
 
     public Vector2f getMousePosition() {
         return mousePosition;
+    }
+
+    public boolean isExitRequested() {
+        if (exitRequested) {
+            exitRequested = false;
+            return true;
+        }
+        return false;
+    }
+
+    public void setExitRequested(boolean exitRequested) {
+        this.exitRequested = exitRequested;
     }
 }

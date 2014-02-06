@@ -24,6 +24,7 @@
 package com.tuhoojabotti.crazyjavabubbles.renderer;
 
 /**
+ * Full of constants for rendering the game.
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class RenderSettings {

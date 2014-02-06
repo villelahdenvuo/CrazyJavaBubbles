@@ -8,3 +8,6 @@
  * 22.1.2014 &ndash; **7h** &ndash; *Pelilogiikka ja dokumentaatio kuntoon*
  * 23.1.2014 &ndash; **2h** &ndash; *Testaus kuntoon ja luokkakaavio*
  * 29.1.2014 &ndash; **5h** &ndash; *Parannettu testausta, optimoitu logiikkaa, lisätty fysiikat*
+ * 5.2.2014 &ndash; **8h** &ndash; *Optimoitu renderöintiä (4x nopeampi), refaktoroitu fysiikkaa & kaikenlaista pientä*
+ * 6.2.2014 &ndash; **4h** &ndash; *Paranneltu pelitiloja ja poistettu redundanttia koodia*
+ 	 * Hieno bugi windows/linux ero - linuksilla `Math.sin((long / int) + int + int)` palauttaa aina 0, windowsilla toimaa

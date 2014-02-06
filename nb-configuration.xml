@@ -19,6 +19,7 @@ Any value defined here will override the pom.xml file value but is only applicab
         <word>board's</word>
         <word>color</word>
         <word>framerate</word>
+        <word>game's</word>
         <word>init</word>
         <word>initialize</word>
     </spellchecker-wordlist>

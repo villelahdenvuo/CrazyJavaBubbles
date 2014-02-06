@@ -28,7 +28,7 @@ import java.awt.Point;
 import org.newdawn.slick.geom.Vector2f;
 
 /**
- *
+ * Handles updating of the game logic from the game class.
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class CrazyGameLogic {
@@ -108,7 +108,7 @@ public class CrazyGameLogic {
         board.select(point.x, point.y);
     }
     
-    private Point getMousePositionOnBoard(Vector2f mousePosition) {
+    public static Point getMousePositionOnBoard(Vector2f mousePosition) {
         int margin = RenderSettings.BOARD_MARGIN,
                 r = RenderSettings.BUBBLE_RADIUS;
 

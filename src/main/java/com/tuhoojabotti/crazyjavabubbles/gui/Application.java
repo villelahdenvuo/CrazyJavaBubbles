@@ -29,7 +29,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
- *
+ * The game's main class.
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class Application extends StateBasedGame {

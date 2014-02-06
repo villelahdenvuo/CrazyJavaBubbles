@@ -25,6 +25,7 @@ package com.tuhoojabotti.crazyjavabubbles.logic;
 
 import com.tuhoojabotti.crazyjavabubbles.renderer.RenderSettings;
 import java.awt.Point;
+import java.util.Random;
 import java.util.Set;
 import org.junit.After;
 import org.junit.Before;
@@ -37,6 +38,9 @@ import org.newdawn.slick.geom.Vector2f;
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class CrazyGameLogicTest {
+
+    private int r = RenderSettings.BUBBLE_RADIUS,
+            margin = RenderSettings.BOARD_MARGIN;
 
     public CrazyGameLogicTest() {
     }
@@ -56,11 +60,11 @@ public class CrazyGameLogicTest {
     @Test
     public void gameShouldEnd() {
         Bubble[][] bubbles = logic.getBoard().getBubbles();
-        int loops = 0, r = RenderSettings.BUBBLE_RADIUS, m = RenderSettings.BOARD_MARGIN;
+        int loops = 0;
         while (!logic.isGameOver()) {
             for (int y = 0; y < bubbles.length; y++) {
                 for (int x = 0; x < bubbles[0].length; x++) {
-                    logic.select(new Vector2f(m + x * r, m + y * r));
+                    logic.select(new Vector2f(margin + x * r, margin + y * r));
                     logic.pop();
                 }
             }
@@ -76,15 +80,50 @@ public class CrazyGameLogicTest {
     @Test
     public void popShouldReturnBubbleCount() {
         Bubble[][] bubbles = logic.getBoard().getBubbles();
-        int r = RenderSettings.BUBBLE_RADIUS, m = RenderSettings.BOARD_MARGIN;
         for (int y = 0; y < bubbles.length; y++) {
             for (int x = 0; x < bubbles[0].length; x++) {
-                logic.select(new Vector2f(m + x * r, m + y * r));
+                logic.select(new Vector2f(margin + x * r, margin + y * r));
                 Set<Bubble> selection = logic.getBoard().getSelection();
                 if (!selection.isEmpty()) {
                     assertEquals(selection.size(), logic.pop());
                 }
             }
         }
+    }
+
+    @Test
+    public void selectionIsCachedUnlessForced() {
+        Random rand = new Random();
+        Vector2f vec = new Vector2f(margin + rand.nextInt(24) * r, margin + rand.nextInt(17) * r);
+
+        while (logic.getBoard().getSelection().isEmpty()) {
+            vec = new Vector2f(margin + rand.nextInt(24) * r, margin + rand.nextInt(17) * r);
+            logic.select(vec);
+        }
+
+        // Selection shouldn't be updated.
+        Set<Bubble> selection = logic.getBoard().getSelection();
+        logic.select(vec);
+        assertEquals(selection, logic.getBoard().getSelection());
+
+        // Forcing selection should create new selection.
+        logic.forceSelect(vec);
+        assertNotSame(selection, logic.getBoard().getSelection());
+    }
+
+    @Test
+    public void getMousePositionOnBoardWorks() {
+        testPoint(4, 3);
+        testPoint(3, 4);
+        testPoint(24, 17);
+        testPoint(0, 0);
+        testPoint(100, 100);
+        testPoint(-4, -56);
+    }
+
+    private void testPoint(int x, int y) {
+        Random rand = new Random();
+        Vector2f vec = new Vector2f(margin + x * r + r * rand.nextFloat(), margin + y * r + r * rand.nextFloat());
+        assertEquals(new Point(x, y), CrazyGameLogic.getMousePositionOnBoard(vec));
     }
 }
