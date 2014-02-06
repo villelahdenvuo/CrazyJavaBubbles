@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.tuhoojabotti.crazyjavabubbles.gui;
 
 import org.newdawn.slick.GameContainer;
@@ -31,11 +30,13 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
- * A wrapper for BasicGameState that handles some basic stuff like
- * keeping track of the mouse.
+ * A wrapper for BasicGameState that handles some basic stuff like keeping track
+ * of the mouse.
+ *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public abstract class GameWrapper extends BasicGameState {
+
     private Vector2f mousePosition;
     private final int ID;
     private boolean exitRequested;
@@ -49,14 +50,14 @@ public abstract class GameWrapper extends BasicGameState {
     public int getID() {
         return ID;
     }
-    
+
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
         if (exitRequested) {
             gc.exit();
         }
     }
-    
+
     @Override
     public void mouseMoved(int oldx, int oldy, int newx, int newy) {
         mousePosition.set(newx, newy);
@@ -66,11 +67,13 @@ public abstract class GameWrapper extends BasicGameState {
     public void mouseDragged(int oldx, int oldy, int newx, int newy) {
         mousePosition.set(newx, newy);
     }
-    
+
     @Override
     public void keyPressed(int key, char c) {
-        switch(key) {
-            case 1: exitRequested = true; break;
+        switch (key) {
+            case 1:
+                exitRequested = true;
+                break;
         }
     }
 
@@ -78,6 +81,11 @@ public abstract class GameWrapper extends BasicGameState {
         return mousePosition;
     }
 
+    /**
+     * Tells if exit was requested and resets it to false.
+     *
+     * @return is exit requested
+     */
     public boolean isExitRequested() {
         if (exitRequested) {
             exitRequested = false;

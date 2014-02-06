@@ -23,6 +23,7 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.renderer;
 
+import static com.tuhoojabotti.crazyjavabubbles.Util.curveValue;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import java.util.Random;
 import org.newdawn.slick.Color;
@@ -156,9 +157,5 @@ public class BubbleRenderer {
         );
 
         return bubble.isPopped();
-    }
-
-    private float curveValue(float newValue, float oldValue, float smooth) {
-        return oldValue + (newValue - oldValue) * smooth;
     }
 }

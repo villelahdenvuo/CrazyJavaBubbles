@@ -29,16 +29,17 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
  * A game state for the main menu.
+ *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class MainMenu extends GameWrapper {
+
     private TextRenderer titleText;
-    
+
     /**
      * Create a new main menu.
      *
@@ -60,13 +61,6 @@ public class MainMenu extends GameWrapper {
         titleText.render(gc.getWidth() / 2, 50, "Crazy Bubbles");
     }
 
-    @Override
-    public void mouseReleased(int button, int x, int y) {
-        
-    }
-
-    
-    
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
         super.update(gc, sbg, i);

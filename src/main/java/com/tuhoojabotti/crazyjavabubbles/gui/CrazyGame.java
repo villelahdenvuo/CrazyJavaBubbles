@@ -38,9 +38,21 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
  */
 public class CrazyGame extends GameWrapper {
 
+    /**
+     * The game logic.
+     */
     private CrazyGameLogic logic;
+    
+    /**
+     * The game renderer.
+     */
     private CrazyGameRenderer renderer;
 
+    /**
+     * Create a new game.
+     * 
+     * @param ID the id of this game state
+     */
     public CrazyGame(int ID) {
         super(ID);
     }

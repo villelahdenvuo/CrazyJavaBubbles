@@ -23,6 +23,7 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.gui;
 
+import static com.tuhoojabotti.crazyjavabubbles.Util.curveValue;
 import com.tuhoojabotti.crazyjavabubbles.renderer.TextRenderer;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import com.tuhoojabotti.crazyjavabubbles.renderer.BubbleRenderer;
@@ -38,10 +39,11 @@ import org.newdawn.slick.state.StateBasedGame;
 
 /**
  * A cool splash screen for the game!
+ *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class SplashScreen extends GameWrapper {
-    
+
     private ArrayList<BubbleRenderer> bubbleRenderers;
     private ArrayList<Bubble> bubbles;
     private TextRenderer titleText;
@@ -80,8 +82,8 @@ public class SplashScreen extends GameWrapper {
 
         int r = RenderSettings.BUBBLE_RADIUS;
 
-        for (int y = 0; y <= gc.getHeight() / r; y++) {
-            for (int x = 0; x < gc.getWidth() / r; x++) {
+        for (int y = 0; y <= gc.getHeight() / r + 1; y++) {
+            for (int x = 0; x < gc.getWidth() / r + 1; x++) {
                 if ((y < 8 || y > 10) && (y < 2 || y > 4 || x < 4 || x > 20)) {
                     Bubble b = new Bubble(x, y);
                     b.setSelected(true);
@@ -98,7 +100,7 @@ public class SplashScreen extends GameWrapper {
     public void enter(GameContainer gc, StateBasedGame game) throws SlickException {
         setExitRequested(false);
         titlePos = new Vector2f(gc.getWidth() / 2, -200);
-        authorPos = new Vector2f(-200, gc.getHeight() / 2 - 40);
+        authorPos = new Vector2f(-200, gc.getHeight() / 2 - 50);
     }
 
     /**
@@ -112,13 +114,12 @@ public class SplashScreen extends GameWrapper {
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics gfx) throws SlickException {
         for (BubbleRenderer renderer : bubbleRenderers) {
-            renderer.render(-1, -6);
+            renderer.render(-RenderSettings.BUBBLE_RADIUS / 2, -RenderSettings.BUBBLE_RADIUS / 2);
         }
 
         titleText.render((int) titlePos.x, (int) titlePos.y, "Crazy Bubbles");
-
         authorText.render((int) authorPos.x, (int) authorPos.y, "by Ville 'Tuhis' Lahdenvuo");
-        authorText.render((int) authorPos.x, (int) authorPos.y + 40, "for JavaLabra 2014");
+        authorText.render((int) authorPos.x, (int) authorPos.y + 40, "<3 you all");
     }
 
     /**
@@ -134,31 +135,31 @@ public class SplashScreen extends GameWrapper {
         if (isExitRequested()) {
             sbg.enterState(Application.GAME);
         }
-        
+
         for (BubbleRenderer renderer : bubbleRenderers) {
             renderer.update(gc, delta);
         }
 
-        mousePosition.set(
-                gc.getWidth() / 2 + (float) Math.cos(gc.getTime() / 100) * gc.getWidth(),
-                gc.getHeight() / 2 + (float) Math.sin(gc.getTime() / 100) * gc.getWidth());
-
+        updateFakeMouse(gc);
         updateTexts(gc);
+    }
+    
+    private void updateFakeMouse(GameContainer gc) {
+        float w = gc.getWidth(), h = gc.getHeight();
+        long t = gc.getTime();
+
+        mousePosition.set(w / 2 + (float) Math.cos(t / 100.0) * w,
+                h / 2 + (float) Math.sin(t / 100.0) * w);
     }
 
     private void updateTexts(GameContainer gc) {
-        titlePos.y = titlePos.y + (56 - titlePos.y) * 0.05f;
-
-        if (titlePos.y > 40) {
-            authorPos.x = authorPos.x + (titlePos.x - authorPos.x) * 0.02f;
-        }
-
-        if (authorPos.x > titlePos.x - 5) {
-            authorPos.x = authorPos.x + (gc.getWidth() * 2f - authorPos.x) * 0.04f;
-        }
-
+        titlePos.y = curveValue(48, titlePos.y, 0.05f);
         if (authorPos.x > gc.getWidth() + 200) {
             setExitRequested(true);
+        } else if (authorPos.x > titlePos.x - 5) {
+            authorPos.x = curveValue(gc.getWidth() * 2, authorPos.x, 0.04f);
+        } else if (titlePos.y > 38) {
+            authorPos.x = curveValue(titlePos.x, authorPos.x, 0.02f);
         }
     }
 }
