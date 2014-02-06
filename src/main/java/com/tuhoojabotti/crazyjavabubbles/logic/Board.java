@@ -31,6 +31,7 @@ import java.util.Set;
 
 /**
  * The logic of the game, it's all here.
+ *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class Board {
@@ -102,8 +103,13 @@ public class Board {
         return bubbles;
     }
 
-    public void setBubbles(Bubble[][] bubbls) {
-        bubbles = bubbls;
+    /**
+     * Set the board manually.
+     *
+     * @param newBubbles the new bubbles
+     */
+    public void setBubbles(Bubble[][] newBubbles) {
+        bubbles = newBubbles;
         height = bubbles.length;
         width = bubbles[0].length;
         updateHasMoreMoves();
@@ -192,9 +198,14 @@ public class Board {
      * Update board, just for testing purposes.
      */
     protected void update() {
-        boolean moved = false;
+        if (moveDown() || moveLeft()) {
+            update(); // Run update until we didn't move anything.
+        }
+        updateHasMoreMoves();
+    }
 
-        // Move bubbles down.
+    private boolean moveDown() {
+        boolean moved = false;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 Bubble b = bubbles[y][x];
@@ -204,8 +215,11 @@ public class Board {
                 }
             }
         }
+        return moved;
+    }
 
-        // Move columns left.
+    private boolean moveLeft() {
+        boolean moved = false;
         for (int x = 0; x < width; x++) {
             if (!isOnBoard(x, height - 1) && isOnBoard(x + 1, height - 1)) {
                 moved = true;
@@ -216,14 +230,7 @@ public class Board {
                 }
             }
         }
-
-        // Something changed, update this.
-        updateHasMoreMoves();
-
-        // Run update until we didn't move anything.
-        if (moved) {
-            update();
-        }
+        return moved;
     }
 
     private void moveBubble(Bubble b, int x, int y) {
