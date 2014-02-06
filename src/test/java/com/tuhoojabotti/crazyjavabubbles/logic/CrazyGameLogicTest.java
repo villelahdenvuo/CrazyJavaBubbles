@@ -23,13 +23,14 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.logic;
 
+import com.tuhoojabotti.crazyjavabubbles.renderer.RenderSettings;
 import java.awt.Point;
-import java.util.HashSet;
 import java.util.Set;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.newdawn.slick.geom.Vector2f;
 
 /**
  *
@@ -55,16 +56,16 @@ public class CrazyGameLogicTest {
     @Test
     public void gameShouldEnd() {
         Bubble[][] bubbles = logic.getBoard().getBubbles();
-        int i = 0;
+        int loops = 0, r = RenderSettings.BUBBLE_RADIUS, m = RenderSettings.BOARD_MARGIN;
         while (!logic.isGameOver()) {
             for (int y = 0; y < bubbles.length; y++) {
                 for (int x = 0; x < bubbles[0].length; x++) {
-                    logic.select(new Point(x, y));
+                    logic.select(new Vector2f(m + x * r, m + y * r));
                     logic.pop();
                 }
             }
-            i++;
-            if (i > 100) {
+            loops++;
+            if (loops > 200) {
                 fail("Game should end at some point.");
             }
         }
@@ -75,11 +76,12 @@ public class CrazyGameLogicTest {
     @Test
     public void popShouldReturnBubbleCount() {
         Bubble[][] bubbles = logic.getBoard().getBubbles();
+        int r = RenderSettings.BUBBLE_RADIUS, m = RenderSettings.BOARD_MARGIN;
         for (int y = 0; y < bubbles.length; y++) {
             for (int x = 0; x < bubbles[0].length; x++) {
-                logic.select(new Point(x, y));
+                logic.select(new Vector2f(m + x * r, m + y * r));
                 Set<Bubble> selection = logic.getBoard().getSelection();
-                if (selection.size() > 1) {
+                if (!selection.isEmpty()) {
                     assertEquals(selection.size(), logic.pop());
                 }
             }
