@@ -143,7 +143,7 @@ public class BubbleRenderer {
 
         // Set hole size. It depends on mouse distance and selection.
         inCircle.setRadius((float) (Math.max(8, r / 3f - 10 / mouseDistance * 50)
-                + Math.sin((gc.getTime() / 80) + bubble.x + bubble.y) * selected * 2.5f));
+                + Math.sin((gc.getTime() / 80.0) + (double) (bubble.x + bubble.y)) * selected * 2.5f));
 
         // Update the hole position.
         float hole = 3.5f * (1 - selected), offset = r / 2 - inCircle.getRadius();

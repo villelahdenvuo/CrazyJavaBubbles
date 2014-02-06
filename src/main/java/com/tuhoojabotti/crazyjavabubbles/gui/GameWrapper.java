@@ -35,8 +35,8 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public abstract class GameWrapper extends BasicGameState {
-    Vector2f mousePosition;
-    private int ID;
+    private Vector2f mousePosition;
+    private final int ID;
     private boolean exitRequested;
 
     public GameWrapper(int ID) {
@@ -75,5 +75,9 @@ public abstract class GameWrapper extends BasicGameState {
         switch(key) {
             case 1: exitRequested = true; break;
         }
+    }
+
+    public Vector2f getMousePosition() {
+        return mousePosition;
     }
 }

@@ -23,7 +23,9 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.logic;
 
+import com.tuhoojabotti.crazyjavabubbles.renderer.RenderSettings;
 import java.awt.Point;
+import org.newdawn.slick.geom.Vector2f;
 
 /**
  *
@@ -90,9 +92,10 @@ public class CrazyGameLogic {
     /**
      * Update selection on the board.
      *
-     * @param point where the selection starts
+     * @param mousePosition
      */
-    public void select(Point point) {
+    public void select(Vector2f mousePosition) {
+        Point point = getMousePositionOnBoard(mousePosition);
         // Update selection only if mouse has moved.
         if (!lastSelection.equals(point)) {
             board.select(point.x, point.y);
@@ -100,7 +103,17 @@ public class CrazyGameLogic {
         }
     }
 
-    public void forceSelect(Point point) {
+    public void forceSelect(Vector2f mousePosition) {
+        Point point = getMousePositionOnBoard(mousePosition);
         board.select(point.x, point.y);
     }
+    
+    private Point getMousePositionOnBoard(Vector2f mousePosition) {
+        int margin = RenderSettings.BOARD_MARGIN,
+                r = RenderSettings.BUBBLE_RADIUS;
+
+        return new Point(
+                Math.round((mousePosition.x - margin - r / 2) / r),
+                Math.round((mousePosition.y - margin - r / 2) / r));
+    }    
 }

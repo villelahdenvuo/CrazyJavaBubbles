@@ -26,7 +26,6 @@ package com.tuhoojabotti.crazyjavabubbles.renderer;
 import com.tuhoojabotti.crazyjavabubbles.logic.Board;
 import com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogic;
 import java.awt.Font;
-import java.awt.geom.Point2D;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.Color;

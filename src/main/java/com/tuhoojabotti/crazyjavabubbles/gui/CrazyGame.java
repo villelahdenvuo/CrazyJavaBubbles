@@ -25,14 +25,13 @@ package com.tuhoojabotti.crazyjavabubbles.gui;
 
 import com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogic;
 import com.tuhoojabotti.crazyjavabubbles.renderer.CrazyGameRenderer;
-import com.tuhoojabotti.crazyjavabubbles.renderer.RenderSettings;
-import java.awt.Point;
-import java.util.logging.Logger;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
 
 /**
  *
@@ -46,13 +45,17 @@ public class CrazyGame extends GameWrapper {
     public CrazyGame(int ID) {
         super(ID);
     }
-    
+
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         super.init(gc, sbg);
         logic = new CrazyGameLogic();
+    }
+
+    @Override
+    public void enter(GameContainer gc, StateBasedGame game) throws SlickException {
         logic.init();
-        renderer = new CrazyGameRenderer(logic.getBoard(), gc.getGraphics(), gc, super.mousePosition);
+        renderer = new CrazyGameRenderer(logic.getBoard(), gc.getGraphics(), gc, getMousePosition());
     }
 
     @Override
@@ -63,34 +66,23 @@ public class CrazyGame extends GameWrapper {
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
         super.update(gc, sbg, delta);
-        
+
         renderer.update(delta);
-        logic.select(getMousePositionOnBoard());
-        
+        logic.select(getMousePosition());
+
         if (logic.isGameOver()) {
-            // TODO
+            sbg.enterState(Application.SPLASHSCREEN, new FadeOutTransition(), new FadeInTransition());
         }
     }
 
     @Override
     public void mouseReleased(int button, int x, int y) {
-        mousePosition.set(x, y);
         if (button == 0) {
             int count = logic.pop();
             if (count > 0) {
-                logic.forceSelect(getMousePositionOnBoard());
-                renderer.explode(mousePosition, count);
+                logic.forceSelect(getMousePosition());
+                renderer.explode(getMousePosition(), count);
             }
         }
     }
-    
-    private Point getMousePositionOnBoard() {
-        int margin = RenderSettings.BOARD_MARGIN,
-                r = RenderSettings.BUBBLE_RADIUS;
-
-        return new Point(
-                Math.round((mousePosition.x - margin - r / 2) / r),
-                Math.round((mousePosition.y - margin - r / 2) / r));
-    }
-
 }
