@@ -23,6 +23,8 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.logic;
 
+import com.tuhoojabotti.crazyjavabubbles.Util;
+import java.awt.Point;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,5 +59,11 @@ public class BubbleTest {
     @Test
     public void testIsPopped() {
         assertFalse(bubble.isPopped());
+    }
+
+    @Test
+    public void getScreenPositionWorks() {
+        assertEquals(Util.getPositionOnBoard(bubble.getScreenPosition()),
+                new Point((int) bubble.getX(), (int) bubble.getY()));
     }
 }

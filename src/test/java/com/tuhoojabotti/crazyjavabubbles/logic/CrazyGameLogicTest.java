@@ -61,12 +61,17 @@ public class CrazyGameLogicTest {
     @Test
     public void gameShouldEnd() {
         Bubble[][] bubbles = logic.getBoard().getBubbles();
-        int loops = 0;
+        int loops = 0, count = 0;
         while (!logic.isGameOver()) {
             for (int y = 0; y < bubbles.length; y++) {
                 for (int x = 0; x < bubbles[0].length; x++) {
                     logic.updateSelection(new Vector2f(margin + x * r, margin + y * r));
-                    logic.pop();
+                    Set<Bubble> popped = logic.pop();
+                    if (popped != null) {
+                        count += popped.size();
+                        assertEquals(count, logic.getBubblesPopped());
+                        assertTrue(logic.getBiggestCluster() >= popped.size());
+                    }
                 }
             }
             loops++;

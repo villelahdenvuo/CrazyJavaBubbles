@@ -42,7 +42,6 @@ public class TextRenderer {
 
     public static final int ALIGN_LEFT = 0, ALIGN_RIGHT = 1, ALIGN_CENTER = 2;
     public static final int ALIGN_TOP = 0, ALIGN_MIDDLE = 1, ALIGN_BOTTOM = 2;
-    //private final UnicodeFont U_FONT;
     private UnicodeFont font;
 
     private int horizontalAlign = ALIGN_LEFT;
@@ -64,7 +63,7 @@ public class TextRenderer {
             font = new UnicodeFont(awtFont, size, false, false);
         } catch (FontFormatException | IOException e) {
             Font awtFont = new Font("Times New Roman", Font.PLAIN, size);
-            font = new UnicodeFont(awtFont);            
+            font = new UnicodeFont(awtFont);
         }
         font.addAsciiGlyphs();
         font.getEffects().add(new ColorEffect(java.awt.Color.WHITE));
@@ -128,5 +127,4 @@ public class TextRenderer {
 
         font.drawString(x, y, text, color);
     }
-
 }
