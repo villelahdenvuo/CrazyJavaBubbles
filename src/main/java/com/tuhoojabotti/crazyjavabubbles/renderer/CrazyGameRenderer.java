@@ -126,25 +126,30 @@ public class CrazyGameRenderer {
         if (RenderSettings.PARTICLE_EFFECTS) {
             particleSystem.update(delta);
         }
+        if (gameContainer.getFPS() < 100) {
+            RenderSettings.PARTICLE_EFFECTS = false;
+        } else {
+            RenderSettings.PARTICLE_EFFECTS = true;
+        }
+
     }
 
     private void initParticleSystem() {
         ImageBuffer ib = new ImageBuffer(4, 4);
-        //ib.setRGBA(0, 0, 255, 255, 255, 255);
         for (int y = 0; y < 4; y++) {
             for (int x = 0; x < 4; x++) {
                 ib.setRGBA(x, y, 255, 255, 255, 255);
             }
         }
-        particleSystem = new ParticleSystem(new Image(ib), RenderSettings.MAX_PARTICLES);
-        //particleSystem.getEmitter(0).setEnabled(false); // disable the initial emitter
-        particleSystem.setRemoveCompletedEmitters(true); // remove emitters once they finish    
+        particleSystem = new ParticleSystem(new Image(ib));
+        particleSystem.setRemoveCompletedEmitters(true);
 
         try {
             explosion = ParticleIO.loadEmitter("effects/bubble_emitter.xml");
             explosion.setEnabled(false);
         } catch (IOException ex) {
-            Logger.getLogger(CrazyGameRenderer.class.getName()).log(Level.SEVERE, null, ex);
+            // Do not try to render effects.
+            RenderSettings.PARTICLE_EFFECTS = false;
         }
     }
 }
