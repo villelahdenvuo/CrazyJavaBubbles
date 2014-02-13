@@ -37,7 +37,7 @@ public class RenderSettings {
     /**
      * How much do the bubbles move?
      */
-    public static final float BUBBLE_WOBBLE = 0.05f;
+    public static final float BUBBLE_WOBBLE = 0.04f;
 
     /**
      * Margin where to draw the {@link Board}.

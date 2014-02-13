@@ -88,8 +88,8 @@ public class BubbleRenderer {
                 point.x - outCircle.getCenterX());
         float distance = Math.max(10, point.distance(outCircle.getLocation()));
 
-        velocity.x -= 600 / distance * (float) Math.cos(angle);
-        velocity.y -= 400 / distance * (float) Math.sin(angle);
+        velocity.x -= 750 / distance * (float) Math.cos(angle);
+        velocity.y -= 650 / distance * (float) Math.sin(angle);
     }
 
     /**
@@ -128,7 +128,7 @@ public class BubbleRenderer {
     }
 
     private void updatePhysics(double mouseAngle, int delta) {
-        float smooth = RenderSettings.BUBBLE_WOBBLE + bubble.y / 80f;
+        float smooth = RenderSettings.BUBBLE_WOBBLE + (bubble.y - 1) / 80f;
 
         // Update velocity towards real position + towards mouse cursor.
         velocity.x = curveValue(target.x - outCircle.getX(), velocity.x, smooth)

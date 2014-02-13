@@ -30,6 +30,7 @@ import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import com.tuhoojabotti.crazyjavabubbles.renderer.BubbleRenderer;
 import com.tuhoojabotti.crazyjavabubbles.renderer.RenderSettings;
 import java.util.ArrayList;
+import java.util.Random;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -53,6 +54,18 @@ public class SplashScreen extends StateWrapper {
     private TextRenderer authorText;
     private Vector2f titlePos;
     private Vector2f authorPos;
+    
+    private String greeting;
+    private final String[] greetings = new String[]{
+        "<3 y'all",
+        "Hey mum, look at me!",
+        "JavaLabra <3",
+        "Matti, missä oluet?",
+        "TKO-äly rulz!",
+        "CoolBasic respect!",
+        "Wow, such splash; so screen.",
+        "- Insert Bitcoin -"
+    };
 
     /**
      * Create a new splash screen.
@@ -96,9 +109,11 @@ public class SplashScreen extends StateWrapper {
 
     @Override
     public void enter(GameContainer gc, StateBasedGame game) throws SlickException {
+        Random rand = new Random();
         setExitRequested(false);
         titlePos = new Vector2f(gc.getWidth() / 2, -200);
-        authorPos = new Vector2f(-260, gc.getHeight() / 2 - 50);
+        authorPos = new Vector2f(-400, gc.getHeight() / 2 - 50);
+        greeting = greetings[rand.nextInt(greetings.length)];
     }
 
     @Override
@@ -109,7 +124,7 @@ public class SplashScreen extends StateWrapper {
 
         titleText.render((int) titlePos.x, (int) titlePos.y, "Crazy Bubbles");
         authorText.render((int) authorPos.x, (int) authorPos.y, "by Ville 'Tuhis' Lahdenvuo");
-        authorText.render((int) authorPos.x, (int) authorPos.y + 40, "<3 you all");
+        authorText.render((int) authorPos.x, (int) authorPos.y + 40, greeting);
     }
 
     @Override

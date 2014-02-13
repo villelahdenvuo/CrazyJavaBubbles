@@ -94,7 +94,7 @@ public class BubbleEffectRenderer {
         // Disable particle effects if the game is too slow.
         if (fps < 100) {
             RenderSettings.PARTICLE_EFFECTS = false;
-        } else if (fps > 600) {
+        } else if (fps > 400) {
             RenderSettings.PARTICLE_EFFECTS = true;
         }
     }
