@@ -47,9 +47,9 @@ public class CrazyGameRenderer {
     private final GameContainer gameContainer;
     private BubbleEffectRenderer particleRenderer;
 
-    private int windowWidth;
-    private int windowHeight;
-    private Color barColor = new Color(1f, 1f, 1f, 0.5f);
+    private final int windowWidth;
+    private final int windowHeight;
+    private final Color barColor = new Color(1f, 1f, 1f, 0.5f);
 
     /**
      * Create new {@link CrazyGame} renderer.
@@ -74,10 +74,8 @@ public class CrazyGameRenderer {
             gc.exit();
         }
 
-        if (RenderSettings.PARTICLE_EFFECTS) {
-            particleRenderer = new BubbleEffectRenderer();
-            particleRenderer.initParticleSystem();
-        }
+        particleRenderer = new BubbleEffectRenderer();
+        particleRenderer.initParticleSystem();
     }
 
     /**
