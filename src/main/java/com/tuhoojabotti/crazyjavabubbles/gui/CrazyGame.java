@@ -37,8 +37,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.openal.AudioLoader;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.FadeInTransition;
-import org.newdawn.slick.state.transition.FadeOutTransition;
 import org.newdawn.slick.util.ResourceLoader;
 
 /**
@@ -72,11 +70,11 @@ public class CrazyGame extends GameWrapper {
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         logic = new CrazyGameLogic();
         try {
-            blimSound = AudioLoader.getAudio("OGG", ResourceLoader.getResourceAsStream("blim.ogg"));
+            blimSound = AudioLoader.getAudio("OGG", ResourceLoader.getResourceAsStream("sounds/blim.ogg"));
         } catch (IOException ex) {
             Logger.getLogger(CrazyGame.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Music gameMusic = new Music("uk.ogg");
+        Music gameMusic = new Music("sounds/uk.ogg");
         gameMusic.loop();    
     }
 

@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.util.ResourceLoader;
@@ -53,13 +52,13 @@ public class TextRenderer {
      * Create a new text renderer.
      *
      * @param fontName font to use
-     * @param style style of the font (e.g. Font.BOLD)
      * @param size size of the font
      * @throws SlickException
      */
     public TextRenderer(String fontName, int size) throws SlickException {
         try {
-            InputStream inputStream = ResourceLoader.getResourceAsStream(fontName + ".ttf");
+            InputStream inputStream = ResourceLoader.getResourceAsStream(
+                    "fonts/" + fontName + ".ttf");
             Font awtFont = Font.createFont(Font.TRUETYPE_FONT, inputStream);
             awtFont = awtFont.deriveFont(size); // set font size
             font = new UnicodeFont(awtFont, size, false, false);

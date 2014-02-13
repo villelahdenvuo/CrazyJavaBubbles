@@ -41,6 +41,9 @@ public class RenderSettings {
      */
     public static final int BOARD_MARGIN = 15;
 
+    public static final boolean PARTICLE_EFFECTS = false;
+    public static final int MAX_PARTICLES = 1000;
+    
     /**
      * Render debug stuff on the screen.
      */

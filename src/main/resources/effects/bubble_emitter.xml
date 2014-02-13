@@ -24,7 +24,7 @@ THE SOFTWARE.
 -->
 <emitter imageName="" name="Bubble Particle" useAdditive="false" useOriented="false">
     <spawnInterval enabled="false" max="1000.0" min="1000.0"/>
-    <spawnCount enabled="true" max="100.0" min="80.0"/>
+    <spawnCount enabled="true" max="100.0" min="100.0"/>
     <initialLife enabled="true" max="250.0" min="200.0"/>
     <initialSize enabled="true" max="10.0" min="4.0"/>
     <initialDistance enabled="false" max="0.0" min="0.0"/>

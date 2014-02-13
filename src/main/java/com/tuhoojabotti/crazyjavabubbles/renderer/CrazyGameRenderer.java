@@ -26,7 +26,6 @@ package com.tuhoojabotti.crazyjavabubbles.renderer;
 import com.tuhoojabotti.crazyjavabubbles.logic.Board;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogic;
-import java.awt.Font;
 import java.io.IOException;
 import java.util.Set;
 import java.util.logging.Level;
@@ -76,21 +75,24 @@ public class CrazyGameRenderer {
             Logger.getLogger(CrazyGameRenderer.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        initParticleSystem();
+        if (RenderSettings.PARTICLE_EFFECTS) {
+            initParticleSystem();
+        }
     }
 
     public void explode(Set<Bubble> bubbles) {
         boardRenderer.explode(bubbles);
-        int rp2 = RenderSettings.BUBBLE_RADIUS / 2;
-
-        for (Bubble bubble : bubbles) {
-            Vector2f point = bubble.getScreenPosition();
-            ConfigurableEmitter e = explosion.duplicate();
-            e.setPosition(point.x + rp2, point.y + rp2, false);
-            e.addColorPoint(0f, bubble.getColor());
-            e.addColorPoint(1f, bubble.getColor().darker(0.5f));
-            e.setEnabled(true);
-            particleSystem.addEmitter(e);
+        if (RenderSettings.PARTICLE_EFFECTS) {
+            int rp2 = RenderSettings.BUBBLE_RADIUS / 2;
+            for (Bubble bubble : bubbles) {
+                Vector2f point = bubble.getScreenPosition();
+                ConfigurableEmitter e = explosion.duplicate();
+                e.setPosition(point.x + rp2, point.y + rp2, false);
+                e.addColorPoint(0f, bubble.getColor());
+                e.addColorPoint(1f, bubble.getColor().darker(0.5f));
+                e.setEnabled(true);
+                particleSystem.addEmitter(e);
+            }
         }
     }
 
@@ -113,13 +115,17 @@ public class CrazyGameRenderer {
 
         scoreText.render(6, textY, "score: " + game.getScore());
 
-        particleSystem.render();
+        if (RenderSettings.PARTICLE_EFFECTS) {
+            particleSystem.render();
+        }
     }
 
     public void update(int delta) {
         deltaTime = delta;
         boardRenderer.update(gameContainer, delta);
-        particleSystem.update(delta);
+        if (RenderSettings.PARTICLE_EFFECTS) {
+            particleSystem.update(delta);
+        }
     }
 
     private void initParticleSystem() {
@@ -130,15 +136,13 @@ public class CrazyGameRenderer {
                 ib.setRGBA(x, y, 255, 255, 255, 255);
             }
         }
-        particleSystem = new ParticleSystem(new Image(ib), 1500);
+        particleSystem = new ParticleSystem(new Image(ib), RenderSettings.MAX_PARTICLES);
         //particleSystem.getEmitter(0).setEnabled(false); // disable the initial emitter
         particleSystem.setRemoveCompletedEmitters(true); // remove emitters once they finish    
 
         try {
-            explosion = ParticleIO.loadEmitter("bubble_emitter.xml");
+            explosion = ParticleIO.loadEmitter("effects/bubble_emitter.xml");
             explosion.setEnabled(false);
-            //explosion.addColorPoint(0f, Color.red);
-            //explosion.addColorPoint(1f, Color.black);
         } catch (IOException ex) {
             Logger.getLogger(CrazyGameRenderer.class.getName()).log(Level.SEVERE, null, ex);
         }
