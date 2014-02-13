@@ -51,7 +51,7 @@ public class MainMenu extends GameWrapper {
 
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        titleText = new TextRenderer("Calibri", Font.BOLD, 80);
+        titleText = new TextRenderer("sweet-as-candy.regular", 80);
         titleText.setHorizontalAlign(TextRenderer.ALIGN_CENTER);
     }
 

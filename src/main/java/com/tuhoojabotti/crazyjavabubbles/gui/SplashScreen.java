@@ -75,16 +75,16 @@ public class SplashScreen extends GameWrapper {
         bubbles = new ArrayList<>();
         mousePosition = new Vector2f();
 
-        titleText = new TextRenderer("Calibri", Font.BOLD, 84);
+        titleText = new TextRenderer("sweet-as-candy.regular", 60);
         titleText.setHorizontalAlign(TextRenderer.ALIGN_CENTER);
-        authorText = new TextRenderer("Calibri", Font.BOLD, 30);
+        authorText = new TextRenderer("goodtimes.regular", 28);
         authorText.setHorizontalAlign(TextRenderer.ALIGN_CENTER);
 
         int r = RenderSettings.BUBBLE_RADIUS;
 
         for (int y = 0; y <= gc.getHeight() / r + 1; y++) {
             for (int x = 0; x < gc.getWidth() / r + 1; x++) {
-                if ((y < 8 || y > 10) && (y < 2 || y > 4 || x < 5 || x > 20)) {
+                if ((y < 8 || y > 10) && (y < 2 || y > 4 || x < 2 || x > 23)) {
                     Bubble b = new Bubble(x, y);
                     b.setSelected(true);
                     bubbles.add(b);
@@ -100,7 +100,7 @@ public class SplashScreen extends GameWrapper {
     public void enter(GameContainer gc, StateBasedGame game) throws SlickException {
         setExitRequested(false);
         titlePos = new Vector2f(gc.getWidth() / 2, -200);
-        authorPos = new Vector2f(-200, gc.getHeight() / 2 - 50);
+        authorPos = new Vector2f(-260, gc.getHeight() / 2 - 50);
     }
 
     /**
@@ -153,12 +153,12 @@ public class SplashScreen extends GameWrapper {
     }
 
     private void updateTexts(GameContainer gc) {
-        titlePos.y = curveValue(48, titlePos.y, 0.05f);
-        if (authorPos.x > gc.getWidth() + 200) {
+        titlePos.y = curveValue(52, titlePos.y, 0.05f);
+        if (authorPos.x > gc.getWidth() + 250) {
             setExitRequested(true);
         } else if (authorPos.x > titlePos.x - 5) {
-            authorPos.x = curveValue(gc.getWidth() * 2, authorPos.x, 0.04f);
-        } else if (titlePos.y > 38) {
+            authorPos.x = curveValue(gc.getWidth() * 2.4f, authorPos.x, 0.04f);
+        } else if (titlePos.y > 42) {
             authorPos.x = curveValue(titlePos.x, authorPos.x, 0.02f);
         }
     }

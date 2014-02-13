@@ -24,50 +24,66 @@
 package com.tuhoojabotti.crazyjavabubbles.renderer;
 
 import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.IOException;
+import java.io.InputStream;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
+import org.newdawn.slick.util.ResourceLoader;
 
 /**
  * A simple text rendering utility.
+ *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class TextRenderer {
 
     public static final int ALIGN_LEFT = 0, ALIGN_RIGHT = 1, ALIGN_CENTER = 2;
     public static final int ALIGN_TOP = 0, ALIGN_MIDDLE = 1, ALIGN_BOTTOM = 2;
-    private final UnicodeFont U_FONT;
+    //private final UnicodeFont U_FONT;
+    private UnicodeFont font;
 
     private int horizontalAlign = ALIGN_LEFT;
     private int verticalAlign = ALIGN_TOP;
 
     /**
      * Create a new text renderer.
-     * 
+     *
      * @param fontName font to use
      * @param style style of the font (e.g. Font.BOLD)
      * @param size size of the font
      * @throws SlickException
      */
-    public TextRenderer(String fontName, int style, int size) throws SlickException {
-        Font font = new Font(fontName, style, size);
-        U_FONT = new UnicodeFont(font, font.getSize(), font.isBold(), font.isItalic());
-        U_FONT.addAsciiGlyphs();
-        U_FONT.getEffects().add(new ColorEffect(java.awt.Color.WHITE));
-        U_FONT.loadGlyphs();
+    public TextRenderer(String fontName, int size) throws SlickException {
+        try {
+            InputStream inputStream = ResourceLoader.getResourceAsStream(fontName + ".ttf");
+            Font awtFont = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+            awtFont = awtFont.deriveFont(size); // set font size
+            font = new UnicodeFont(awtFont, size, false, false);
+        } catch (FontFormatException | IOException e) {
+            Font awtFont = new Font("Times New Roman", Font.PLAIN, size);
+            font = new UnicodeFont(awtFont);            
+        }
+        font.addAsciiGlyphs();
+        font.getEffects().add(new ColorEffect(java.awt.Color.WHITE));
+        font.loadGlyphs();
     }
 
     /**
      * Set the horizontal alignment of the text.
+     *
      * @param horizontalAlign
      */
     public void setHorizontalAlign(int horizontalAlign) {
         this.horizontalAlign = horizontalAlign;
     }
-    
+
     /**
      * Set the vertical alignment of the text.
+     *
      * @param verticalAlign
      */
     public void setVerticalAlign(int verticalAlign) {
@@ -76,6 +92,7 @@ public class TextRenderer {
 
     /**
      * Render a string with white colour.
+     *
      * @param x
      * @param y
      * @param text the text to render
@@ -86,6 +103,7 @@ public class TextRenderer {
 
     /**
      * Render a string with any colour.
+     *
      * @param x
      * @param y
      * @param text the text to render
@@ -94,22 +112,22 @@ public class TextRenderer {
     public void render(int x, int y, String text, Color color) {
         switch (horizontalAlign) {
             case ALIGN_RIGHT:
-                x = x - U_FONT.getWidth(text);
+                x = x - font.getWidth(text);
                 break;
             case ALIGN_CENTER:
-                x = x - U_FONT.getWidth(text) / 2;
+                x = x - font.getWidth(text) / 2;
                 break;
         }
         switch (verticalAlign) {
             case ALIGN_BOTTOM:
-                y = y - U_FONT.getHeight(text);
+                y = y - font.getHeight(text);
                 break;
             case ALIGN_MIDDLE:
-                y = y - U_FONT.getHeight(text) / 2;
+                y = y - font.getHeight(text) / 2;
                 break;
         }
 
-        U_FONT.drawString(x, y, text, color);
+        font.drawString(x, y, text, color);
     }
 
 }

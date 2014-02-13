@@ -86,7 +86,7 @@ public class CrazyGame extends GameWrapper {
         logic.select(getMousePosition());
 
         if (logic.isGameOver()) {
-            sbg.enterState(Application.SPLASHSCREEN, new FadeOutTransition(), new FadeInTransition());
+            sbg.enterState(Application.SPLASHSCREEN);
         }
     }
 

@@ -71,7 +71,7 @@ public class CrazyGameRenderer {
         boardRenderer = new BoardRenderer(board, gfx, mouse);
 
         try {
-            scoreText = new TextRenderer("Courier New", Font.PLAIN, 16);
+            scoreText = new TextRenderer("goodtimes.regular", 16);
         } catch (SlickException ex) {
             Logger.getLogger(CrazyGameRenderer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -106,7 +106,7 @@ public class CrazyGameRenderer {
         gfx.setColor(new Color(1f, 1f, 1f, 0.5f));
         gfx.fillRect(0, gameContainer.getHeight() - 28, gameContainer.getWidth(), 28);
 
-        int textY = gameContainer.getHeight() - 20;
+        int textY = gameContainer.getHeight() - 22;
 
         scoreText.render(gameContainer.getWidth() - 100, textY, "fps: " + gameContainer.getFPS());
         scoreText.render(gameContainer.getWidth() - 180, textY, "ms: " + deltaTime);
