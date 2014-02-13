@@ -23,18 +23,22 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.logic;
 
-import com.tuhoojabotti.crazyjavabubbles.renderer.RenderSettings;
+import static com.tuhoojabotti.crazyjavabubbles.Util.getPositionOnBoard;
 import java.awt.Point;
 import java.util.Set;
 import org.newdawn.slick.geom.Vector2f;
 
 /**
  * Handles updating of the game logic from the game class.
+ *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class CrazyGameLogic {
 
     private int score;
+    private int bubblesPopped;
+    private int biggestCluster;
+
     private final Board board;
     private final Point lastSelection;
 
@@ -54,52 +58,49 @@ public class CrazyGameLogic {
         score = 0;
     }
 
-    /**
-     * @return whether game is over.
-     */
     public boolean isGameOver() {
         return !board.hasMoreMoves();
     }
 
-    /**
-     * Returns score of the game.
-     *
-     * @return score of the game
-     */
     public int getScore() {
         return score;
     }
 
-    /**
-     * @return the game board
-     */
+    public int getBiggestCluster() {
+        return biggestCluster;
+    }
+
+    public int getBubblesPopped() {
+        return bubblesPopped;
+    }
+
     public Board getBoard() {
         return board;
     }
 
     /**
-     * Pop the currently selected {@link Bubble}s.
+     * Pop the currently updateSelectioned {@link Bubble}s.
      *
-     * @return how many bubbles were popped
+     * @return all the bubbles that were popped
      */
     public Set<Bubble> pop() {
-        Set<Bubble> bubbles = board.pop();
-        if (bubbles == null) {
-            return null;
+        Set<Bubble> popped = board.pop();
+
+        if (popped != null) {
+            updateScore(popped.size());
         }
 
-        score += bubbles.size();
-
-        return bubbles;
+        return popped;
     }
 
     /**
-     * Update selection on the board.
+     * Update updateSelectionion on the board, but only if the position has
+     * changed.
      *
      * @param mousePosition
      */
-    public void select(Vector2f mousePosition) {
-        Point point = getMousePositionOnBoard(mousePosition);
+    public void updateSelection(Vector2f mousePosition) {
+        Point point = getPositionOnBoard(mousePosition);
         // Update selection only if mouse has moved.
         if (!lastSelection.equals(point)) {
             board.select(point.x, point.y);
@@ -107,17 +108,24 @@ public class CrazyGameLogic {
         }
     }
 
-    public void forceSelect(Vector2f mousePosition) {
-        Point point = getMousePositionOnBoard(mousePosition);
+    /**
+     * Update updateSelectionion on the board.
+     *
+     * @param mousePosition
+     */
+    public void forceUpdateSelection(Vector2f mousePosition) {
+        Point point = getPositionOnBoard(mousePosition);
         board.select(point.x, point.y);
     }
-    
-    public static Point getMousePositionOnBoard(Vector2f mousePosition) {
-        int margin = RenderSettings.BOARD_MARGIN,
-                r = RenderSettings.BUBBLE_RADIUS;
 
-        return new Point(
-                Math.round((mousePosition.x - margin - r / 2) / r),
-                Math.round((mousePosition.y - margin - r / 2) / r));
-    }    
+    /**
+     * Update the score of the game.
+     *
+     * @param popped amount of bubbles popped
+     */
+    private void updateScore(int popped) {
+        bubblesPopped += popped;
+        biggestCluster = Math.max(biggestCluster, popped);
+        score = (int) Math.round(bubblesPopped * Math.sqrt(biggestCluster));
+    }
 }

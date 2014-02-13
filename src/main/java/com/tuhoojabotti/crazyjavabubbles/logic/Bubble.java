@@ -40,7 +40,7 @@ public class Bubble extends Vector2f {
     private boolean popped;
 
     /**
-     * Create a new Bubble.
+     * Create a new Bubble with random color.
      *
      * @param x
      * @param y
@@ -75,38 +75,34 @@ public class Bubble extends Vector2f {
         return popped;
     }
 
-    /**
-     * @param selected whether the bubble is selected or not
-     */
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
 
-    /**
-     * @return whether the bubble is selected or not
-     */
     public boolean isSelected() {
         return selected;
     }
 
-    /**
-     * @return the colour of the bubble
-     */
     public Color getColor() {
         return color;
     }
 
     /**
-     * @param b bubble to compare to
+     * @param bubble bubble to compare to
      * @return whether two bubbles are the same colour or not
      */
-    public boolean equals(Bubble b) {
-        if (b == null) {
+    public boolean equals(Bubble bubble) {
+        if (bubble == null) {
             return false;
         }
-        return color.equals(b.color);
+        return color.equals(bubble.color);
     }
 
+    /**
+     * Where on the screen is this bubble?
+     *
+     * @return the location on screen
+     */
     public Vector2f getScreenPosition() {
         int m = RenderSettings.BOARD_MARGIN,
                 r = RenderSettings.BUBBLE_RADIUS;

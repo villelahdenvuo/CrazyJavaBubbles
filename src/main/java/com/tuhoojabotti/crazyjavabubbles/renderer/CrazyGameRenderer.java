@@ -23,38 +23,33 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.renderer;
 
+import static com.tuhoojabotti.crazyjavabubbles.Util.fatalError;
 import com.tuhoojabotti.crazyjavabubbles.logic.Board;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogic;
-import java.io.IOException;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.ImageBuffer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
-import org.newdawn.slick.particles.ConfigurableEmitter;
-import org.newdawn.slick.particles.ParticleIO;
-import org.newdawn.slick.particles.ParticleSystem;
 
 /**
- * Renders the whole game.
+ * Renders the whole game. Board, effects, score, everything.
  *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class CrazyGameRenderer {
 
-    private final Graphics gfx;
+    private final Graphics graphics;
     private final BoardRenderer boardRenderer;
-    private TextRenderer scoreText;
+    private TextRenderer text;
     private final GameContainer gameContainer;
-    private int deltaTime;
-    private ParticleSystem particleSystem;
-    private ConfigurableEmitter explosion;
+    private BubbleEffectRenderer particleRenderer;
+
+    private int windowWidth;
+    private int windowHeight;
+    private Color barColor = new Color(1f, 1f, 1f, 0.5f);
 
     /**
      * Create new {@link CrazyGame} renderer.
@@ -65,33 +60,37 @@ public class CrazyGameRenderer {
      * @param mouse mouse position
      */
     public CrazyGameRenderer(Board board, Graphics gfx, GameContainer gc, Vector2f mouse) {
-        this.gfx = gfx;
+        windowWidth = gc.getWidth();
+        windowHeight = gc.getHeight();
         gameContainer = gc;
+        graphics = gfx;
+
         boardRenderer = new BoardRenderer(board, gfx, mouse);
 
         try {
-            scoreText = new TextRenderer("goodtimes.regular", 16);
+            text = new TextRenderer("goodtimes.regular", 16);
         } catch (SlickException ex) {
-            Logger.getLogger(CrazyGameRenderer.class.getName()).log(Level.SEVERE, null, ex);
+            fatalError("Failed to load text.", this.getClass(), ex);
+            gc.exit();
         }
 
         if (RenderSettings.PARTICLE_EFFECTS) {
-            initParticleSystem();
+            particleRenderer = new BubbleEffectRenderer();
+            particleRenderer.initParticleSystem();
         }
     }
 
+    /**
+     * Create an explosion on the screen with particles and physics.
+     *
+     * @param bubbles the bubbles that explode
+     */
     public void explode(Set<Bubble> bubbles) {
         boardRenderer.explode(bubbles);
+
         if (RenderSettings.PARTICLE_EFFECTS) {
-            int rp2 = RenderSettings.BUBBLE_RADIUS / 2;
             for (Bubble bubble : bubbles) {
-                Vector2f point = bubble.getScreenPosition();
-                ConfigurableEmitter e = explosion.duplicate();
-                e.setPosition(point.x + rp2, point.y + rp2, false);
-                e.addColorPoint(0f, bubble.getColor());
-                e.addColorPoint(1f, bubble.getColor().darker(0.5f));
-                e.setEnabled(true);
-                particleSystem.addEmitter(e);
+                particleRenderer.addExplosion(bubble);
             }
         }
     }
@@ -105,51 +104,26 @@ public class CrazyGameRenderer {
         boardRenderer.render(RenderSettings.BOARD_MARGIN,
                 RenderSettings.BOARD_MARGIN);
 
-        gfx.setColor(new Color(1f, 1f, 1f, 0.5f));
-        gfx.fillRect(0, gameContainer.getHeight() - 28, gameContainer.getWidth(), 28);
+        graphics.setColor(barColor);
+        graphics.fillRect(0, windowHeight - 28, windowWidth, 28);
 
-        int textY = gameContainer.getHeight() - 22;
+        int textY = windowHeight - 22;
+        text.render(windowWidth - 120, textY, "fps: " + gameContainer.getFPS());
 
-        scoreText.render(gameContainer.getWidth() - 100, textY, "fps: " + gameContainer.getFPS());
-        scoreText.render(gameContainer.getWidth() - 180, textY, "ms: " + deltaTime);
+        text.render(6, textY, "score: " + game.getScore());
+        text.render(156, textY, "biggest: " + game.getBiggestCluster());
+        text.render(306, textY, "total: " + game.getBubblesPopped());
 
-        scoreText.render(6, textY, "score: " + game.getScore());
-
-        if (RenderSettings.PARTICLE_EFFECTS) {
-            particleSystem.render();
-        }
+        particleRenderer.render();
     }
 
+    /**
+     * Update the renderer physics, particles, etc.
+     *
+     * @param delta delta time
+     */
     public void update(int delta) {
-        deltaTime = delta;
         boardRenderer.update(gameContainer, delta);
-        if (RenderSettings.PARTICLE_EFFECTS) {
-            particleSystem.update(delta);
-        }
-        if (gameContainer.getFPS() < 100) {
-            RenderSettings.PARTICLE_EFFECTS = false;
-        } else {
-            RenderSettings.PARTICLE_EFFECTS = true;
-        }
-
-    }
-
-    private void initParticleSystem() {
-        ImageBuffer ib = new ImageBuffer(4, 4);
-        for (int y = 0; y < 4; y++) {
-            for (int x = 0; x < 4; x++) {
-                ib.setRGBA(x, y, 255, 255, 255, 255);
-            }
-        }
-        particleSystem = new ParticleSystem(new Image(ib));
-        particleSystem.setRemoveCompletedEmitters(true);
-
-        try {
-            explosion = ParticleIO.loadEmitter("effects/bubble_emitter.xml");
-            explosion.setEnabled(false);
-        } catch (IOException ex) {
-            // Do not try to render effects.
-            RenderSettings.PARTICLE_EFFECTS = false;
-        }
+        particleRenderer.update(delta, gameContainer.getFPS());
     }
 }

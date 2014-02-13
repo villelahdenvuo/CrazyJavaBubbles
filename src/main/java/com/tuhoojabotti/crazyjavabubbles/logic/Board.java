@@ -35,10 +35,13 @@ import java.util.Set;
  */
 public class Board {
 
+    // The content of the board
     private Bubble[][] bubbles;
+    // The content of the selection
     private Set<Bubble> selection;
     private int width;
     private int height;
+    // Is the game over or not?
     private boolean hasMoreMoves;
 
     /**
@@ -56,7 +59,7 @@ public class Board {
     /**
      * initialize game board.
      */
-    public void init() {
+    protected void init() {
         selection = new HashSet<>();
         hasMoreMoves = false;
 
@@ -76,7 +79,7 @@ public class Board {
      *
      * @return amount of bubbles popped
      */
-    public Set<Bubble> pop() {
+    protected Set<Bubble> pop() {
         if (selection.size() < 2) {
             return null; // Can't pop if selection is smaller than 2.
         }
@@ -100,18 +103,18 @@ public class Board {
     }
 
     /**
-     * Set the board manually.
+     * Set the content of the board manually (for tests).
      *
      * @param newBubbles the new bubbles
      */
-    public void setBubbles(Bubble[][] newBubbles) {
+    protected void setBubbles(Bubble[][] newBubbles) {
         bubbles = newBubbles;
         height = bubbles.length;
         width = bubbles[0].length;
         updateHasMoreMoves();
     }
 
-    public Set<Bubble> getSelection() {
+    protected Set<Bubble> getSelection() {
         return selection;
     }
 
@@ -121,7 +124,7 @@ public class Board {
      * @param x
      * @param y
      */
-    public void select(int x, int y) {
+    protected void select(int x, int y) {
         updateSelection(x, y);
 
         for (y = 0; y < height; y++) {
@@ -139,10 +142,17 @@ public class Board {
      *
      * @return whether groups exist on the board or not.
      */
-    public boolean hasMoreMoves() {
+    protected boolean hasMoreMoves() {
         return hasMoreMoves;
     }
 
+    /**
+     * Is the point on the board?
+     *
+     * @param x
+     * @param y
+     * @return true or false
+     */
     private boolean isOnBoard(int x, int y) {
         return x >= 0 && x < width
                 && y >= 0 && y < height && bubbles[y][x] != null;
@@ -155,36 +165,47 @@ public class Board {
         return bubbles[y][x];
     }
 
+    /**
+     * Update bubble selection.
+     *
+     * @param startX the x-coordinate of the new selection
+     * @param startY the y-coordinate of the new selection
+     */
     private void updateSelection(int startX, int startY) {
-        selection = new HashSet<>();
+        selection = new HashSet<>(); // Could be .clear(), but this is for test.
 
-        if (!isOnBoard(startX, startY)) {
-            return; // Nothing to select.
+        if (isOnBoard(startX, startY)) {
+            selectNeighbours(startX, startY);
         }
 
-        // Basically do a BFS on the board.
-        Queue<Bubble> queue = new LinkedList<>();
-        queue.add(get(startX, startY));
-
-        while (!queue.isEmpty()) {
-            Bubble current = queue.poll();
-            int x = (int) current.x, y = (int) current.y;
-
-            addIfOk(current, queue, x + 1, y);
-            addIfOk(current, queue, x - 1, y);
-            addIfOk(current, queue, x, y + 1);
-            addIfOk(current, queue, x, y - 1);
-            selection.add(current);
-        }
-
-        // Can't select just one.
+        // Can't select just one bubble.
         if (selection.size() == 1) {
             selection.clear();
         }
     }
 
-    private void addIfOk(Bubble current, Queue<Bubble> queue, int x, int y) {
-        Bubble next = get(x, y);
+    /**
+     * Basically do a BFS on the board and select all neighbours.
+     *
+     * @param startX the x-coordinate of the new selection
+     * @param startY the y-coordinate of the new selection
+     */
+    private void selectNeighbours(int startX, int startY) {
+        Queue<Bubble> queue = new LinkedList<>();
+        queue.add(get(startX, startY));
+
+        while (!queue.isEmpty()) {
+            Bubble current = queue.poll();
+            queueIfMatches(current, queue, current.x + 1, current.y);
+            queueIfMatches(current, queue, current.x - 1, current.y);
+            queueIfMatches(current, queue, current.x, current.y + 1);
+            queueIfMatches(current, queue, current.x, current.y - 1);
+            selection.add(current);
+        }
+    }
+
+    private void queueIfMatches(Bubble current, Queue<Bubble> queue, float x, float y) {
+        Bubble next = get((int) x, (int) y);
         if (current.equals(next) && !selection.contains(next)) {
             queue.add(next);
         }
@@ -194,12 +215,18 @@ public class Board {
      * Update board, just for testing purposes.
      */
     protected void updateBubblePositions() {
+        // Run updateBubblePositions until we didn't move anything.
         if (moveBubblesDown() || moveBubblesLeft()) {
-            updateBubblePositions(); // Run updateBubblePositions until we didn't move anything.
+            updateBubblePositions();
         }
         updateHasMoreMoves();
     }
 
+    /**
+     * Move bubbles hanging in the air down.
+     *
+     * @return was something moved
+     */
     private boolean moveBubblesDown() {
         boolean moved = false;
         for (int y = 0; y < height; y++) {
@@ -214,6 +241,11 @@ public class Board {
         return moved;
     }
 
+    /**
+     * Pack bubbles to the left.
+     *
+     * @return
+     */
     private boolean moveBubblesLeft() {
         boolean moved = false;
         for (int x = 0; x < width; x++) {
@@ -229,12 +261,23 @@ public class Board {
         return moved;
     }
 
-    private void moveBubble(Bubble b, int x, int y) {
-        bubbles[(int) b.y][(int) b.x] = null;
-        b.set(x, y);
-        bubbles[y][x] = b;
+    /**
+     * Move a single bubble to a new location.
+     *
+     * @param bubble the bubble to move
+     * @param x new x-coordinate
+     * @param y new y-coordinate
+     */
+    private void moveBubble(Bubble bubble, int x, int y) {
+        bubbles[(int) bubble.y][(int) bubble.x] = null;
+        bubble.set(x, y);
+        bubbles[y][x] = bubble;
     }
 
+    /**
+     * Check if the board still has moves left. Basically checks if there
+     * exists two bubbles of the same color together somewhere.
+     */
     private void updateHasMoreMoves() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {

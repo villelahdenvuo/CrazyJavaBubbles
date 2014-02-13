@@ -24,11 +24,11 @@
 package com.tuhoojabotti.crazyjavabubbles.gui;
 
 import static com.tuhoojabotti.crazyjavabubbles.Util.curveValue;
+import static com.tuhoojabotti.crazyjavabubbles.Util.fatalError;
 import com.tuhoojabotti.crazyjavabubbles.renderer.TextRenderer;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import com.tuhoojabotti.crazyjavabubbles.renderer.BubbleRenderer;
 import com.tuhoojabotti.crazyjavabubbles.renderer.RenderSettings;
-import java.awt.Font;
 import java.util.ArrayList;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -42,14 +42,15 @@ import org.newdawn.slick.state.StateBasedGame;
  *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
-public class SplashScreen extends GameWrapper {
+public class SplashScreen extends StateWrapper {
 
+    // For the background.
     private ArrayList<BubbleRenderer> bubbleRenderers;
     private ArrayList<Bubble> bubbles;
+    private Vector2f mousePosition;
+    // For the texts.
     private TextRenderer titleText;
     private TextRenderer authorText;
-    private Vector2f mousePosition;
-
     private Vector2f titlePos;
     private Vector2f authorPos;
 
@@ -62,22 +63,19 @@ public class SplashScreen extends GameWrapper {
         super(ID);
     }
 
-    /**
-     * Initialise the splash screen.
-     *
-     * @param gc game container
-     * @param sbg game itself
-     * @throws SlickException
-     */
     @Override
-    public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+    public void init(GameContainer gc, StateBasedGame sbg) {
         bubbleRenderers = new ArrayList<>();
         bubbles = new ArrayList<>();
         mousePosition = new Vector2f();
 
-        titleText = new TextRenderer("sweet-as-candy.regular", 60);
+        try {
+            titleText = new TextRenderer("sweet-as-candy.regular", 60);
+            authorText = new TextRenderer("goodtimes.regular", 28);
+        } catch (SlickException e) {
+            fatalError("Could not load font.", this.getClass(), e);
+        }
         titleText.setHorizontalAlign(TextRenderer.ALIGN_CENTER);
-        authorText = new TextRenderer("goodtimes.regular", 28);
         authorText.setHorizontalAlign(TextRenderer.ALIGN_CENTER);
 
         int r = RenderSettings.BUBBLE_RADIUS;
@@ -103,16 +101,8 @@ public class SplashScreen extends GameWrapper {
         authorPos = new Vector2f(-260, gc.getHeight() / 2 - 50);
     }
 
-    /**
-     * Render the splash screen.
-     *
-     * @param gc game container
-     * @param game game itself
-     * @param gfx graphics controller
-     * @throws SlickException
-     */
     @Override
-    public void render(GameContainer gc, StateBasedGame game, Graphics gfx) throws SlickException {
+    public void render(GameContainer gc, StateBasedGame game, Graphics gfx) {
         for (BubbleRenderer renderer : bubbleRenderers) {
             renderer.render(-RenderSettings.BUBBLE_RADIUS / 2, -RenderSettings.BUBBLE_RADIUS / 2);
         }
@@ -122,28 +112,31 @@ public class SplashScreen extends GameWrapper {
         authorText.render((int) authorPos.x, (int) authorPos.y + 40, "<3 you all");
     }
 
-    /**
-     * Update the splash screen.
-     *
-     * @param gc game container
-     * @param sbg game itself
-     * @param delta delta time
-     * @throws SlickException
-     */
     @Override
-    public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+    public void update(GameContainer gameContainer, StateBasedGame game, int delta) {
         if (isExitRequested()) {
-            sbg.enterState(Application.GAME);
+            game.enterState(Application.GAME);
         }
 
         for (BubbleRenderer renderer : bubbleRenderers) {
-            renderer.update(gc, delta);
+            renderer.update(gameContainer, delta);
         }
 
-        updateFakeMouse(gc);
-        updateTexts(gc);
+        updateFakeMouse(gameContainer);
+        updateTexts(gameContainer);
     }
-    
+
+    @Override
+    public void keyPressed(int key, char c) {
+        // Any key to skip splash screen.
+        setExitRequested(true);
+    }
+
+    /**
+     * Move a fake mouse around the screen to affect the bubbles.
+     *
+     * @param gc game container
+     */
     private void updateFakeMouse(GameContainer gc) {
         float w = gc.getWidth(), h = gc.getHeight();
         long t = gc.getTime();
@@ -152,6 +145,11 @@ public class SplashScreen extends GameWrapper {
                 h / 2 + (float) Math.sin(t / 100.0) * w);
     }
 
+    /**
+     * Animate texts smoothly.
+     *
+     * @param gc game container
+     */
     private void updateTexts(GameContainer gc) {
         titlePos.y = curveValue(52, titlePos.y, 0.05f);
         if (authorPos.x > gc.getWidth() + 250) {

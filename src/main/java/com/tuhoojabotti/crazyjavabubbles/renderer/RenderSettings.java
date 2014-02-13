@@ -33,14 +33,21 @@ public class RenderSettings {
      * Size of the {@link Bubble}s.
      */
     public static final int BUBBLE_RADIUS = 32;
-
+    
+    /**
+     * How much do the bubbles move?
+     */
     public static final float BUBBLE_WOBBLE = 0.05f;
 
     /**
      * Margin where to draw the {@link Board}.
      */
     public static final int BOARD_MARGIN = 15;
-
+    
+    /**
+     * Enable or disable particle effects.
+     * They will be disabled in any case if fps is under 100.
+     */
     public static boolean PARTICLE_EFFECTS = true;
     
     /**

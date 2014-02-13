@@ -23,32 +23,28 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.gui;
 
+import static com.tuhoojabotti.crazyjavabubbles.Util.fatalError;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
  * The game's main class.
+ *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class Application extends StateBasedGame {
 
     /**
-     * The splash screen.
+     * The splash screen state ID.
      */
     public static final int SPLASHSCREEN = 0;
 
     /**
-     * The main menu.
+     * The game state ID.
      */
-    public static final int MAINMENU = 1;
-
-    /**
-     * The game itself.
-     */
-    public static final int GAME = 2;
+    public static final int GAME = 1;
 
     /**
      * Name of the game, used as the title of the window.
@@ -86,12 +82,10 @@ public class Application extends StateBasedGame {
      * Calls init method of each game state, and set's the state ID.
      *
      * @param gc game container
-     * @throws SlickException
      */
     @Override
-    public void initStatesList(GameContainer gc) throws SlickException {
+    public void initStatesList(GameContainer gc) {
         this.addState(new SplashScreen(SPLASHSCREEN));
-        this.addState(new MainMenu(MAINMENU));
         this.addState(new CrazyGame(GAME));
     }
 
@@ -102,15 +96,13 @@ public class Application extends StateBasedGame {
         try {
             AppGameContainer app = new AppGameContainer(this);
             app.setDisplayMode(WIDTH, HEIGHT, false);
-            //app.setTargetFrameRate(FPS);
             app.setShowFPS(false);
             app.setMaximumLogicUpdateInterval(20);
             app.setMinimumLogicUpdateInterval(15);
             app.setAlwaysRender(true);
             app.start();
         } catch (SlickException e) {
-            e.printStackTrace();
+            fatalError("Failed to start the game!", this.getClass(), e);
         }
     }
-
 }

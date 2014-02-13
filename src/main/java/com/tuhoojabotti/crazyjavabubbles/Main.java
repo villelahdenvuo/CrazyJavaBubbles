@@ -26,7 +26,6 @@ package com.tuhoojabotti.crazyjavabubbles;
 import com.tuhoojabotti.crazyjavabubbles.gui.Application;
 
 /**
- *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class Main {

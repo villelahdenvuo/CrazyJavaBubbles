@@ -24,8 +24,7 @@
 package com.tuhoojabotti.crazyjavabubbles.renderer;
 
 import com.tuhoojabotti.crazyjavabubbles.logic.*;
-import java.awt.Point;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -33,38 +32,35 @@ import org.newdawn.slick.geom.Vector2f;
 
 /**
  * Renders the {@link Board}.
+ *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class BoardRenderer {
 
-    private final Graphics gfx;
-    private final Board board;
-    private final ArrayList<BubbleRenderer> bubbleRenderers;
+    private final Set<BubbleRenderer> bubbleRenderers;
 
     /**
      * Create new {@link Board} renderer.
-     * 
+     *
      * @param board the game board to render
      * @param gfx the graphics controller
      * @param mouse the mouse position
      */
     public BoardRenderer(Board board, Graphics gfx, Vector2f mouse) {
-        this.board = board;
-        this.gfx = gfx;
-        
         Bubble[][] bubbles = board.getBubbles();
-        bubbleRenderers = new ArrayList<>();
-        
+        bubbleRenderers = new HashSet<>();
+
         for (int y = 0; y < bubbles.length; y++) {
             for (int x = 0; x < bubbles[0].length; x++) {
-                bubbleRenderers.add(new BubbleRenderer(bubbles[y][x], gfx, mouse));
+                bubbleRenderers.add(new BubbleRenderer(bubbles[y][x], gfx, 
+                        mouse));
             }
         }
     }
 
     /**
      * Create a forceful explosion.
-     * 
+     *
      * @param bubbles
      */
     public void explode(Set<Bubble> bubbles) {
@@ -73,11 +69,11 @@ public class BoardRenderer {
                 bubbleRenderer.applyForce((Vector2f) bubble);
             }
         }
-
     }
-    
+
     /**
      * Render the board.
+     *
      * @param x
      * @param y
      */
@@ -87,15 +83,20 @@ public class BoardRenderer {
         }
     }
 
-    public void update(GameContainer gc, int delta) {
-        ArrayList<BubbleRenderer> popped = new ArrayList<>();
-        
+    /**
+     * Update bubble physics.
+     * @param gameContainer game container
+     * @param delta delta time
+     */
+    public void update(GameContainer gameContainer, int delta) {
+        Set<BubbleRenderer> popped = new HashSet<>();
+
         for (BubbleRenderer bubbleRenderer : bubbleRenderers) {
-            if (bubbleRenderer.update(gc, delta)) {
+            if (bubbleRenderer.update(gameContainer, delta)) {
                 popped.add(bubbleRenderer);
             }
         }
-        
+        // These won't need updating anymore.
         bubbleRenderers.removeAll(popped);
     }
 }

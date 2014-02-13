@@ -21,23 +21,61 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.tuhoojabotti.crazyjavabubbles;
+
+import com.tuhoojabotti.crazyjavabubbles.gui.Application;
+import com.tuhoojabotti.crazyjavabubbles.renderer.RenderSettings;
+import java.awt.Point;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import org.newdawn.slick.geom.Vector2f;
 
 /**
  * Helpful utilities.
+ *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class Util {
-    
+
     /**
      * Change a value smoothly.
-     * @param newValue
-     * @param oldValue
-     * @param smooth the smaller the smoother
+     *
+     * @param current
+     * @param old
+     * @param smoothness the smaller the smoother
      * @return something between new and old
      */
-    public static float curveValue(float newValue, float oldValue, float smooth) {
-        return oldValue + (newValue - oldValue) * smooth;
+    public static float curveValue(float current, float old, float smoothness) {
+        return old + (current - old) * smoothness;
+    }
+
+    /**
+     * Create a nice pop up window telling why the game must close.
+     *
+     * @param message why the game must close
+     * @param caller where did the problem occur
+     * @param e what was the problem
+     */
+    public static void fatalError(String message, Class caller, Throwable e) {
+        Logger.getLogger(caller.getName()).log(Level.SEVERE, message, e);
+        JOptionPane.showMessageDialog(null, message,
+                Application.NAME, JOptionPane.ERROR_MESSAGE);
+        System.exit(1);
+    }
+
+    /**
+     * Convert screen coordinates to board coordinates.
+     *
+     * @param position on screen
+     * @return position on board
+     */
+    public static Point getPositionOnBoard(Vector2f position) {
+        int margin = RenderSettings.BOARD_MARGIN,
+                r = RenderSettings.BUBBLE_RADIUS;
+
+        return new Point(
+                Math.round((position.x - margin - r / 2) / r),
+                Math.round((position.y - margin - r / 2) / r));
     }
 }

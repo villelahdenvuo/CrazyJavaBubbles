@@ -23,13 +23,12 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.gui;
 
+import static com.tuhoojabotti.crazyjavabubbles.Util.fatalError;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogic;
 import com.tuhoojabotti.crazyjavabubbles.renderer.CrazyGameRenderer;
 import java.io.IOException;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Music;
@@ -41,25 +40,29 @@ import org.newdawn.slick.util.ResourceLoader;
 
 /**
  * The game state that handles updating and rendering of the game.
+ *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
-public class CrazyGame extends GameWrapper {
+public class CrazyGame extends StateWrapper {
 
     /**
      * The game logic.
      */
     private CrazyGameLogic logic;
-    
+
     /**
      * The game renderer.
      */
     private CrazyGameRenderer renderer;
 
+    /**
+     * The sound effect for popping the bubbles.
+     */
     private Audio blimSound;
-    
+
     /**
      * Create a new game.
-     * 
+     *
      * @param ID the id of this game state
      */
     public CrazyGame(int ID) {
@@ -67,25 +70,27 @@ public class CrazyGame extends GameWrapper {
     }
 
     @Override
-    public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+    public void init(GameContainer gc, StateBasedGame sbg) {
         logic = new CrazyGameLogic();
+
         try {
-            blimSound = AudioLoader.getAudio("OGG", ResourceLoader.getResourceAsStream("sounds/blim.ogg"));
-        } catch (IOException ex) {
-            Logger.getLogger(CrazyGame.class.getName()).log(Level.SEVERE, null, ex);
+            blimSound = AudioLoader.getAudio("OGG",
+                    ResourceLoader.getResourceAsStream("sounds/blim.ogg"));
+            Music gameMusic = new Music("sounds/uk.ogg");
+            gameMusic.loop();
+        } catch (SlickException | IOException e) {
+            fatalError("Could not load sounds.", this.getClass(), e);
         }
-        Music gameMusic = new Music("sounds/uk.ogg");
-        gameMusic.loop();    
     }
 
     @Override
-    public void enter(GameContainer gc, StateBasedGame game) throws SlickException {
+    public void enter(GameContainer gc, StateBasedGame game) {
         logic.init();
         renderer = new CrazyGameRenderer(logic.getBoard(), gc.getGraphics(), gc, getMousePosition());
     }
 
     @Override
-    public void render(GameContainer gc, StateBasedGame sbg, Graphics gfx) throws SlickException {
+    public void render(GameContainer gc, StateBasedGame sbg, Graphics gfx) {
         renderer.render(logic);
     }
 
@@ -94,7 +99,7 @@ public class CrazyGame extends GameWrapper {
         super.update(gc, sbg, delta);
 
         renderer.update(delta);
-        logic.select(getMousePosition());
+        logic.updateSelection(getMousePosition());
 
         if (logic.isGameOver()) {
             sbg.enterState(Application.SPLASHSCREEN);
@@ -104,10 +109,14 @@ public class CrazyGame extends GameWrapper {
     @Override
     public void mouseReleased(int button, int x, int y) {
         if (button == 0) {
+            // Pop the bubbles!
             Set<Bubble> bubbles = logic.pop();
+
             if (bubbles != null) {
-                blimSound.playAsSoundEffect((float) Math.sqrt(bubbles.size()) / 2.0f, 1f, false);
-                logic.forceSelect(getMousePosition());
+                blimSound.playAsSoundEffect((float) Math.sqrt(bubbles.size())
+                        / 2.0f, 1f, false);
+                // Force update of selection.
+                logic.forceUpdateSelection(getMousePosition());
                 renderer.explode(bubbles);
             }
         }

@@ -23,6 +23,7 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.logic;
 
+import static com.tuhoojabotti.crazyjavabubbles.Util.getPositionOnBoard;
 import com.tuhoojabotti.crazyjavabubbles.renderer.RenderSettings;
 import java.awt.Point;
 import java.util.Random;
@@ -64,7 +65,7 @@ public class CrazyGameLogicTest {
         while (!logic.isGameOver()) {
             for (int y = 0; y < bubbles.length; y++) {
                 for (int x = 0; x < bubbles[0].length; x++) {
-                    logic.select(new Vector2f(margin + x * r, margin + y * r));
+                    logic.updateSelection(new Vector2f(margin + x * r, margin + y * r));
                     logic.pop();
                 }
             }
@@ -82,7 +83,7 @@ public class CrazyGameLogicTest {
         Bubble[][] bubbles = logic.getBoard().getBubbles();
         for (int y = 0; y < bubbles.length; y++) {
             for (int x = 0; x < bubbles[0].length; x++) {
-                logic.select(new Vector2f(margin + x * r, margin + y * r));
+                logic.updateSelection(new Vector2f(margin + x * r, margin + y * r));
                 Set<Bubble> selection = logic.getBoard().getSelection();
                 if (!selection.isEmpty()) {
                     assertEquals(selection.size(), logic.pop().size());
@@ -98,16 +99,16 @@ public class CrazyGameLogicTest {
 
         while (logic.getBoard().getSelection().isEmpty()) {
             vec = new Vector2f(margin + rand.nextInt(24) * r, margin + rand.nextInt(17) * r);
-            logic.select(vec);
+            logic.updateSelection(vec);
         }
 
         // Selection shouldn't be updated.
         Set<Bubble> selection = logic.getBoard().getSelection();
-        logic.select(vec);
+        logic.updateSelection(vec);
         assertEquals(selection, logic.getBoard().getSelection());
 
         // Forcing selection should create new selection.
-        logic.forceSelect(vec);
+        logic.forceUpdateSelection(vec);
         assertNotSame(selection, logic.getBoard().getSelection());
     }
 
@@ -124,6 +125,6 @@ public class CrazyGameLogicTest {
     private void testPoint(int x, int y) {
         Random rand = new Random();
         Vector2f vec = new Vector2f(margin + x * r + r * rand.nextFloat(), margin + y * r + r * rand.nextFloat());
-        assertEquals(new Point(x, y), CrazyGameLogic.getMousePositionOnBoard(vec));
+        assertEquals(new Point(x, y), getPositionOnBoard(vec));
     }
 }
