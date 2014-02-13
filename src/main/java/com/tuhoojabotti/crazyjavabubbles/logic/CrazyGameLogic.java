@@ -56,6 +56,8 @@ public class CrazyGameLogic {
     public void init() {
         board.init();
         score = 0;
+        bubblesPopped = 0;
+        biggestCluster = 0;
     }
 
     public boolean isGameOver() {
