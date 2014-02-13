@@ -29,6 +29,7 @@ import com.tuhoojabotti.crazyjavabubbles.renderer.CrazyGameRenderer;
 import java.util.Set;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -62,6 +63,8 @@ public class CrazyGame extends GameWrapper {
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         logic = new CrazyGameLogic();
+        Music gameMusic = new Music("uk.ogg");
+        gameMusic.loop();    
     }
 
     @Override
