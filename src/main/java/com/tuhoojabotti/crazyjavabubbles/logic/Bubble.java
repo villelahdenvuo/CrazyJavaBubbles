@@ -23,15 +23,17 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.logic;
 
-import java.awt.geom.Point2D;
+import com.tuhoojabotti.crazyjavabubbles.renderer.RenderSettings;
 import java.util.Random;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.geom.Vector2f;
 
 /**
  * A bubble on the game, all the information about it.
+ *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
-public class Bubble extends Point2D.Float {
+public class Bubble extends Vector2f {
 
     private final Color color;
     private boolean selected;
@@ -47,12 +49,12 @@ public class Bubble extends Point2D.Float {
         super(x, y);
         selected = false;
         popped = false;
-        
+
         this.color = new Color[]{
             Color.red, new Color(0.4f, 0.6f, 1f), Color.green, Color.yellow
         }[new Random().nextInt(4)];
     }
-    
+
     /**
      * Create a new Bubble.
      *
@@ -64,7 +66,7 @@ public class Bubble extends Point2D.Float {
         super(x, y);
         this.color = color;
     }
-    
+
     public void pop() {
         popped = true;
     }
@@ -72,7 +74,7 @@ public class Bubble extends Point2D.Float {
     public boolean isPopped() {
         return popped;
     }
-    
+
     /**
      * @param selected whether the bubble is selected or not
      */
@@ -103,5 +105,11 @@ public class Bubble extends Point2D.Float {
             return false;
         }
         return color.equals(b.color);
+    }
+
+    public Vector2f getScreenPosition() {
+        int m = RenderSettings.BOARD_MARGIN,
+                r = RenderSettings.BUBBLE_RADIUS;
+        return new Vector2f(m + x * r, m + y * r);
     }
 }

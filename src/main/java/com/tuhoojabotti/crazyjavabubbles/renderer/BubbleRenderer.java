@@ -81,12 +81,14 @@ public class BubbleRenderer {
         this(bubble, gfx, new Vector2f(-100000, -100000));
     }
 
-    public void applyForce(Vector2f point, float power) {
+    public void applyForce(Vector2f bubble) {
+        int m = RenderSettings.BOARD_MARGIN;
+        Vector2f point = new Vector2f(m + bubble.x * r, m + bubble.y * r);
         double angle = Math.atan2(point.y - outCircle.getCenterY(), point.x - outCircle.getCenterX());
         float distance = Math.max(10, point.distance(outCircle.getLocation()));
 
-        velocity.x -= power / distance * (float) Math.cos(angle) * 200;
-        velocity.y -= power / distance * (float) Math.sin(angle) * 200;
+        velocity.x -= 3 / distance * (float) Math.cos(angle) * 200;
+        velocity.y -= 2 / distance * (float) Math.sin(angle) * 200;
     }
 
     /**

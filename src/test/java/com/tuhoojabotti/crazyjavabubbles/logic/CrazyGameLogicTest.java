@@ -85,7 +85,7 @@ public class CrazyGameLogicTest {
                 logic.select(new Vector2f(margin + x * r, margin + y * r));
                 Set<Bubble> selection = logic.getBoard().getSelection();
                 if (!selection.isEmpty()) {
-                    assertEquals(selection.size(), logic.pop());
+                    assertEquals(selection.size(), logic.pop().size());
                 }
             }
         }

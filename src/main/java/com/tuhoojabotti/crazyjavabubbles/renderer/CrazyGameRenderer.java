@@ -24,18 +24,27 @@
 package com.tuhoojabotti.crazyjavabubbles.renderer;
 
 import com.tuhoojabotti.crazyjavabubbles.logic.Board;
+import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogic;
 import java.awt.Font;
+import java.io.IOException;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.ImageBuffer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
+import org.newdawn.slick.particles.ConfigurableEmitter;
+import org.newdawn.slick.particles.ParticleIO;
+import org.newdawn.slick.particles.ParticleSystem;
 
 /**
  * Renders the whole game.
+ *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class CrazyGameRenderer {
@@ -45,6 +54,8 @@ public class CrazyGameRenderer {
     private TextRenderer scoreText;
     private final GameContainer gameContainer;
     private int deltaTime;
+    private ParticleSystem particleSystem;
+    private ConfigurableEmitter explosion;
 
     /**
      * Create new {@link CrazyGame} renderer.
@@ -61,14 +72,26 @@ public class CrazyGameRenderer {
 
         try {
             scoreText = new TextRenderer("Courier New", Font.PLAIN, 16);
-            //scoreText.setVerticalAlign(TextRenderer.ALIGN_BOTTOM);
         } catch (SlickException ex) {
             Logger.getLogger(CrazyGameRenderer.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        initParticleSystem();
     }
 
-    public void explode(Vector2f point, float power) {
-        boardRenderer.explode(point, power);
+    public void explode(Set<Bubble> bubbles) {
+        boardRenderer.explode(bubbles);
+        int rp2 = RenderSettings.BUBBLE_RADIUS / 2;
+
+        for (Bubble bubble : bubbles) {
+            Vector2f point = bubble.getScreenPosition();
+            ConfigurableEmitter e = explosion.duplicate();
+            e.setPosition(point.x + rp2, point.y + rp2, false);
+            e.addColorPoint(0f, bubble.getColor());
+            e.addColorPoint(1f, bubble.getColor().darker(0.5f));
+            e.setEnabled(true);
+            particleSystem.addEmitter(e);
+        }
     }
 
     /**
@@ -89,11 +112,35 @@ public class CrazyGameRenderer {
         scoreText.render(gameContainer.getWidth() - 180, textY, "ms: " + deltaTime);
 
         scoreText.render(6, textY, "score: " + game.getScore());
+
+        particleSystem.render();
     }
 
     public void update(int delta) {
         deltaTime = delta;
         boardRenderer.update(gameContainer, delta);
+        particleSystem.update(delta);
     }
 
+    private void initParticleSystem() {
+        ImageBuffer ib = new ImageBuffer(4, 4);
+        //ib.setRGBA(0, 0, 255, 255, 255, 255);
+        for (int y = 0; y < 4; y++) {
+            for (int x = 0; x < 4; x++) {
+                ib.setRGBA(x, y, 255, 255, 255, 255);
+            }
+        }
+        particleSystem = new ParticleSystem(new Image(ib), 1500);
+        //particleSystem.getEmitter(0).setEnabled(false); // disable the initial emitter
+        particleSystem.setRemoveCompletedEmitters(true); // remove emitters once they finish    
+
+        try {
+            explosion = ParticleIO.loadEmitter("bubble_emitter.xml");
+            explosion.setEnabled(false);
+            //explosion.addColorPoint(0f, Color.red);
+            //explosion.addColorPoint(1f, Color.black);
+        } catch (IOException ex) {
+            Logger.getLogger(CrazyGameRenderer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

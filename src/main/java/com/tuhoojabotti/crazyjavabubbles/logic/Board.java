@@ -23,7 +23,6 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.logic;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -77,9 +76,9 @@ public class Board {
      *
      * @return amount of bubbles popped
      */
-    public int pop() {
+    public Set<Bubble> pop() {
         if (selection.size() < 2) {
-            return 0; // Can't pop if selection is smaller than 2.
+            return null; // Can't pop if selection is smaller than 2.
         }
 
         // Remove selected bubbles from the board.
@@ -93,7 +92,7 @@ public class Board {
         }
 
         updateBubblePositions();
-        return selection.size();
+        return selection;
     }
 
     public Bubble[][] getBubbles() {
@@ -232,7 +231,7 @@ public class Board {
 
     private void moveBubble(Bubble b, int x, int y) {
         bubbles[(int) b.y][(int) b.x] = null;
-        b.setLocation(x, y);
+        b.set(x, y);
         bubbles[y][x] = b;
     }
 

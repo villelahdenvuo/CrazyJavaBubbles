@@ -23,8 +23,10 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.gui;
 
+import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogic;
 import com.tuhoojabotti.crazyjavabubbles.renderer.CrazyGameRenderer;
+import java.util.Set;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -88,10 +90,10 @@ public class CrazyGame extends GameWrapper {
     @Override
     public void mouseReleased(int button, int x, int y) {
         if (button == 0) {
-            int count = logic.pop();
-            if (count > 0) {
+            Set<Bubble> bubbles = logic.pop();
+            if (bubbles != null) {
                 logic.forceSelect(getMousePosition());
-                renderer.explode(getMousePosition(), count);
+                renderer.explode(bubbles);
             }
         }
     }

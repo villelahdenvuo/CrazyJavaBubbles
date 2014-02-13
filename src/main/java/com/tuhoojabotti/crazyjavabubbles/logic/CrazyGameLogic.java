@@ -25,6 +25,7 @@ package com.tuhoojabotti.crazyjavabubbles.logic;
 
 import com.tuhoojabotti.crazyjavabubbles.renderer.RenderSettings;
 import java.awt.Point;
+import java.util.Set;
 import org.newdawn.slick.geom.Vector2f;
 
 /**
@@ -81,10 +82,13 @@ public class CrazyGameLogic {
      *
      * @return how many bubbles were popped
      */
-    public int pop() {
-        int bubbles = board.pop();
+    public Set<Bubble> pop() {
+        Set<Bubble> bubbles = board.pop();
+        if (bubbles == null) {
+            return null;
+        }
 
-        score += bubbles;
+        score += bubbles.size();
 
         return bubbles;
     }

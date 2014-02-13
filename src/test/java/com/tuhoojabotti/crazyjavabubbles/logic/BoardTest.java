@@ -99,8 +99,7 @@ public class BoardTest {
 
     @Test
     public void testPopWithEmptySelection() {
-        int result = board.pop();
-        assertEquals(0, result);
+        assertEquals(null, board.pop());
     }
 
     @Test
@@ -109,8 +108,7 @@ public class BoardTest {
             {'b'}
         });
         board.select(0, 0);
-        int popped = board.pop();
-        assertEquals(0, popped);
+        assertEquals(null, board.pop());
     }
 
     @Test

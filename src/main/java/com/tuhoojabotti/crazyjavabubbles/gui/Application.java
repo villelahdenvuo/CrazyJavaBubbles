@@ -89,9 +89,9 @@ public class Application extends StateBasedGame {
      */
     @Override
     public void initStatesList(GameContainer gc) throws SlickException {
+        this.addState(new CrazyGame(GAME));
         this.addState(new SplashScreen(SPLASHSCREEN));
         this.addState(new MainMenu(MAINMENU));
-        this.addState(new CrazyGame(GAME));
     }
 
     /**

@@ -24,7 +24,9 @@
 package com.tuhoojabotti.crazyjavabubbles.renderer;
 
 import com.tuhoojabotti.crazyjavabubbles.logic.*;
+import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Set;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Vector2f;
@@ -63,13 +65,15 @@ public class BoardRenderer {
     /**
      * Create a forceful explosion.
      * 
-     * @param point origin of the explosion
-     * @param power power of the explosion
+     * @param bubbles
      */
-    public void explode(Vector2f point, float power) {
-        for (BubbleRenderer bubbleRenderer : bubbleRenderers) {
-            bubbleRenderer.applyForce(point, power);
+    public void explode(Set<Bubble> bubbles) {
+        for (Bubble bubble : bubbles) {
+            for (BubbleRenderer bubbleRenderer : bubbleRenderers) {
+                bubbleRenderer.applyForce((Vector2f) bubble);
+            }
         }
+
     }
     
     /**
