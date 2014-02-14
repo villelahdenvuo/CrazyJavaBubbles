@@ -128,7 +128,7 @@ public class BubbleRenderer {
     }
 
     private void updatePhysics(double mouseAngle, int delta) {
-        float smooth = RenderSettings.BUBBLE_WOBBLE + (bubble.y - 1) / 80f;
+        float smooth = RenderSettings.BUBBLE_WOBBLE + (bubble.y + 5) / 200f;
 
         // Update velocity towards real position + towards mouse cursor.
         velocity.x = curveValue(target.x - outCircle.getX(), velocity.x, smooth)

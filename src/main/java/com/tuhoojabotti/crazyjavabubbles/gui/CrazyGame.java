@@ -29,6 +29,7 @@ import com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogic;
 import com.tuhoojabotti.crazyjavabubbles.renderer.CrazyGameRenderer;
 import java.io.IOException;
 import java.util.Set;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Music;
@@ -36,6 +37,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.openal.AudioLoader;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.EmptyTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
 import org.newdawn.slick.util.ResourceLoader;
 
 /**
@@ -102,7 +105,7 @@ public class CrazyGame extends StateWrapper {
         logic.updateSelection(getMousePosition());
 
         if (logic.isGameOver()) {
-            sbg.enterState(Application.SPLASHSCREEN);
+            sbg.enterState(Application.SPLASHSCREEN, new FadeOutTransition(Color.black, 3000), new EmptyTransition());
         }
     }
 
