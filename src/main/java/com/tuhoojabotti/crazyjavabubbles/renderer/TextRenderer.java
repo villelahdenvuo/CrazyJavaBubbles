@@ -31,6 +31,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
+import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.util.ResourceLoader;
 
 /**
@@ -42,7 +43,7 @@ public class TextRenderer {
 
     public static final int ALIGN_LEFT = 0, ALIGN_RIGHT = 1, ALIGN_CENTER = 2;
     public static final int ALIGN_TOP = 0, ALIGN_MIDDLE = 1, ALIGN_BOTTOM = 2;
-    private UnicodeFont font;
+    protected UnicodeFont font;
 
     private int horizontalAlign = ALIGN_LEFT;
     private int verticalAlign = ALIGN_TOP;
@@ -57,7 +58,7 @@ public class TextRenderer {
     public TextRenderer(String fontName, int size) throws SlickException {
         try {
             InputStream inputStream = ResourceLoader.getResourceAsStream(
-                    "fonts/" + fontName + ".ttf");
+                "fonts/" + fontName + ".ttf");
             Font awtFont = Font.createFont(Font.TRUETYPE_FONT, inputStream);
             awtFont = awtFont.deriveFont(size); // set font size
             font = new UnicodeFont(awtFont, size, false, false);
@@ -70,22 +71,24 @@ public class TextRenderer {
         font.loadGlyphs();
     }
 
-    /**
-     * Set the horizontal alignment of the text.
-     *
-     * @param horizontalAlign
-     */
     public void setHorizontalAlign(int horizontalAlign) {
         this.horizontalAlign = horizontalAlign;
     }
 
-    /**
-     * Set the vertical alignment of the text.
-     *
-     * @param verticalAlign
-     */
     public void setVerticalAlign(int verticalAlign) {
         this.verticalAlign = verticalAlign;
+    }
+
+    public int getHorizontalAlign() {
+        return horizontalAlign;
+    }
+
+    public int getVerticalAlign() {
+        return verticalAlign;
+    }
+
+    public UnicodeFont getFont() {
+        return font;
     }
 
     /**
@@ -108,6 +111,11 @@ public class TextRenderer {
      * @param color the colour of the text
      */
     public void render(int x, int y, String text, Color color) {
+        Vector2f position = calculateAlignment(x, y, text);
+        font.drawString(position.x, position.y, text, color);
+    }
+
+    protected Vector2f calculateAlignment(int x, int y, String text) {
         switch (horizontalAlign) {
             case ALIGN_RIGHT:
                 x = x - font.getWidth(text);
@@ -124,7 +132,6 @@ public class TextRenderer {
                 y = y - font.getHeight(text) / 2;
                 break;
         }
-
-        font.drawString(x, y, text, color);
+        return new Vector2f(x, y);
     }
 }

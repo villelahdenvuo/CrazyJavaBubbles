@@ -38,6 +38,7 @@ public class CrazyGameLogic {
     private int score;
     private int bubblesPopped;
     private int biggestCluster;
+    private long startTime;
 
     private final Board board;
     private final Point lastSelection;
@@ -54,6 +55,7 @@ public class CrazyGameLogic {
      * Initialise the logic.
      */
     public void init() {
+        startTime = System.currentTimeMillis();
         board.init();
         score = 0;
         bubblesPopped = 0;
@@ -78,6 +80,10 @@ public class CrazyGameLogic {
 
     public Board getBoard() {
         return board;
+    }
+
+    public int getTime() {
+        return (int) Math.round((System.currentTimeMillis() - startTime) / 1000);
     }
 
     /**

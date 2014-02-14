@@ -29,6 +29,7 @@ import com.tuhoojabotti.crazyjavabubbles.renderer.TextRenderer;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import com.tuhoojabotti.crazyjavabubbles.renderer.BubbleRenderer;
 import com.tuhoojabotti.crazyjavabubbles.renderer.RenderSettings;
+import com.tuhoojabotti.crazyjavabubbles.renderer.WobbleTextRenderer;
 import java.util.ArrayList;
 import java.util.Random;
 import org.newdawn.slick.GameContainer;
@@ -50,12 +51,12 @@ public class SplashScreen extends StateWrapper {
     private ArrayList<Bubble> bubbles;
     private Vector2f mousePosition;
     // For the texts.
-    private TextRenderer titleText;
-    private TextRenderer authorText;
+    private WobbleTextRenderer titleText;
+    private WobbleTextRenderer authorText;
+    private WobbleTextRenderer greetingText;
     private Vector2f titlePos;
     private Vector2f authorPos;
     
-    private String greeting;
     private final String[] greetings = new String[]{
         "<3 y'all",
         "Hey mum, look at me!",
@@ -83,8 +84,8 @@ public class SplashScreen extends StateWrapper {
         mousePosition = new Vector2f();
 
         try {
-            titleText = new TextRenderer("sweet-as-candy.regular", 60);
-            authorText = new TextRenderer("goodtimes.regular", 28);
+            titleText = new WobbleTextRenderer("sweet-as-candy.regular", 60, "Crazy Bubbles");
+            authorText = new WobbleTextRenderer("goodtimes.regular", 28, "by Ville 'Tuhis' Lahdenvuo", 0.3f);
         } catch (SlickException e) {
             fatalError("Could not load font.", this.getClass(), e);
         }
@@ -95,7 +96,7 @@ public class SplashScreen extends StateWrapper {
 
         for (int y = 0; y <= gc.getHeight() / r + 1; y++) {
             for (int x = 0; x < gc.getWidth() / r + 1; x++) {
-                if ((y < 8 || y > 10) && (y < 2 || y > 4 || x < 2 || x > 23)) {
+                if ((y < 8 || y > 10) && (y < 1 || y > 4 || x < 2 || x > 23)) {
                     Bubble b = new Bubble(x, y);
                     b.setSelected(true);
                     bubbles.add(b);
@@ -112,8 +113,9 @@ public class SplashScreen extends StateWrapper {
         Random rand = new Random();
         setExitRequested(false);
         titlePos = new Vector2f(gc.getWidth() / 2, -200);
-        authorPos = new Vector2f(-400, gc.getHeight() / 2 - 50);
-        greeting = greetings[rand.nextInt(greetings.length)];
+        authorPos = new Vector2f(-400, gc.getHeight() / 2 - 46);
+        greetingText = new WobbleTextRenderer("goodtimes.regular", 26, greetings[rand.nextInt(greetings.length)], 0.3f);
+        greetingText.setHorizontalAlign(TextRenderer.ALIGN_CENTER);
     }
 
     @Override
@@ -122,9 +124,9 @@ public class SplashScreen extends StateWrapper {
             renderer.render(-RenderSettings.BUBBLE_RADIUS / 2, -RenderSettings.BUBBLE_RADIUS / 2);
         }
 
-        titleText.render((int) titlePos.x, (int) titlePos.y, "Crazy Bubbles");
-        authorText.render((int) authorPos.x, (int) authorPos.y, "by Ville 'Tuhis' Lahdenvuo");
-        authorText.render((int) authorPos.x, (int) authorPos.y + 40, greeting);
+        titleText.render((int) titlePos.x, (int) titlePos.y);
+        authorText.render((int) authorPos.x, (int) authorPos.y);
+        greetingText.render((int) authorPos.x, (int) authorPos.y + 40);
     }
 
     @Override
@@ -166,12 +168,12 @@ public class SplashScreen extends StateWrapper {
      * @param gc game container
      */
     private void updateTexts(GameContainer gc) {
-        titlePos.y = curveValue(52, titlePos.y, 0.05f);
+        titlePos.y = curveValue(60, titlePos.y, 0.05f);
         if (authorPos.x > gc.getWidth() + 250) {
             setExitRequested(true);
         } else if (authorPos.x > titlePos.x - 5) {
             authorPos.x = curveValue(gc.getWidth() * 2.4f, authorPos.x, 0.04f);
-        } else if (titlePos.y > 42) {
+        } else if (titlePos.y > 50) {
             authorPos.x = curveValue(titlePos.x, authorPos.x, 0.02f);
         }
     }

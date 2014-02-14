@@ -111,6 +111,7 @@ public class CrazyGameRenderer {
         text.render(6, textY, "score: " + game.getScore());
         text.render(156, textY, "biggest: " + game.getBiggestCluster());
         text.render(306, textY, "total: " + game.getBubblesPopped());
+        text.render(456, textY, "time: " + game.getTime());
 
         particleRenderer.render();
     }
