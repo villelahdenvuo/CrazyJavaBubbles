@@ -11,3 +11,4 @@
  * 5.2.2014 &ndash; **8h** &ndash; *Optimoitu renderöintiä (4x nopeampi), refaktoroitu fysiikkaa & kaikenlaista pientä*
  * 6.2.2014 &ndash; **4h** &ndash; *Paranneltu pelitiloja ja poistettu redundanttia koodia*
  	 * Hieno bugi windows/linux ero - linuksilla `Math.sin((long / int) + int + int)` palauttaa aina 0, windowsilla toimaa
+ * 14.2.2014 &ndash; **8h** &ndash; *Partikkelilefektit, musiikit, äänet, dokumentointia, viilausta*
