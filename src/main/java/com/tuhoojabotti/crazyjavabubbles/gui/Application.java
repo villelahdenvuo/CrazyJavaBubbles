@@ -87,6 +87,16 @@ public class Application extends StateBasedGame {
     public void initStatesList(GameContainer gc) {
         this.addState(new SplashScreen(SPLASHSCREEN));
         this.addState(new CrazyGame(GAME));
+
+        if (gc instanceof AppGameContainer) {
+            AppGameContainer app = (AppGameContainer) gc;
+            if (!app.isFullscreen()) {
+                try {
+                    app.setIcons(new String[]{"graphics/icon16.png", "graphics/icon24.png", "graphics/icon32.png"});
+                } catch (SlickException e) {
+                }
+            }
+        }
     }
 
     /**
