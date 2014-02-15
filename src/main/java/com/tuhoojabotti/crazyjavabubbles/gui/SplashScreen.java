@@ -36,7 +36,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
-import org.newdawn.slick.opengl.TextureImpl;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
@@ -56,7 +55,7 @@ public class SplashScreen extends StateWrapper {
     private WobbleTextRenderer greetingText;
     private Vector2f titlePos;
     private Vector2f authorPos;
-    
+
     private final String[] greetings = new String[]{
         "<3 y'all",
         "Hey mum, look at me!",
@@ -83,6 +82,11 @@ public class SplashScreen extends StateWrapper {
         bubbles = new ArrayList<>();
         mousePosition = new Vector2f();
 
+        createBackground(gc.getWidth(), gc.getHeight(), gc.getGraphics());
+        createTexts();
+    }
+
+    private void createTexts() {
         try {
             titleText = new WobbleTextRenderer("sweet-as-candy.regular", 60, "Crazy Bubbles");
             authorText = new WobbleTextRenderer("goodtimes.regular", 28, "by Ville 'Tuhis' Lahdenvuo", 0.3f);
@@ -91,21 +95,21 @@ public class SplashScreen extends StateWrapper {
         }
         titleText.setHorizontalAlign(TextRenderer.ALIGN_CENTER);
         authorText.setHorizontalAlign(TextRenderer.ALIGN_CENTER);
+    }
 
+    private void createBackground(int w, int h, Graphics gfx) {
         int r = RenderSettings.BUBBLE_RADIUS;
 
-        for (int y = 0; y <= gc.getHeight() / r + 1; y++) {
-            for (int x = 0; x < gc.getWidth() / r + 1; x++) {
+        for (int y = 0; y <= h / r + 1; y++) {
+            for (int x = 0; x < w / r + 1; x++) {
                 if ((y < 8 || y > 10) && (y < 1 || y > 4 || x < 2 || x > 23)) {
                     Bubble b = new Bubble(x, y);
                     b.setSelected(true);
                     bubbles.add(b);
-                    bubbleRenderers.add(new BubbleRenderer(b, gc.getGraphics(), mousePosition));
+                    bubbleRenderers.add(new BubbleRenderer(b, gfx, mousePosition));
                 }
             }
         }
-
-        TextureImpl.bindNone();
     }
 
     @Override
@@ -159,7 +163,7 @@ public class SplashScreen extends StateWrapper {
         long t = gc.getTime();
 
         mousePosition.set(w / 2 + (float) Math.cos(t / 100.0) * w,
-                h / 2 + (float) Math.sin(t / 100.0) * w);
+            h / 2 + (float) Math.sin(t / 100.0) * w);
     }
 
     /**

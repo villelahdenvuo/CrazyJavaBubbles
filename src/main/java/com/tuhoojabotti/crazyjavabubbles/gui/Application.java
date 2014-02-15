@@ -92,7 +92,8 @@ public class Application extends StateBasedGame {
             AppGameContainer app = (AppGameContainer) gc;
             if (!app.isFullscreen()) {
                 try {
-                    app.setIcons(new String[]{"graphics/icon16.png", "graphics/icon24.png", "graphics/icon32.png"});
+                    app.setIcons(new String[]{"graphics/icon16.png",
+                        "graphics/icon24.png", "graphics/icon32.png"});
                 } catch (SlickException e) {
                 }
             }
