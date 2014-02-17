@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.tuhoojabotti.crazyjavabubbles.renderer;
+package com.tuhoojabotti.crazyjavabubbles.gui;
 
 import java.awt.Font;
 import java.awt.FontFormatException;

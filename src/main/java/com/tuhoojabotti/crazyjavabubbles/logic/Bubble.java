@@ -23,7 +23,7 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.logic;
 
-import com.tuhoojabotti.crazyjavabubbles.renderer.RenderSettings;
+import com.tuhoojabotti.crazyjavabubbles.gui.RenderSettings;
 import java.util.Random;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Vector2f;

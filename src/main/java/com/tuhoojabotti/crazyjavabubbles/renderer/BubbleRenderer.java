@@ -23,6 +23,7 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.renderer;
 
+import com.tuhoojabotti.crazyjavabubbles.gui.RenderSettings;
 import static com.tuhoojabotti.crazyjavabubbles.Util.curveValue;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import org.newdawn.slick.Color;

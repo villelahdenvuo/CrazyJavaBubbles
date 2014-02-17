@@ -24,7 +24,7 @@
 package com.tuhoojabotti.crazyjavabubbles.logic;
 
 import static com.tuhoojabotti.crazyjavabubbles.Util.getPositionOnBoard;
-import com.tuhoojabotti.crazyjavabubbles.renderer.RenderSettings;
+import com.tuhoojabotti.crazyjavabubbles.gui.RenderSettings;
 import java.awt.Point;
 import java.util.Random;
 import java.util.Set;

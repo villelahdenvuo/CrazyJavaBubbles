@@ -21,15 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.tuhoojabotti.crazyjavabubbles.gui;
+package com.tuhoojabotti.crazyjavabubbles;
 
 import static com.tuhoojabotti.crazyjavabubbles.Util.curveValue;
 import static com.tuhoojabotti.crazyjavabubbles.Util.fatalError;
-import com.tuhoojabotti.crazyjavabubbles.renderer.TextRenderer;
+import com.tuhoojabotti.crazyjavabubbles.gui.TextRenderer;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import com.tuhoojabotti.crazyjavabubbles.renderer.BubbleRenderer;
-import com.tuhoojabotti.crazyjavabubbles.renderer.RenderSettings;
-import com.tuhoojabotti.crazyjavabubbles.renderer.WobbleTextRenderer;
+import com.tuhoojabotti.crazyjavabubbles.gui.RenderSettings;
+import com.tuhoojabotti.crazyjavabubbles.gui.WobbleTextRenderer;
 import java.util.ArrayList;
 import java.util.Random;
 import org.newdawn.slick.GameContainer;

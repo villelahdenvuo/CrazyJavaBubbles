@@ -23,6 +23,8 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.renderer;
 
+import com.tuhoojabotti.crazyjavabubbles.gui.TextRenderer;
+import com.tuhoojabotti.crazyjavabubbles.gui.RenderSettings;
 import static com.tuhoojabotti.crazyjavabubbles.Util.fatalError;
 import com.tuhoojabotti.crazyjavabubbles.logic.Board;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;

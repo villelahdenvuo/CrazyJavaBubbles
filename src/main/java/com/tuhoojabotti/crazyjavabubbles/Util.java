@@ -23,8 +23,7 @@
  */
 package com.tuhoojabotti.crazyjavabubbles;
 
-import com.tuhoojabotti.crazyjavabubbles.gui.Application;
-import com.tuhoojabotti.crazyjavabubbles.renderer.RenderSettings;
+import com.tuhoojabotti.crazyjavabubbles.gui.RenderSettings;
 import java.awt.Point;
 import java.util.logging.Level;
 import java.util.logging.Logger;
