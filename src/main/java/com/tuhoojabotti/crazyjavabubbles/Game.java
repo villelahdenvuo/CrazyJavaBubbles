@@ -23,6 +23,8 @@
  */
 package com.tuhoojabotti.crazyjavabubbles;
 
+import com.tuhoojabotti.crazyjavabubbles.states.SplashScreen;
+import com.tuhoojabotti.crazyjavabubbles.states.CrazyGame;
 import static com.tuhoojabotti.crazyjavabubbles.Util.fatalError;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
@@ -34,8 +36,12 @@ import org.newdawn.slick.state.StateBasedGame;
  *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
-public class Application extends StateBasedGame {
-
+public class Game extends StateBasedGame {
+   
+    public static void main(String[] args) {
+        new Game().run();
+    }
+    
     /**
      * The splash screen state ID.
      */
@@ -74,7 +80,7 @@ public class Application extends StateBasedGame {
     /**
      * Creates a new Application.
      */
-    public Application() {
+    public Game() {
         super(NAME);
     }
 

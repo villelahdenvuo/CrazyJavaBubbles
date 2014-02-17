@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.tuhoojabotti.crazyjavabubbles;
+package com.tuhoojabotti.crazyjavabubbles.states;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;

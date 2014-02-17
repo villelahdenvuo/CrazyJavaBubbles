@@ -59,7 +59,7 @@ public class Util {
     public static void fatalError(String message, Class caller, Throwable e) {
         Logger.getLogger(caller.getName()).log(Level.SEVERE, message, e);
         JOptionPane.showMessageDialog(null, message,
-                Application.NAME, JOptionPane.ERROR_MESSAGE);
+                Game.NAME, JOptionPane.ERROR_MESSAGE);
         System.exit(1);
     }
 

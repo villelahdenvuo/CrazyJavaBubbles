@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.tuhoojabotti.crazyjavabubbles;
+package com.tuhoojabotti.crazyjavabubbles.states;
 
+import com.tuhoojabotti.crazyjavabubbles.Game;
 import static com.tuhoojabotti.crazyjavabubbles.Util.curveValue;
 import static com.tuhoojabotti.crazyjavabubbles.Util.fatalError;
 import com.tuhoojabotti.crazyjavabubbles.gui.TextRenderer;
@@ -136,7 +137,7 @@ public class SplashScreen extends StateWrapper {
     @Override
     public void update(GameContainer gameContainer, StateBasedGame game, int delta) {
         if (isExitRequested()) {
-            game.enterState(Application.GAME);
+            game.enterState(Game.GAME);
         }
 
         for (BubbleRenderer renderer : bubbleRenderers) {

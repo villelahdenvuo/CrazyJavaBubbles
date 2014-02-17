@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.tuhoojabotti.crazyjavabubbles;
+package com.tuhoojabotti.crazyjavabubbles.states;
 
+import com.tuhoojabotti.crazyjavabubbles.Game;
 import static com.tuhoojabotti.crazyjavabubbles.Util.fatalError;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogic;
@@ -105,7 +106,7 @@ public class CrazyGame extends StateWrapper {
         logic.updateSelection(getMousePosition());
 
         if (logic.isGameOver()) {
-            sbg.enterState(Application.SPLASHSCREEN, new FadeOutTransition(Color.black, 3000), new EmptyTransition());
+            sbg.enterState(Game.SPLASHSCREEN, new FadeOutTransition(Color.black, 3000), new EmptyTransition());
         }
     }
 
