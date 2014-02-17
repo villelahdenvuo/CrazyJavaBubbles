@@ -2,8 +2,8 @@
     "fullscreen": false,
     "particle_effects": true,
     "score_effects": true,
-    "music_on": false,
+    "music_on": true,
     "music_volume": 100,
-    "sound_on": false,
+    "sound_on": true,
     "sound_volume": 100
 }
