@@ -36,7 +36,7 @@ import org.newdawn.slick.geom.Vector2f;
 public class CrazyGameLogic {
 
     private int score;
-    private int bubblesPopped;
+    private int poppedTotal;
     private int biggestCluster;
     private long startTime;
 
@@ -58,7 +58,7 @@ public class CrazyGameLogic {
         startTime = System.currentTimeMillis();
         board.init();
         score = 0;
-        bubblesPopped = 0;
+        poppedTotal = 0;
         biggestCluster = 0;
     }
 
@@ -67,7 +67,7 @@ public class CrazyGameLogic {
     }
 
     public int getScore() {
-        return score;
+        return (int) Math.round(score + Math.pow(biggestCluster, 3));
     }
 
     public int getBiggestCluster() {
@@ -75,7 +75,7 @@ public class CrazyGameLogic {
     }
 
     public int getBubblesPopped() {
-        return bubblesPopped;
+        return poppedTotal;
     }
 
     public Board getBoard() {
@@ -132,8 +132,12 @@ public class CrazyGameLogic {
      * @param popped amount of bubbles popped
      */
     private void updateScore(int popped) {
-        bubblesPopped += popped;
+        poppedTotal += popped;
         biggestCluster = Math.max(biggestCluster, popped);
-        score = (int) Math.round(bubblesPopped * Math.sqrt(biggestCluster));
+        score += calculateScore(popped);
+    }
+    
+    public int calculateScore(int popped) {
+        return (int) Math.round(Math.pow(popped, 2)) * 100;
     }
 }

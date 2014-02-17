@@ -23,12 +23,15 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.renderer;
 
+import com.tuhoojabotti.crazyjavabubbles.renderer.effect.BubbleEffectRenderer;
 import com.tuhoojabotti.crazyjavabubbles.gui.TextRenderer;
 import com.tuhoojabotti.crazyjavabubbles.gui.RenderSettings;
 import static com.tuhoojabotti.crazyjavabubbles.Util.fatalError;
 import com.tuhoojabotti.crazyjavabubbles.logic.Board;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogic;
+import com.tuhoojabotti.crazyjavabubbles.renderer.effect.ScoreEffectRenderer;
+import com.tuhoojabotti.crazyjavabubbles.states.CrazyGame;
 import java.util.Set;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -43,11 +46,14 @@ import org.newdawn.slick.geom.Vector2f;
  */
 public class CrazyGameRenderer {
 
+    private final CrazyGameLogic game;
     private final Graphics graphics;
     private final BoardRenderer boardRenderer;
     private TextRenderer text;
     private final GameContainer gameContainer;
     private BubbleEffectRenderer particleRenderer;
+    private ScoreEffectRenderer scoreRenderer;
+    private Vector2f mousePosition;
 
     private final int windowWidth;
     private final int windowHeight;
@@ -56,18 +62,20 @@ public class CrazyGameRenderer {
     /**
      * Create new {@link CrazyGame} renderer.
      *
-     * @param board board of the game
+     * @param game the game logic to render
      * @param gfx graphics controller
      * @param gc game container
      * @param mouse mouse position
      */
-    public CrazyGameRenderer(Board board, Graphics gfx, GameContainer gc, Vector2f mouse) {
+    public CrazyGameRenderer(CrazyGameLogic game, Graphics gfx, GameContainer gc, Vector2f mouse) {
+        this.game = game;
         windowWidth = gc.getWidth();
         windowHeight = gc.getHeight();
         gameContainer = gc;
         graphics = gfx;
+        mousePosition = mouse;
 
-        boardRenderer = new BoardRenderer(board, gfx, mouse);
+        boardRenderer = new BoardRenderer(game.getBoard(), gfx, mouse);
 
         try {
             text = new TextRenderer("goodtimes.regular", 16);
@@ -78,6 +86,7 @@ public class CrazyGameRenderer {
 
         particleRenderer = new BubbleEffectRenderer();
         particleRenderer.initParticleSystem();
+        scoreRenderer = new ScoreEffectRenderer();
     }
 
     /**
@@ -91,18 +100,20 @@ public class CrazyGameRenderer {
         if (RenderSettings.PARTICLE_EFFECTS) {
             for (Bubble bubble : bubbles) {
                 particleRenderer.addExplosion(bubble);
+                scoreRenderer.applyForce(bubble.getScreenPosition());
             }
         }
+        scoreRenderer.addScoreEffect(game.calculateScore(bubbles.size()), mousePosition);
     }
 
     /**
      * Render the game.
-     *
-     * @param game game logic
      */
-    public void render(CrazyGameLogic game) {
+    public void render() {
         boardRenderer.render(RenderSettings.BOARD_MARGIN,
-                RenderSettings.BOARD_MARGIN);
+            RenderSettings.BOARD_MARGIN);
+
+        scoreRenderer.render();
 
         graphics.setColor(barColor);
         graphics.fillRect(0, windowHeight - 28, windowWidth, 28);
@@ -111,9 +122,9 @@ public class CrazyGameRenderer {
         text.render(windowWidth - 120, textY, "fps: " + gameContainer.getFPS());
 
         text.render(6, textY, "score: " + game.getScore());
-        text.render(156, textY, "biggest: " + game.getBiggestCluster());
-        text.render(306, textY, "total: " + game.getBubblesPopped());
-        text.render(456, textY, "time: " + game.getTime());
+        text.render(50+156, textY, "biggest: " + game.getBiggestCluster());
+        text.render(50+306, textY, "total: " + game.getBubblesPopped());
+        text.render(50+456, textY, "time: " + game.getTime());
 
         particleRenderer.render();
     }
@@ -126,5 +137,6 @@ public class CrazyGameRenderer {
     public void update(int delta) {
         boardRenderer.update(gameContainer, delta);
         particleRenderer.update(delta, gameContainer.getFPS());
+        scoreRenderer.update(gameContainer, delta);
     }
 }

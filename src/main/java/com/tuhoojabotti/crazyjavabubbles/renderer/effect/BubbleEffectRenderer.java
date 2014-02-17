@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.tuhoojabotti.crazyjavabubbles.renderer;
+package com.tuhoojabotti.crazyjavabubbles.renderer.effect;
 
 import com.tuhoojabotti.crazyjavabubbles.gui.RenderSettings;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
@@ -47,7 +47,7 @@ public class BubbleEffectRenderer {
      *
      * @param bubble where to create it and what color
      */
-    protected void addExplosion(Bubble bubble) {
+    public void addExplosion(Bubble bubble) {
         int offset = RenderSettings.BUBBLE_RADIUS / 2;
         Vector2f point = bubble.getScreenPosition();
         ConfigurableEmitter e = explosion.duplicate();
@@ -61,7 +61,7 @@ public class BubbleEffectRenderer {
     /**
      * Create a particle system for the renderer.
      */
-    protected void initParticleSystem() {
+    public void initParticleSystem() {
         particleSystem = new ParticleSystem(createParticle());
         particleSystem.setRemoveCompletedEmitters(true);
 
@@ -77,7 +77,7 @@ public class BubbleEffectRenderer {
     /**
      * Render the particle effect.
      */
-    protected void render() {
+    public void render() {
         if (RenderSettings.PARTICLE_EFFECTS) {
             particleSystem.render();
         }
@@ -87,8 +87,9 @@ public class BubbleEffectRenderer {
      * Update the particle effect.
      *
      * @param delta delta time
+     * @param fps the framerate of the game
      */
-    protected void update(int delta, int fps) {
+    public void update(int delta, int fps) {
         if (RenderSettings.PARTICLE_EFFECTS) {
             particleSystem.update(delta);
         }

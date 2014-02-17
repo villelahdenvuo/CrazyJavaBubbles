@@ -58,12 +58,13 @@ public class Game extends StateBasedGame {
      * Creates a new Game.
      */
     public Game() {
+        // Set the title of the game window to NAME.
         super(NAME);
     }
 
     /**
-     * Creates and calls init method of each game state.
-     * Also changes application icon to a custom one.
+     * Creates and calls init method of each game state. Also changes
+     * application icon to a custom one.
      *
      * @param gc game container
      */
@@ -74,15 +75,20 @@ public class Game extends StateBasedGame {
 
         // If we are initializing the AppGameContainer, set custom icon.
         if (gc instanceof AppGameContainer) {
-            setIcons((AppGameContainer) gc, new String[]{"graphics/icon16.png",
-                "graphics/icon24.png", "graphics/icon32.png"});
+            setIcons((AppGameContainer) gc);
         }
     }
 
-    private void setIcons(AppGameContainer app, String[] icons) {
+    /**
+     * Set the icon of the game window and other places.
+     *
+     * @param app
+     */
+    private void setIcons(AppGameContainer app) {
         if (!app.isFullscreen()) {
             try {
-                app.setIcons(icons);
+                app.setIcons(new String[]{"graphics/icon16.png",
+                    "graphics/icon24.png", "graphics/icon32.png"});
             } catch (SlickException e) {
             }
         }
@@ -97,8 +103,10 @@ public class Game extends StateBasedGame {
             app.setDisplayMode(RenderSettings.SCREEN_WIDTH,
                 RenderSettings.SCREEN_HEIGHT, RenderSettings.IS_FULLSCREEN);
             app.setShowFPS(false);
-            app.setMaximumLogicUpdateInterval(20);
+            // Update game logic every 15-20ms.
             app.setMinimumLogicUpdateInterval(15);
+            app.setMaximumLogicUpdateInterval(20);
+            // Don't pause if window loses focus.
             app.setAlwaysRender(true);
             app.start();
         } catch (SlickException e) {

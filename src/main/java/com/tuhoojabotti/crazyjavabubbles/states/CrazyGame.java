@@ -90,12 +90,12 @@ public class CrazyGame extends StateWrapper {
     @Override
     public void enter(GameContainer gc, StateBasedGame game) {
         logic.init();
-        renderer = new CrazyGameRenderer(logic.getBoard(), gc.getGraphics(), gc, getMousePosition());
+        renderer = new CrazyGameRenderer(logic, gc.getGraphics(), gc, getMousePosition());
     }
 
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics gfx) {
-        renderer.render(logic);
+        renderer.render();
     }
 
     @Override
