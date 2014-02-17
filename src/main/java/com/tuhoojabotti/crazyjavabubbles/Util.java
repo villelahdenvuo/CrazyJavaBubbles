@@ -23,7 +23,7 @@
  */
 package com.tuhoojabotti.crazyjavabubbles;
 
-import com.tuhoojabotti.crazyjavabubbles.gui.RenderSettings;
+import com.tuhoojabotti.crazyjavabubbles.gui.Settings;
 import java.awt.Point;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,8 +70,8 @@ public class Util {
      * @return position on board
      */
     public static Point getPositionOnBoard(Vector2f position) {
-        int margin = RenderSettings.BOARD_MARGIN,
-                r = RenderSettings.BUBBLE_RADIUS;
+        int margin = Settings.BOARD_MARGIN,
+                r = Settings.BUBBLE_RADIUS;
 
         return new Point(
                 Math.round((position.x - margin - r / 2) / r),

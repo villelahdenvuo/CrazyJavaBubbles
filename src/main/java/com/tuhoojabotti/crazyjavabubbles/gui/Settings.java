@@ -23,17 +23,68 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.gui;
 
+import com.tuhoojabotti.crazyjavabubbles.Util;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import net.sf.json.JSONObject;
+import net.sf.json.JSONSerializer;
+import org.newdawn.slick.util.ResourceLoader;
+import org.apache.commons.io.IOUtils;
+
 /**
  * Full of constants for rendering the game.
+ *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
-public class RenderSettings {
+public class Settings {
 
+    private static HashMap<String, Object> settings;
+
+    /**
+     * Load settings from config.json.
+     */
+    public static void loadSettings() {
+        settings = new HashMap<>();
+
+        try {
+            String txt = IOUtils.toString(ResourceLoader.getResourceAsStream("config.json"));
+            JSONObject config = (JSONObject) JSONSerializer.toJSON(txt);
+
+            // Load all settings.
+            for (Iterator it = config.keySet().iterator(); it.hasNext();) {
+                String key = (String) it.next();
+                settings.put(key, config.get(key));
+            }
+
+        } catch (IOException e) {
+            Util.fatalError("Could not load config.json", Settings.class, e);
+        }
+    }
+
+    // Here are the getters and setters for the settings.
+    
+    public static Object get(String key) {
+        return settings.get(key);
+    }
+
+    public static boolean is(String key) {
+        return (boolean) settings.get(key);
+    }
+
+    public static void set(String key, Object value) {
+        settings.put(key, value);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Below are the hard coded globals that can not be changed by the user. //
+    ///////////////////////////////////////////////////////////////////////////
+    
     /**
      * Size of the {@link Bubble}s.
      */
     public static final int BUBBLE_RADIUS = 32;
-    
+
     /**
      * How much do the bubbles move?
      */
@@ -43,18 +94,12 @@ public class RenderSettings {
      * Margin where to draw the {@link Board}.
      */
     public static final int BOARD_MARGIN = 15;
-    
-    /**
-     * Enable or disable particle effects.
-     * They will be disabled in any case if fps is under 100.
-     */
-    public static boolean PARTICLE_EFFECTS = true;
-    
+
     /**
      * Render debug stuff on the screen.
      */
     public static final boolean DEBUG = false;
-    
+
     /**
      * Width of the window.
      */
@@ -63,10 +108,5 @@ public class RenderSettings {
     /**
      * Height of the window.
      */
-    public static final int SCREEN_HEIGHT = 600;    
-    
-    /**
-     * Should the game run fullscreen.
-     */
-    public static boolean IS_FULLSCREEN = false;
+    public static final int SCREEN_HEIGHT = 600;
 }

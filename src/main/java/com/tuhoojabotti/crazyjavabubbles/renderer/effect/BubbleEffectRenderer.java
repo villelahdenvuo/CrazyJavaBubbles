@@ -23,7 +23,7 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.renderer.effect;
 
-import com.tuhoojabotti.crazyjavabubbles.gui.RenderSettings;
+import com.tuhoojabotti.crazyjavabubbles.gui.Settings;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import java.io.IOException;
 import org.newdawn.slick.Image;
@@ -48,7 +48,7 @@ public class BubbleEffectRenderer {
      * @param bubble where to create it and what color
      */
     public void addExplosion(Bubble bubble) {
-        int offset = RenderSettings.BUBBLE_RADIUS / 2;
+        int offset = Settings.BUBBLE_RADIUS / 2;
         Vector2f point = bubble.getScreenPosition();
         ConfigurableEmitter e = explosion.duplicate();
         e.setPosition(point.x + offset, point.y + offset, false);
@@ -70,7 +70,7 @@ public class BubbleEffectRenderer {
             explosion.setEnabled(false);
         } catch (IOException e) {
             // Do not try to render effects.
-            RenderSettings.PARTICLE_EFFECTS = false;
+            Settings.set("particle_effects", false);
         }
     }
 
@@ -78,7 +78,7 @@ public class BubbleEffectRenderer {
      * Render the particle effect.
      */
     public void render() {
-        if (RenderSettings.PARTICLE_EFFECTS) {
+        if (Settings.is("particle_effects")) {
             particleSystem.render();
         }
     }
@@ -87,17 +87,10 @@ public class BubbleEffectRenderer {
      * Update the particle effect.
      *
      * @param delta delta time
-     * @param fps the framerate of the game
      */
-    public void update(int delta, int fps) {
-        if (RenderSettings.PARTICLE_EFFECTS) {
+    public void update(int delta) {
+        if (Settings.is("particle_effects")) {
             particleSystem.update(delta);
-        }
-        // Disable particle effects if the game is too slow.
-        if (fps < 100) {
-            RenderSettings.PARTICLE_EFFECTS = false;
-        } else if (fps > 400) {
-            RenderSettings.PARTICLE_EFFECTS = true;
         }
     }
 

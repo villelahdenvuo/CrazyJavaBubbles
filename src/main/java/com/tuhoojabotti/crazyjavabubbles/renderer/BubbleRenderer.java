@@ -23,7 +23,7 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.renderer;
 
-import com.tuhoojabotti.crazyjavabubbles.gui.RenderSettings;
+import com.tuhoojabotti.crazyjavabubbles.gui.Settings;
 import static com.tuhoojabotti.crazyjavabubbles.Util.curveValue;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import org.newdawn.slick.Color;
@@ -40,8 +40,8 @@ import org.newdawn.slick.geom.Vector2f;
 public class BubbleRenderer {
 
     private final Graphics graphics;
-    private final int radius = RenderSettings.BUBBLE_RADIUS;
-    private final int margin = RenderSettings.BOARD_MARGIN;
+    private final int radius = Settings.BUBBLE_RADIUS;
+    private final int margin = Settings.BOARD_MARGIN;
     private final Vector2f mousePosition;
 
     private Bubble bubble;
@@ -129,7 +129,7 @@ public class BubbleRenderer {
     }
 
     private void updatePhysics(double mouseAngle, int delta) {
-        float smooth = RenderSettings.BUBBLE_WOBBLE + (bubble.y + 5) / 200f;
+        float smooth = Settings.BUBBLE_WOBBLE + (bubble.y + 5) / 200f;
 
         // Update velocity towards real position + towards mouse cursor.
         velocity.x = curveValue(target.x - outCircle.getX(), velocity.x, smooth)

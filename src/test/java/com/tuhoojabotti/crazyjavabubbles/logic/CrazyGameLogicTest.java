@@ -24,7 +24,7 @@
 package com.tuhoojabotti.crazyjavabubbles.logic;
 
 import static com.tuhoojabotti.crazyjavabubbles.Util.getPositionOnBoard;
-import com.tuhoojabotti.crazyjavabubbles.gui.RenderSettings;
+import com.tuhoojabotti.crazyjavabubbles.gui.Settings;
 import java.awt.Point;
 import java.util.Random;
 import java.util.Set;
@@ -40,8 +40,8 @@ import org.newdawn.slick.geom.Vector2f;
  */
 public class CrazyGameLogicTest {
 
-    private int r = RenderSettings.BUBBLE_RADIUS,
-            margin = RenderSettings.BOARD_MARGIN;
+    private int r = Settings.BUBBLE_RADIUS,
+            margin = Settings.BOARD_MARGIN;
 
     public CrazyGameLogicTest() {
     }
@@ -70,7 +70,7 @@ public class CrazyGameLogicTest {
                     if (popped != null) {
                         count += popped.size();
                         assertEquals(count, logic.getBubblesPopped());
-                        assertTrue(logic.getBiggestCluster() >= popped.size());
+                        assertTrue(logic.getBiggestClusterBonus() >= popped.size());
                     }
                 }
             }
@@ -80,7 +80,7 @@ public class CrazyGameLogicTest {
             }
         }
 
-        assertTrue("Score should be bigger than zero.", logic.getScore() > 0);
+        assertTrue("Score should be bigger than zero.", logic.getTotalScore() > 0);
     }
 
     @Test

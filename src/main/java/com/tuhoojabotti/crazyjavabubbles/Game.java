@@ -23,14 +23,18 @@
  */
 package com.tuhoojabotti.crazyjavabubbles;
 
+import static com.tuhoojabotti.crazyjavabubbles.Util.fatalError;
 import com.tuhoojabotti.crazyjavabubbles.states.SplashScreen;
 import com.tuhoojabotti.crazyjavabubbles.states.CrazyGame;
-import static com.tuhoojabotti.crazyjavabubbles.Util.fatalError;
-import com.tuhoojabotti.crazyjavabubbles.gui.RenderSettings;
+import com.tuhoojabotti.crazyjavabubbles.gui.Settings;
+import java.io.IOException;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.openal.AudioLoader;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.ResourceLoader;
 
 /**
  * The game's main class.
@@ -60,6 +64,7 @@ public class Game extends StateBasedGame {
     public Game() {
         // Set the title of the game window to NAME.
         super(NAME);
+        Settings.loadSettings();
     }
 
     /**
@@ -85,11 +90,20 @@ public class Game extends StateBasedGame {
      * @param app
      */
     private void setIcons(AppGameContainer app) {
-        if (!app.isFullscreen()) {
+        try {
+            app.setIcons(new String[]{"graphics/icon16.png",
+                "graphics/icon24.png", "graphics/icon32.png"});
+        } catch (SlickException e) {
+        }
+    }
+
+    private void startMusic() {
+        if (Settings.is("music_on")) {
             try {
-                app.setIcons(new String[]{"graphics/icon16.png",
-                    "graphics/icon24.png", "graphics/icon32.png"});
+                Music gameMusic = new Music("sounds/uk.ogg");
+                gameMusic.loop(1, (int) Settings.get("music_volume") / 100f);
             } catch (SlickException e) {
+                fatalError("Could not load music.", this.getClass(), e);
             }
         }
     }
@@ -99,15 +113,18 @@ public class Game extends StateBasedGame {
      */
     public void run() {
         try {
+            startMusic();
+
             AppGameContainer app = new AppGameContainer(this);
-            app.setDisplayMode(RenderSettings.SCREEN_WIDTH,
-                RenderSettings.SCREEN_HEIGHT, RenderSettings.IS_FULLSCREEN);
+            app.setDisplayMode(Settings.SCREEN_WIDTH,
+                Settings.SCREEN_HEIGHT, Settings.is("fullscreen"));
             app.setShowFPS(false);
             // Update game logic every 15-20ms.
             app.setMinimumLogicUpdateInterval(15);
             app.setMaximumLogicUpdateInterval(20);
             // Don't pause if window loses focus.
             app.setAlwaysRender(true);
+
             app.start();
         } catch (SlickException e) {
             fatalError("Failed to start the game!", this.getClass(), e);

@@ -23,7 +23,7 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.renderer.effect;
 
-import com.tuhoojabotti.crazyjavabubbles.gui.RenderSettings;
+import com.tuhoojabotti.crazyjavabubbles.gui.Settings;
 import com.tuhoojabotti.crazyjavabubbles.gui.TextRenderer;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -92,12 +92,14 @@ public class ScoreEffectRenderer {
 
     public void addScoreEffect(int score, Vector2f pos) {
         String text = "" + score;
+        float mul = rand.nextFloat() * 3;
         for (int i = 0; i < text.length(); i++) {
             String c = "" + text.charAt(i);
-            
+
             pos.add(new Vector2f(font.getFont().getWidth(c), 0));
-            Vector2f vel = new Vector2f(rand.nextFloat() * 0.2f - 0.1f, -5);
-            
+            Vector2f vel = new Vector2f(rand.nextFloat() * 0.2f - 0.1f,
+                -4 - rand.nextFloat() * 0.5f - mul);
+
             particles.add(new ScoreParticle(pos, vel, c));
         }
     }
@@ -109,12 +111,18 @@ public class ScoreEffectRenderer {
     }
 
     public void render() {
+        if (!Settings.is("score_effects")) {
+            return;
+        }
         for (ScoreParticle scoreParticle : particles) {
             scoreParticle.render(font);
         }
     }
 
     public void update(GameContainer gc, int delta) {
+        if (!Settings.is("score_effects")) {
+            return;
+        }
         HashSet<ScoreParticle> dead = new HashSet<>();
         for (ScoreParticle scoreParticle : particles) {
             if (scoreParticle.update(gc, delta)) {

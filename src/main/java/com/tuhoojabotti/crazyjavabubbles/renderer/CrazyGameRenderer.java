@@ -25,9 +25,9 @@ package com.tuhoojabotti.crazyjavabubbles.renderer;
 
 import com.tuhoojabotti.crazyjavabubbles.renderer.effect.BubbleEffectRenderer;
 import com.tuhoojabotti.crazyjavabubbles.gui.TextRenderer;
-import com.tuhoojabotti.crazyjavabubbles.gui.RenderSettings;
+import com.tuhoojabotti.crazyjavabubbles.gui.Settings;
 import static com.tuhoojabotti.crazyjavabubbles.Util.fatalError;
-import com.tuhoojabotti.crazyjavabubbles.logic.Board;
+import com.tuhoojabotti.crazyjavabubbles.gui.WobbleTextRenderer;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogic;
 import com.tuhoojabotti.crazyjavabubbles.renderer.effect.ScoreEffectRenderer;
@@ -50,6 +50,7 @@ public class CrazyGameRenderer {
     private final Graphics graphics;
     private final BoardRenderer boardRenderer;
     private TextRenderer text;
+    private WobbleTextRenderer scoreText;
     private final GameContainer gameContainer;
     private BubbleEffectRenderer particleRenderer;
     private ScoreEffectRenderer scoreRenderer;
@@ -78,10 +79,10 @@ public class CrazyGameRenderer {
         boardRenderer = new BoardRenderer(game.getBoard(), gfx, mouse);
 
         try {
+            scoreText = new WobbleTextRenderer("goodtimes.regular", 16, "score:", 0.15f);
             text = new TextRenderer("goodtimes.regular", 16);
-        } catch (SlickException ex) {
-            fatalError("Failed to load text.", this.getClass(), ex);
-            gc.exit();
+        } catch (SlickException e) {
+            fatalError("Failed to load text.", this.getClass(), e);
         }
 
         particleRenderer = new BubbleEffectRenderer();
@@ -97,21 +98,25 @@ public class CrazyGameRenderer {
     public void explode(Set<Bubble> bubbles) {
         boardRenderer.explode(bubbles);
 
-        if (RenderSettings.PARTICLE_EFFECTS) {
+        if (Settings.is("particle_effects")) {
             for (Bubble bubble : bubbles) {
                 particleRenderer.addExplosion(bubble);
-                scoreRenderer.applyForce(bubble.getScreenPosition());
             }
         }
-        scoreRenderer.addScoreEffect(game.calculateScore(bubbles.size()), mousePosition);
+        if (Settings.is("score_effects")) {
+            for (Bubble bubble : bubbles) {
+                scoreRenderer.applyForce(bubble.getScreenPosition());
+            }
+            scoreRenderer.addScoreEffect(game.calculateScore(bubbles.size()), mousePosition);
+        }
     }
 
     /**
      * Render the game.
      */
     public void render() {
-        boardRenderer.render(RenderSettings.BOARD_MARGIN,
-            RenderSettings.BOARD_MARGIN);
+        boardRenderer.render(Settings.BOARD_MARGIN,
+            Settings.BOARD_MARGIN);
 
         scoreRenderer.render();
 
@@ -121,10 +126,10 @@ public class CrazyGameRenderer {
         int textY = windowHeight - 22;
         text.render(windowWidth - 120, textY, "fps: " + gameContainer.getFPS());
 
-        text.render(6, textY, "score: " + game.getScore());
-        text.render(50+156, textY, "biggest: " + game.getBiggestCluster());
-        text.render(50+306, textY, "total: " + game.getBubblesPopped());
-        text.render(50+456, textY, "time: " + game.getTime());
+        scoreText.render(6, textY + 2);
+        text.render(84, textY, "" + game.getScore());
+        text.render(206, textY, "biggest: " + game.getBiggestCluster());
+        text.render(356, textY, "time: " + game.getTime());
 
         particleRenderer.render();
     }
@@ -136,7 +141,7 @@ public class CrazyGameRenderer {
      */
     public void update(int delta) {
         boardRenderer.update(gameContainer, delta);
-        particleRenderer.update(delta, gameContainer.getFPS());
+        particleRenderer.update(delta);
         scoreRenderer.update(gameContainer, delta);
     }
 }

@@ -25,15 +25,16 @@ package com.tuhoojabotti.crazyjavabubbles.states;
 
 import com.tuhoojabotti.crazyjavabubbles.Game;
 import static com.tuhoojabotti.crazyjavabubbles.Util.fatalError;
+import com.tuhoojabotti.crazyjavabubbles.gui.Settings;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogic;
 import com.tuhoojabotti.crazyjavabubbles.renderer.CrazyGameRenderer;
+import com.tuhoojabotti.crazyjavabubbles.renderer.GameOverRenderer;
 import java.io.IOException;
 import java.util.Set;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.openal.AudioLoader;
@@ -65,6 +66,12 @@ public class CrazyGame extends StateWrapper {
     private Audio blimSound;
 
     /**
+     * Game over overlay.
+     */
+    private GameOverRenderer gameOver;
+    private boolean newGame;
+
+    /**
      * Create a new game.
      *
      * @param ID the id of this game state
@@ -77,18 +84,20 @@ public class CrazyGame extends StateWrapper {
     public void init(GameContainer gc, StateBasedGame sbg) {
         logic = new CrazyGameLogic();
 
-        try {
-            blimSound = AudioLoader.getAudio("OGG",
+        if (Settings.is("sound_on")) {
+            try {
+                blimSound = AudioLoader.getAudio("OGG",
                     ResourceLoader.getResourceAsStream("sounds/blim.ogg"));
-            Music gameMusic = new Music("sounds/uk.ogg");
-            gameMusic.loop();
-        } catch (SlickException | IOException e) {
-            fatalError("Could not load sounds.", this.getClass(), e);
+            } catch (IOException e) {
+                fatalError("Could not load sounds.", this.getClass(), e);
+            }
         }
     }
 
     @Override
     public void enter(GameContainer gc, StateBasedGame game) {
+        gameOver = new GameOverRenderer(gc, gc.getGraphics(), logic);
+        newGame = false;
         logic.init();
         renderer = new CrazyGameRenderer(logic, gc.getGraphics(), gc, getMousePosition());
     }
@@ -96,6 +105,9 @@ public class CrazyGame extends StateWrapper {
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics gfx) {
         renderer.render();
+        if (logic.isGameOver()) {
+            gameOver.render();
+        }
     }
 
     @Override
@@ -106,23 +118,31 @@ public class CrazyGame extends StateWrapper {
         logic.updateSelection(getMousePosition());
 
         if (logic.isGameOver()) {
-            sbg.enterState(Game.SPLASHSCREEN, new FadeOutTransition(Color.black, 3000), new EmptyTransition());
+            gameOver.update(delta);
+            if (newGame) {
+                sbg.enterState(Game.SPLASHSCREEN, new FadeOutTransition(Color.black, 200), new EmptyTransition());
+            }
         }
     }
 
     @Override
     public void mouseReleased(int button, int x, int y) {
-        if (button == 0) {
+        if (button == 0 && !logic.isGameOver()) {
             // Pop the bubbles!
             Set<Bubble> bubbles = logic.pop();
 
             if (bubbles != null) {
-                blimSound.playAsSoundEffect((float) Math.sqrt(bubbles.size())
-                        / 2.0f, 1f, false);
+                if (Settings.is("sound_on")) {
+                    blimSound.playAsSoundEffect((float) Math.sqrt(bubbles.size())
+                        / 2.0f, (int) Settings.get("sound_volume") / 100f, false);
+                }
                 // Force update of selection.
                 logic.forceUpdateSelection(getMousePosition());
                 renderer.explode(bubbles);
             }
+        }
+        if (logic.isGameOver() && gameOver.canSkip()) {
+            newGame = true;
         }
     }
 }

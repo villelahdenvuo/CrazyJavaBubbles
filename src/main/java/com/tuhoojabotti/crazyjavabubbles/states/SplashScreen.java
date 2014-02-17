@@ -29,7 +29,7 @@ import static com.tuhoojabotti.crazyjavabubbles.Util.fatalError;
 import com.tuhoojabotti.crazyjavabubbles.gui.TextRenderer;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import com.tuhoojabotti.crazyjavabubbles.renderer.BubbleRenderer;
-import com.tuhoojabotti.crazyjavabubbles.gui.RenderSettings;
+import com.tuhoojabotti.crazyjavabubbles.gui.Settings;
 import com.tuhoojabotti.crazyjavabubbles.gui.WobbleTextRenderer;
 import java.util.ArrayList;
 import java.util.Random;
@@ -99,7 +99,7 @@ public class SplashScreen extends StateWrapper {
     }
 
     private void createBackground(int w, int h, Graphics gfx) {
-        int r = RenderSettings.BUBBLE_RADIUS;
+        int r = Settings.BUBBLE_RADIUS;
 
         for (int y = 0; y <= h / r + 1; y++) {
             for (int x = 0; x < w / r + 1; x++) {
@@ -126,7 +126,7 @@ public class SplashScreen extends StateWrapper {
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics gfx) {
         for (BubbleRenderer renderer : bubbleRenderers) {
-            renderer.render(-RenderSettings.BUBBLE_RADIUS / 2, -RenderSettings.BUBBLE_RADIUS / 2);
+            renderer.render(-Settings.BUBBLE_RADIUS / 2, -Settings.BUBBLE_RADIUS / 2);
         }
 
         titleText.render((int) titlePos.x, (int) titlePos.y);
@@ -150,6 +150,12 @@ public class SplashScreen extends StateWrapper {
 
     @Override
     public void keyPressed(int key, char c) {
+        // Any key to skip splash screen.
+        setExitRequested(true);
+    }
+
+    @Override
+    public void mouseReleased(int button, int x, int y) {
         // Any key to skip splash screen.
         setExitRequested(true);
     }

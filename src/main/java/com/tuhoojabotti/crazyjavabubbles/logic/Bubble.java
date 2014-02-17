@@ -23,7 +23,7 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.logic;
 
-import com.tuhoojabotti.crazyjavabubbles.gui.RenderSettings;
+import com.tuhoojabotti.crazyjavabubbles.gui.Settings;
 import java.util.Random;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Vector2f;
@@ -104,8 +104,8 @@ public class Bubble extends Vector2f {
      * @return the location on screen
      */
     public Vector2f getScreenPosition() {
-        int m = RenderSettings.BOARD_MARGIN,
-                r = RenderSettings.BUBBLE_RADIUS;
+        int m = Settings.BOARD_MARGIN,
+            r = Settings.BUBBLE_RADIUS;
         return new Vector2f(m + x * r, m + y * r);
     }
 }

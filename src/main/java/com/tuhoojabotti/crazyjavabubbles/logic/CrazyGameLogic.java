@@ -39,6 +39,7 @@ public class CrazyGameLogic {
     private int poppedTotal;
     private int biggestCluster;
     private long startTime;
+    private long endTime;
 
     private final Board board;
     private final Point lastSelection;
@@ -63,15 +64,33 @@ public class CrazyGameLogic {
     }
 
     public boolean isGameOver() {
-        return !board.hasMoreMoves();
+        if (board.hasMoreMoves()) {
+            endTime = System.currentTimeMillis();
+            return false;
+        }
+        return true;
+    }
+
+    public int getTotalScore() {
+        return (int) Math.round(score
+            + getBiggestClusterBonus()
+            - getTimeBonus());
     }
 
     public int getScore() {
-        return (int) Math.round(score + Math.pow(biggestCluster, 3));
+        return score;
+    }
+
+    public int getBiggestClusterBonus() {
+        return (int) Math.pow(biggestCluster, 3);
     }
 
     public int getBiggestCluster() {
         return biggestCluster;
+    }
+
+    public int getTimeBonus() {
+        return (int) Math.pow(getTime(), 3);
     }
 
     public int getBubblesPopped() {
@@ -83,7 +102,7 @@ public class CrazyGameLogic {
     }
 
     public int getTime() {
-        return (int) Math.round((System.currentTimeMillis() - startTime) / 1000);
+        return (int) Math.round((endTime - startTime) / 1000);
     }
 
     /**
@@ -136,7 +155,7 @@ public class CrazyGameLogic {
         biggestCluster = Math.max(biggestCluster, popped);
         score += calculateScore(popped);
     }
-    
+
     public int calculateScore(int popped) {
         return (int) Math.round(Math.pow(popped, 2)) * 100;
     }
