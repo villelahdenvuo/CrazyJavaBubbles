@@ -26,6 +26,7 @@ package com.tuhoojabotti.crazyjavabubbles;
 import com.tuhoojabotti.crazyjavabubbles.states.SplashScreen;
 import com.tuhoojabotti.crazyjavabubbles.states.CrazyGame;
 import static com.tuhoojabotti.crazyjavabubbles.Util.fatalError;
+import com.tuhoojabotti.crazyjavabubbles.gui.RenderSettings;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -37,19 +38,15 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
 public class Game extends StateBasedGame {
-   
+
     public static void main(String[] args) {
         new Game().run();
     }
-    
-    /**
-     * The splash screen state ID.
-     */
-    public static final int SPLASHSCREEN = 0;
 
     /**
-     * The game state ID.
+     * The game state IDs. Used for enterState(ID)
      */
+    public static final int SPLASHSCREEN = 0;
     public static final int GAME = 1;
 
     /**
@@ -58,34 +55,15 @@ public class Game extends StateBasedGame {
     public static final String NAME = "Crazy Bubbles";
 
     /**
-     * Width of the window.
-     */
-    public static final int WIDTH = 800;
-
-    /**
-     * Height of the window.
-     */
-    public static final int HEIGHT = 600;
-
-    /**
-     * Preferred framerate.
-     */
-    public static final int FPS = 60;
-
-    /**
-     * Version of the game.
-     */
-    public static final double VERSION = 1.0;
-
-    /**
-     * Creates a new Application.
+     * Creates a new Game.
      */
     public Game() {
         super(NAME);
     }
 
     /**
-     * Calls init method of each game state, and set's the state ID.
+     * Creates and calls init method of each game state.
+     * Also changes application icon to a custom one.
      *
      * @param gc game container
      */
@@ -94,14 +72,18 @@ public class Game extends StateBasedGame {
         this.addState(new SplashScreen(SPLASHSCREEN));
         this.addState(new CrazyGame(GAME));
 
+        // If we are initializing the AppGameContainer, set custom icon.
         if (gc instanceof AppGameContainer) {
-            AppGameContainer app = (AppGameContainer) gc;
-            if (!app.isFullscreen()) {
-                try {
-                    app.setIcons(new String[]{"graphics/icon16.png",
-                        "graphics/icon24.png", "graphics/icon32.png"});
-                } catch (SlickException e) {
-                }
+            setIcons((AppGameContainer) gc, new String[]{"graphics/icon16.png",
+                "graphics/icon24.png", "graphics/icon32.png"});
+        }
+    }
+
+    private void setIcons(AppGameContainer app, String[] icons) {
+        if (!app.isFullscreen()) {
+            try {
+                app.setIcons(icons);
+            } catch (SlickException e) {
             }
         }
     }
@@ -112,7 +94,8 @@ public class Game extends StateBasedGame {
     public void run() {
         try {
             AppGameContainer app = new AppGameContainer(this);
-            app.setDisplayMode(WIDTH, HEIGHT, false);
+            app.setDisplayMode(RenderSettings.SCREEN_WIDTH,
+                RenderSettings.SCREEN_HEIGHT, RenderSettings.IS_FULLSCREEN);
             app.setShowFPS(false);
             app.setMaximumLogicUpdateInterval(20);
             app.setMinimumLogicUpdateInterval(15);

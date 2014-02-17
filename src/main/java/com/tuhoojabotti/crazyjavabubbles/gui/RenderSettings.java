@@ -54,4 +54,19 @@ public class RenderSettings {
      * Render debug stuff on the screen.
      */
     public static final boolean DEBUG = false;
+    
+    /**
+     * Width of the window.
+     */
+    public static final int SCREEN_WIDTH = 800;
+
+    /**
+     * Height of the window.
+     */
+    public static final int SCREEN_HEIGHT = 600;    
+    
+    /**
+     * Should the game run fullscreen.
+     */
+    public static boolean IS_FULLSCREEN = false;
 }
