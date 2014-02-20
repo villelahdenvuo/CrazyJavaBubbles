@@ -66,8 +66,8 @@ public class BubbleRenderer {
         velocity = new Vector2f();
         target = new Vector2f();
 
-        outCircle = new Circle(0, 0, radius / 2, 16);
-        inCircle = new Circle(0, 0, radius / 3, 14);
+        outCircle = new Circle(0, 0, radius / 2, (int) Settings.get("ball_quality"));
+        inCircle = new Circle(0, 0, radius / 3, (int) Settings.get("ball_quality") - 2);
 
         outCircle.setLocation(margin + bubble.x * radius + 100, -10);
     }

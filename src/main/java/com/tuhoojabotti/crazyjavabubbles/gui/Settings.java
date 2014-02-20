@@ -24,9 +24,14 @@
 package com.tuhoojabotti.crazyjavabubbles.gui;
 
 import com.tuhoojabotti.crazyjavabubbles.Util;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Iterator;
+import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 import org.newdawn.slick.util.ResourceLoader;
@@ -46,24 +51,57 @@ public class Settings {
      */
     public static void loadSettings() {
         settings = new HashMap<>();
+        File file = new File("config.json");
+
+        String txt = loadSettingsFile(file);
+
+        if (txt == null) {
+            resetDefaultSettings(file);
+        }
+
+        txt = loadSettingsFile(file);
+
+        if (txt == null) {
+            Util.fatalError("Failed to load settings!", Settings.class, null);
+        }
 
         try {
-            String txt = IOUtils.toString(ResourceLoader.getResourceAsStream("config.json"));
             JSONObject config = (JSONObject) JSONSerializer.toJSON(txt);
-
             // Load all settings.
             for (Iterator it = config.keySet().iterator(); it.hasNext();) {
                 String key = (String) it.next();
+                System.out.println("found setting: " + key + " = " + config.get(key).toString());
                 settings.put(key, config.get(key));
             }
+        } catch (JSONException e) {
+            Util.fatalError("Syntax erro in config file, remove it to load defaults.", Settings.class, e);
+        }
+    }
 
+    private static String loadSettingsFile(File file) {
+        StringBuilder txt = new StringBuilder();
+        try {
+            for (String s : Files.readAllLines(file.toPath(), StandardCharsets.UTF_8)) {
+                txt.append(s);
+            }
+        } catch (IOException ex) {
+            return null;
+        }
+        return txt.toString();
+    }
+
+    private static void resetDefaultSettings(File file) {
+        System.out.println("Resetting default settings.");
+        StringBuilder txt = new StringBuilder();
+
+        try (FileWriter fw = new FileWriter(file, false)) {
+            fw.write(IOUtils.toString(ResourceLoader.getResourceAsStream("config.default.json")));
         } catch (IOException e) {
-            Util.fatalError("Could not load config.json", Settings.class, e);
+            Util.fatalError("Failed to reset default settings!", Settings.class, e);
         }
     }
 
     // Here are the getters and setters for the settings.
-    
     public static Object get(String key) {
         return settings.get(key);
     }
@@ -79,7 +117,6 @@ public class Settings {
     ///////////////////////////////////////////////////////////////////////////
     // Below are the hard coded globals that can not be changed by the user. //
     ///////////////////////////////////////////////////////////////////////////
-    
     /**
      * Size of the {@link Bubble}s.
      */

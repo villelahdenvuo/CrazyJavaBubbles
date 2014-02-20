@@ -2,6 +2,7 @@
     "fullscreen": false,
     "particle_effects": true,
     "score_effects": true,
+    "ball_quality": 20,
     "music_on": true,
     "music_volume": 100,
     "sound_on": true,
