@@ -73,10 +73,8 @@ public class Settings {
     private static void parseSettings(String str) {
         try {
             JSONObject config = (JSONObject) JSONSerializer.toJSON(str);
-            // Load all settings.
             for (Iterator it = config.keySet().iterator(); it.hasNext();) {
                 String key = (String) it.next();
-                System.out.println("found setting: " + key + " = " + config.get(key).toString());
                 settings.put(key, config.get(key));
             }
         } catch (JSONException e) {
