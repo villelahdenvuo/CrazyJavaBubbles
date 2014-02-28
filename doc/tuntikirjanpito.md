@@ -13,4 +13,5 @@
  	 * Hieno bugi windows/linux ero - linuksilla `Math.sin((long / int) + int + int)` palauttaa aina 0, windowsilla toimaa
  * 14.2.2014 &ndash; **8h** &ndash; *Partikkelilefektit, musiikit, äänet, dokumentointia, viilausta*
  * 18.2.2014 &ndash; **5h** &ndash; *Lisää efektejä, asetustiedosto, loppuruutu*
+ * 20.2.2014 &ndash; **2h** &ndash; *Asetustiedoston korjaus (ei resurssit kansioon)*
  * 28.2.2014 &ndash; **6h** &ndash; *Refaktorointia, testauksen parannusta, dokumentaatiota*
