@@ -12,11 +12,6 @@
     </files>
 
     <fileSets>
-        <fileSet>
-            <directory>src/main/resources</directory>
-            <outputDirectory>resources</outputDirectory>
-        </fileSet>
-
         <!-- LWJGL natives -->
         <fileSet>
             <directory>${natives}</directory>
