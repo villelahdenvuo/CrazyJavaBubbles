@@ -10,7 +10,7 @@ CrazyJavaBubbles
 ## Credits
 
  * **Code** [Ville 'Tuhis' Lahdenvuo](http://tuhoojabotti.com/)
- * **Music** [Pekka 'cce' Väänänen](http://www.lofibucket.com/)
+ * **Music** [Valtzu](https://soundcloud.com/valtzu) (I think)
  * **Sound effects** [sfxr](http://www.drpetter.se/project_sfxr.html)
 
 ## License MIT
