@@ -24,33 +24,62 @@
 package com.tuhoojabotti.crazyjavabubbles.renderer;
 
 import static com.tuhoojabotti.crazyjavabubbles.main.Util.curveValue;
-import static com.tuhoojabotti.crazyjavabubbles.main.Util.fatalError;
 import com.tuhoojabotti.crazyjavabubbles.renderer.text.TextRenderer;
 import com.tuhoojabotti.crazyjavabubbles.renderer.text.BeatTextRenderer;
 import com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogic;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 
 /**
+ * Renders a panel that tells the outcome of the game. Could be implemented as a
+ * state in future maybe.
  *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
-public class GameOverRenderer extends Vector2f {
+public class GameOverPanelRenderer extends Vector2f {
 
+    /**
+     * Game container
+     */
     private GameContainer gameContainer;
+    /**
+     * Graphics object.
+     */
     private Graphics graphics;
 
+    /**
+     * "Game Over" -text
+     */
     private BeatTextRenderer titleText;
+    /**
+     * Text for the score statistics
+     */
     private TextRenderer scoreText;
+    /**
+     * Logic for score statistics
+     */
     private CrazyGameLogic logic;
+    /**
+     * After the panel is shown, allow user to exit to a new game.
+     */
     private boolean canSkip;
-    private final Color bgColor = new Color(1f, 1f, 1f, 0.5f);
+    /**
+     * Background color for the panel
+     */
+    private final Color backgroundColor;
 
-    public GameOverRenderer(GameContainer gc, Graphics gfx, CrazyGameLogic game) {
+    /**
+     * Creates a new game over panel.
+     *
+     * @param gc game container
+     * @param gfx graphics object
+     * @param game game logic
+     */
+    public GameOverPanelRenderer(GameContainer gc, Graphics gfx, CrazyGameLogic game) {
         super(gc.getWidth() / 2, -gc.getHeight());
+        backgroundColor = new Color(1f, 1f, 1f, 0.6f);
         logic = game;
         gameContainer = gc;
         graphics = gfx;
@@ -59,13 +88,25 @@ public class GameOverRenderer extends Vector2f {
         scoreText = new TextRenderer("goodtimes.regular", 16);
     }
 
+    /**
+     * Render the panel.
+     */
     public void render() {
         int w = gameContainer.getWidth();
-        graphics.setColor(bgColor);
+        graphics.setColor(backgroundColor);
         graphics.fillRoundRect(x - w / 4, y, w / 2, gameContainer.getHeight() / 2, 20, 30);
 
         titleText.render((int) x, (int) y + 35);
 
+        renderScoreStatistics(w);
+    }
+
+    /**
+     * Render the score statistics on the panel.
+     *
+     * @param w width of the viewport
+     */
+    private void renderScoreStatistics(int w) {
         int textX = (int) x - w / 4 + 20, textY = 100;
 
         scoreText.render(textX, (int) y + textY, "score: " + logic.getScore());
@@ -77,10 +118,12 @@ public class GameOverRenderer extends Vector2f {
             + String.format("%1$.2f", logic.getBubblesPopped() / (double) (24 * 17) * 100) + " %");
 
         scoreText.render(textX, (int) y + textY + 160, "Click for a new game :)");
-
     }
 
-    public void update(int delta) {
+    /**
+     * Update the panel position
+     */
+    public void update() {
         y = curveValue(120, y, 0.03f);
         canSkip = y > 100;
     }

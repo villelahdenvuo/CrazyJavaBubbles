@@ -29,7 +29,7 @@ import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogic;
 import com.tuhoojabotti.crazyjavabubbles.main.Util;
 import com.tuhoojabotti.crazyjavabubbles.renderer.CrazyGameRenderer;
-import com.tuhoojabotti.crazyjavabubbles.renderer.GameOverRenderer;
+import com.tuhoojabotti.crazyjavabubbles.renderer.GameOverPanelRenderer;
 import java.io.IOException;
 import java.util.Set;
 import org.newdawn.slick.Color;
@@ -68,7 +68,7 @@ public class CrazyGame extends StateWrapper {
     /**
      * Game over overlay.
      */
-    private GameOverRenderer gameOver;
+    private GameOverPanelRenderer gameOver;
     private boolean newGame;
 
     /**
@@ -96,7 +96,7 @@ public class CrazyGame extends StateWrapper {
 
     @Override
     public void enter(GameContainer gc, StateBasedGame game) {
-        gameOver = new GameOverRenderer(gc, gc.getGraphics(), logic);
+        gameOver = new GameOverPanelRenderer(gc, gc.getGraphics(), logic);
         newGame = false;
         logic.init();
         renderer = new CrazyGameRenderer(logic, gc.getGraphics(), gc, getMousePosition());
@@ -118,7 +118,7 @@ public class CrazyGame extends StateWrapper {
         logic.updateSelection(getMousePosition());
 
         if (logic.isGameOver()) {
-            gameOver.update(delta);
+            gameOver.update();
             if (newGame) {
                 sbg.enterState(Game.SPLASHSCREEN, new FadeOutTransition(Color.black, 200), new EmptyTransition());
             }
