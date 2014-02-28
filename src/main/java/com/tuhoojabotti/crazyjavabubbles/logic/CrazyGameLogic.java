@@ -163,6 +163,7 @@ public class CrazyGameLogic {
      */
     public void forceUpdateSelection(Vector2f mousePosition) {
         Point point = getPositionOnBoard(mousePosition);
+        lastSelection.setLocation(point);
         board.select(point.x, point.y);
     }
 

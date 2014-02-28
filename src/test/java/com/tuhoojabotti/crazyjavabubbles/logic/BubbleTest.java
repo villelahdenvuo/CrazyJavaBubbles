@@ -25,11 +25,13 @@ package com.tuhoojabotti.crazyjavabubbles.logic;
 
 import com.tuhoojabotti.crazyjavabubbles.main.Util;
 import java.awt.Point;
+import java.util.Random;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.geom.Vector2f;
 
 /**
  *
@@ -63,7 +65,22 @@ public class BubbleTest {
 
     @Test
     public void getScreenPositionWorks() {
-        assertEquals(Util.getPositionOnBoard(bubble.getScreenPosition()),
-                new Point((int) bubble.getX(), (int) bubble.getY()));
+        testPoint(0, 0);
+        testPoint(0, 1);
+        testPoint(1, 0);
+        testPoint(10, 10);
+        testPoint(0, -10);
+    }
+    
+    private void testPoint(int x, int y) {
+        Random rand = new Random();
+        bubble = new Bubble(Color.yellow, x, y);
+        Vector2f screenPos = bubble.getScreenPosition();
+        Point boardPos = new Point(x, y);
+        
+        screenPos.x += rand.nextFloat();
+        screenPos.y += rand.nextFloat();
+        
+        assertEquals(Util.getPositionOnBoard(screenPos), boardPos);
     }
 }

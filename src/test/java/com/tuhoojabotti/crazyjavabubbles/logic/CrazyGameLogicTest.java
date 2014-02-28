@@ -41,7 +41,7 @@ import org.newdawn.slick.geom.Vector2f;
 public class CrazyGameLogicTest {
 
     private int r = Settings.BUBBLE_RADIUS,
-            margin = Settings.BOARD_MARGIN;
+        margin = Settings.BOARD_MARGIN;
 
     public CrazyGameLogicTest() {
     }
@@ -59,12 +59,16 @@ public class CrazyGameLogicTest {
     }
 
     @Test
-    public void gameShouldEnd() {
+    public void gameShouldWork() {
         Bubble[][] bubbles = logic.getBoard().getBubbles();
         int loops = 0, count = 0;
         while (!logic.isGameOver()) {
             for (int y = 0; y < bubbles.length; y++) {
                 for (int x = 0; x < bubbles[0].length; x++) {
+                    try {
+                        Thread.sleep(5);
+                    } catch (InterruptedException ex) {
+                    }                    
                     logic.updateSelection(new Vector2f(margin + x * r, margin + y * r));
                     Set<Bubble> popped = logic.pop();
                     if (popped != null) {
@@ -81,6 +85,10 @@ public class CrazyGameLogicTest {
         }
 
         assertTrue("Score should be bigger than zero.", logic.getTotalScore() > 0);
+        assertTrue("Should have biggest cluster", logic.getBiggestCluster() > 0);
+        assertTrue("Total popped should be positive", logic.getBubblesPopped() > 0);
+        assertTrue("Time bonus should be positive", logic.getTimeBonus() == Math.pow(logic.getTime(), 3));
+        assertTrue("Time should be positive", logic.getTime() >= 1);
     }
 
     @Test
@@ -92,6 +100,7 @@ public class CrazyGameLogicTest {
                 Set<Bubble> selection = logic.getBoard().getSelection();
                 if (!selection.isEmpty()) {
                     assertEquals(selection.size(), logic.pop().size());
+                    assertTrue(logic.getScore() > 0);
                 }
             }
         }
@@ -115,6 +124,12 @@ public class CrazyGameLogicTest {
         // Forcing selection should create new selection.
         logic.forceUpdateSelection(vec);
         assertNotSame(selection, logic.getBoard().getSelection());
+    }
+
+    @Test
+    public void calculateScoreWorks() {
+        assertEquals(400, logic.calculateScore(2));
+        assertEquals(900, logic.calculateScore(3));
     }
 
     @Test
