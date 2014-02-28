@@ -21,49 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.tuhoojabotti.crazyjavabubbles.logic;
+package com.tuhoojabotti.crazyjavabubbles.renderer.text;
 
-import com.tuhoojabotti.crazyjavabubbles.main.Util;
-import java.awt.Point;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.geom.Vector2f;
 
 /**
+ * A simple text rendering utility.
  *
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
-public class BubbleTest {
+public class TextRenderer extends AbstractTextRenderer {
 
-    public BubbleTest() {
+    /**
+     * Create a new text renderer.
+     *
+     * @param fontName font to use
+     * @param size size of the font
+     */
+    public TextRenderer(String fontName, int size) {
+        super(fontName, size);
     }
 
-    private Bubble bubble;
-
-    @Before
-    public void setUp() {
-        bubble = new Bubble(Color.yellow, 0, 1);
+    /**
+     * Render a string with white colour.
+     *
+     * @param x
+     * @param y
+     * @param text the text to render
+     */
+    public void render(int x, int y, String text) {
+        render(x, y, text, Color.white);
     }
 
-    @After
-    public void tearDown() {
-    }
-
-    @Test
-    public void testGetColor() {
-        assertEquals(Color.yellow, bubble.getColor());
-    }
-
-    @Test
-    public void testIsPopped() {
-        assertFalse(bubble.isPopped());
-    }
-
-    @Test
-    public void getScreenPositionWorks() {
-        assertEquals(Util.getPositionOnBoard(bubble.getScreenPosition()),
-                new Point((int) bubble.getX(), (int) bubble.getY()));
+    /**
+     * Render a string with any colour.
+     *
+     * @param x
+     * @param y
+     * @param text the text to render
+     * @param color the colour of the text
+     */
+    public void render(int x, int y, String text, Color color) {
+        Vector2f position = calculateAlignment(x, y, text);
+        font.drawString(position.x, position.y, text, color);
     }
 }

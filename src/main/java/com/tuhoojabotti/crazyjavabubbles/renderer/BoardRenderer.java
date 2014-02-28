@@ -52,8 +52,8 @@ public class BoardRenderer {
 
         for (int y = 0; y < bubbles.length; y++) {
             for (int x = 0; x < bubbles[0].length; x++) {
-                bubbleRenderers.add(new BubbleRenderer(bubbles[y][x], gfx, 
-                        mouse));
+                bubbleRenderers.add(
+                    new BubbleRenderer(bubbles[y][x], gfx, mouse));
             }
         }
     }
@@ -85,18 +85,18 @@ public class BoardRenderer {
 
     /**
      * Update bubble physics.
+     *
      * @param gameContainer game container
      * @param delta delta time
      */
     public void update(GameContainer gameContainer, int delta) {
-        Set<BubbleRenderer> popped = new HashSet<>();
+        Set<BubbleRenderer> dead = new HashSet<>();
 
         for (BubbleRenderer bubbleRenderer : bubbleRenderers) {
             if (bubbleRenderer.update(gameContainer, delta)) {
-                popped.add(bubbleRenderer);
+                dead.add(bubbleRenderer);
             }
         }
-        // These won't need updating anymore.
-        bubbleRenderers.removeAll(popped);
+        bubbleRenderers.removeAll(dead);
     }
 }

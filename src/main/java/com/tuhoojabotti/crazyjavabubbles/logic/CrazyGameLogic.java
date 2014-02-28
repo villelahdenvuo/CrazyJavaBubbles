@@ -23,7 +23,7 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.logic;
 
-import static com.tuhoojabotti.crazyjavabubbles.Util.getPositionOnBoard;
+import static com.tuhoojabotti.crazyjavabubbles.main.Util.getPositionOnBoard;
 import java.awt.Point;
 import java.util.Set;
 import org.newdawn.slick.geom.Vector2f;
@@ -35,13 +35,35 @@ import org.newdawn.slick.geom.Vector2f;
  */
 public class CrazyGameLogic {
 
+    /**
+     * Score of the game.
+     */
     private int score;
+    /**
+     * Total Bubbles popped.
+     */
     private int poppedTotal;
+    /**
+     * Biggest cluster popped.
+     */
     private int biggestCluster;
+    /**
+     * Start time of the game.
+     */
     private long startTime;
+    /**
+     * End time of the game.
+     */
     private long endTime;
 
+    /**
+     * Game board.
+     */
     private final Board board;
+    /**
+     * The last point of selection. If the mouse doesn't move, don't update
+     * selection.
+     */
     private final Point lastSelection;
 
     /**
@@ -121,8 +143,7 @@ public class CrazyGameLogic {
     }
 
     /**
-     * Update updateSelectionion on the board, but only if the position has
-     * changed.
+     * Update selection on the board, but only if the position has changed.
      *
      * @param mousePosition
      */
@@ -136,7 +157,7 @@ public class CrazyGameLogic {
     }
 
     /**
-     * Update updateSelectionion on the board.
+     * Update selection on the board.
      *
      * @param mousePosition
      */
@@ -156,6 +177,12 @@ public class CrazyGameLogic {
         score += calculateScore(popped);
     }
 
+    /**
+     * Calculate score for a move.
+     *
+     * @param popped amount of bubbles popped
+     * @return the score
+     */
     public int calculateScore(int popped) {
         return (int) Math.round(Math.pow(popped, 2)) * 100;
     }

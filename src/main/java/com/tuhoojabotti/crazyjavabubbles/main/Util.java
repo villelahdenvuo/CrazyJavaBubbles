@@ -21,9 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.tuhoojabotti.crazyjavabubbles;
+package com.tuhoojabotti.crazyjavabubbles.main;
 
-import com.tuhoojabotti.crazyjavabubbles.gui.Settings;
 import java.awt.Point;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,7 +58,7 @@ public class Util {
     public static void fatalError(String message, Class caller, Throwable e) {
         Logger.getLogger(caller.getName()).log(Level.SEVERE, message, e);
         JOptionPane.showMessageDialog(null, message,
-                Game.NAME, JOptionPane.ERROR_MESSAGE);
+            Game.NAME, JOptionPane.ERROR_MESSAGE);
         System.exit(1);
     }
 
@@ -71,10 +70,10 @@ public class Util {
      */
     public static Point getPositionOnBoard(Vector2f position) {
         int margin = Settings.BOARD_MARGIN,
-                r = Settings.BUBBLE_RADIUS;
+            r = Settings.BUBBLE_RADIUS;
 
         return new Point(
-                Math.round((position.x - margin - r / 2) / r),
-                Math.round((position.y - margin - r / 2) / r));
+            Math.round((position.x - margin - r / 2) / r),
+            Math.round((position.y - margin - r / 2) / r));
     }
 }

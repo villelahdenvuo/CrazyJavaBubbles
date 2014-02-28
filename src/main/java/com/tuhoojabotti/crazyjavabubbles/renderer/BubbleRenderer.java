@@ -23,8 +23,8 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.renderer;
 
-import com.tuhoojabotti.crazyjavabubbles.gui.Settings;
-import static com.tuhoojabotti.crazyjavabubbles.Util.curveValue;
+import com.tuhoojabotti.crazyjavabubbles.main.Settings;
+import static com.tuhoojabotti.crazyjavabubbles.main.Util.curveValue;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -39,16 +39,43 @@ import org.newdawn.slick.geom.Vector2f;
  */
 public class BubbleRenderer {
 
+    /**
+     * Graphics object
+     */
     private final Graphics graphics;
+    /**
+     * Radius of the Bubble
+     */
     private final int radius = Settings.BUBBLE_RADIUS;
+    /**
+     * Margin of the board
+     */
     private final int margin = Settings.BOARD_MARGIN;
+    /**
+     * Position of the mouse cursor
+     */
     private final Vector2f mousePosition;
 
+    /**
+     * Bubble of this renderer
+     */
     private Bubble bubble;
+    /**
+     * Velocity of the Bubble
+     */
     private Vector2f velocity;
+    /**
+     * Target location of the Bubble
+     */
     private Vector2f target;
 
+    /**
+     * The circle shape
+     */
     private Circle outCircle;
+    /**
+     * The (black) hole on the Bubble
+     */
     private Circle inCircle;
 
     /**
@@ -69,7 +96,7 @@ public class BubbleRenderer {
         outCircle = new Circle(0, 0, radius / 2, (int) Settings.get("ball_quality"));
         inCircle = new Circle(0, 0, radius / 3, (int) Settings.get("ball_quality") - 2);
 
-        outCircle.setLocation(margin + bubble.x * radius + 100, -10);
+        outCircle.setLocation(margin + bubble.x * radius + 150, -10);
     }
 
     /**
@@ -82,11 +109,16 @@ public class BubbleRenderer {
         this(bubble, gfx, new Vector2f(-100000, -100000));
     }
 
+    /**
+     * Move the Bubble if there's an explosion.
+     *
+     * @param bubble the origin of the explosion
+     */
     public void applyForce(Vector2f bubble) {
         Vector2f point = new Vector2f(margin + bubble.x * radius,
-                margin + bubble.y * radius);
+            margin + bubble.y * radius);
         double angle = Math.atan2(point.y - outCircle.getCenterY(),
-                point.x - outCircle.getCenterX());
+            point.x - outCircle.getCenterX());
         float distance = Math.max(10, point.distance(outCircle.getLocation()));
 
         velocity.x -= 750 / distance * (float) Math.cos(angle);
@@ -119,8 +151,8 @@ public class BubbleRenderer {
      */
     public boolean update(GameContainer gameContainer, int delta) {
         double mouseAngle = Math.atan2(
-                mousePosition.y - outCircle.getCenterY(),
-                mousePosition.x - outCircle.getCenterX());
+            mousePosition.y - outCircle.getCenterY(),
+            mousePosition.x - outCircle.getCenterX());
 
         updatePhysics(mouseAngle, delta);
         updateHole(mouseAngle, gameContainer.getTime());
@@ -128,38 +160,50 @@ public class BubbleRenderer {
         return bubble.isPopped();
     }
 
+    /**
+     * Move the Bubble according to it's physics.
+     *
+     * @param mouseAngle where is the mouse
+     * @param delta delta time
+     */
     private void updatePhysics(double mouseAngle, int delta) {
         float smooth = Settings.BUBBLE_WOBBLE + (bubble.y + 5) / 200f;
 
         // Update velocity towards real position + towards mouse cursor.
         velocity.x = curveValue(target.x - outCircle.getX(), velocity.x, smooth)
-                + 0.35f * (float) Math.cos(mouseAngle);
+            + 0.35f * (float) Math.cos(mouseAngle);
         velocity.y = curveValue(target.y - outCircle.getY(), velocity.y, smooth)
-                + 0.35f * (float) Math.sin(mouseAngle);
+            + 0.35f * (float) Math.sin(mouseAngle);
 
         // Move Bubble according to it's velocity.
         outCircle.setLocation(outCircle.getLocation()
-                .add(velocity.scale(delta * 0.04f)));
+            .add(velocity.scale(delta * 0.04f)));
     }
 
+    /**
+     * Update the black hole on the Bubble.
+     *
+     * @param mouseAngle where is the mouse
+     * @param time delta time
+     */
     private void updateHole(double mouseAngle, long time) {
         float mouseDistance = mousePosition.distance(outCircle.getLocation());
 
         // Set hole size.
         inCircle.setRadius((float) (Math.max(8, radius / 3f - 10
-                / mouseDistance * 50)));
+            / mouseDistance * 50)));
 
         if (bubble.isSelected()) {
             inCircle.setRadius(inCircle.getRadius() + (float) Math.sin((time / 80.0)
-                    + (double) (bubble.x + bubble.y)) * 2.5f);
+                + (double) (bubble.x + bubble.y)) * 2.5f);
         }
 
         // Update the hole position.
         float holeSize = bubble.isSelected() ? 0 : 3.5f,
-                offset = radius / 2 - inCircle.getRadius();
+            offset = radius / 2 - inCircle.getRadius();
         inCircle.setLocation(
-                outCircle.getLocation()
-                .add(new Vector2f(((float) Math.cos(mouseAngle) * holeSize) + offset,
-                                ((float) Math.sin(mouseAngle) * holeSize) + offset)));
+            outCircle.getLocation()
+            .add(new Vector2f(((float) Math.cos(mouseAngle) * holeSize) + offset,
+                    ((float) Math.sin(mouseAngle) * holeSize) + offset)));
     }
 }

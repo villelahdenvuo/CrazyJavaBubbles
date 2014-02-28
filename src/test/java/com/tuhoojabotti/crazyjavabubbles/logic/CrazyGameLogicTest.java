@@ -23,8 +23,8 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.logic;
 
-import static com.tuhoojabotti.crazyjavabubbles.Util.getPositionOnBoard;
-import com.tuhoojabotti.crazyjavabubbles.gui.Settings;
+import static com.tuhoojabotti.crazyjavabubbles.main.Util.getPositionOnBoard;
+import com.tuhoojabotti.crazyjavabubbles.main.Settings;
 import java.awt.Point;
 import java.util.Random;
 import java.util.Set;

@@ -23,16 +23,16 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.states;
 
-import com.tuhoojabotti.crazyjavabubbles.Game;
-import static com.tuhoojabotti.crazyjavabubbles.Util.curveValue;
-import static com.tuhoojabotti.crazyjavabubbles.Util.fatalError;
-import com.tuhoojabotti.crazyjavabubbles.gui.TextRenderer;
+import com.tuhoojabotti.crazyjavabubbles.main.Game;
+import static com.tuhoojabotti.crazyjavabubbles.main.Util.curveValue;
+import com.tuhoojabotti.crazyjavabubbles.renderer.text.TextRenderer;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import com.tuhoojabotti.crazyjavabubbles.renderer.BubbleRenderer;
-import com.tuhoojabotti.crazyjavabubbles.gui.Settings;
-import com.tuhoojabotti.crazyjavabubbles.gui.WobbleTextRenderer;
-import java.util.ArrayList;
+import com.tuhoojabotti.crazyjavabubbles.main.Settings;
+import com.tuhoojabotti.crazyjavabubbles.renderer.text.BeatTextRenderer;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -47,13 +47,13 @@ import org.newdawn.slick.state.StateBasedGame;
 public class SplashScreen extends StateWrapper {
 
     // For the background.
-    private ArrayList<BubbleRenderer> bubbleRenderers;
-    private ArrayList<Bubble> bubbles;
+    private Set<BubbleRenderer> bubbleRenderers;
+    private Set<Bubble> bubbles;
     private Vector2f mousePosition;
     // For the texts.
-    private WobbleTextRenderer titleText;
-    private WobbleTextRenderer authorText;
-    private WobbleTextRenderer greetingText;
+    private BeatTextRenderer titleText;
+    private BeatTextRenderer authorText;
+    private BeatTextRenderer greetingText;
     private Vector2f titlePos;
     private Vector2f authorPos;
 
@@ -65,7 +65,8 @@ public class SplashScreen extends StateWrapper {
         "TKO-äly rulz!",
         "CoolBasic respect!",
         "Wow, such splash; so screen.",
-        "- Insert Bitcoin -"
+        "- Insert Bitcoin -",
+        "Väsyttää... :'("
     };
 
     /**
@@ -79,30 +80,33 @@ public class SplashScreen extends StateWrapper {
 
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) {
-        bubbleRenderers = new ArrayList<>();
-        bubbles = new ArrayList<>();
+        bubbleRenderers = new HashSet<>();
+        bubbles = new HashSet<>();
         mousePosition = new Vector2f();
 
         createBackground(gc.getWidth(), gc.getHeight(), gc.getGraphics());
         createTexts();
     }
 
+    /**
+     * Create the texts used in the splash screen.
+     */
     private void createTexts() {
-        try {
-            titleText = new WobbleTextRenderer("sweet-as-candy.regular", 60, "Crazy Bubbles");
-            authorText = new WobbleTextRenderer("goodtimes.regular", 28, "by Ville 'Tuhis' Lahdenvuo", 0.3f);
-        } catch (SlickException e) {
-            fatalError("Could not load font.", this.getClass(), e);
-        }
-        titleText.setHorizontalAlign(TextRenderer.ALIGN_CENTER);
-        authorText.setHorizontalAlign(TextRenderer.ALIGN_CENTER);
+        titleText = new BeatTextRenderer("sweet-as-candy.regular", 60, "Crazy Bubbles");
+        authorText = new BeatTextRenderer("goodtimes.regular", 28, "by Ville 'Tuhis' Lahdenvuo", 15);
+        titleText.setHorizontalAlign(TextRenderer.Align.CENTER);
+        authorText.setHorizontalAlign(TextRenderer.Align.CENTER);
     }
 
+    /**
+     * Create the Bubble-filled background.
+     * @param w width of the viewport
+     * @param h height of the viewport
+     * @param gfx graphics object
+     */
     private void createBackground(int w, int h, Graphics gfx) {
-        int r = Settings.BUBBLE_RADIUS;
-
-        for (int y = 0; y <= h / r + 1; y++) {
-            for (int x = 0; x < w / r + 1; x++) {
+        for (int y = 0; y <= h / Settings.BUBBLE_RADIUS + 1; y++) {
+            for (int x = 0; x < w / Settings.BUBBLE_RADIUS + 1; x++) {
                 if ((y < 8 || y > 10) && (y < 1 || y > 4 || x < 2 || x > 23)) {
                     Bubble b = new Bubble(x, y);
                     b.setSelected(true);
@@ -119,8 +123,8 @@ public class SplashScreen extends StateWrapper {
         setExitRequested(false);
         titlePos = new Vector2f(gc.getWidth() / 2, -200);
         authorPos = new Vector2f(-400, gc.getHeight() / 2 - 46);
-        greetingText = new WobbleTextRenderer("goodtimes.regular", 26, greetings[rand.nextInt(greetings.length)], 0.3f);
-        greetingText.setHorizontalAlign(TextRenderer.ALIGN_CENTER);
+        greetingText = new BeatTextRenderer("goodtimes.regular", 26, greetings[rand.nextInt(greetings.length)], 15);
+        greetingText.setHorizontalAlign(TextRenderer.Align.CENTER);
     }
 
     @Override

@@ -23,7 +23,7 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.logic;
 
-import com.tuhoojabotti.crazyjavabubbles.gui.Settings;
+import com.tuhoojabotti.crazyjavabubbles.main.Settings;
 import java.util.Random;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Vector2f;
@@ -35,8 +35,17 @@ import org.newdawn.slick.geom.Vector2f;
  */
 public class Bubble extends Vector2f {
 
+    /**
+     * Color of the Bubble
+     */
     private final Color color;
+    /**
+     * Is the bubble selected?
+     */
     private boolean selected;
+    /**
+     * Is the bubble dead, these will be garbage collected by the renderer.
+     */
     private boolean popped;
 
     /**
@@ -51,12 +60,12 @@ public class Bubble extends Vector2f {
         popped = false;
 
         this.color = new Color[]{
-            Color.red, new Color(0.4f, 0.6f, 1f), Color.green, Color.yellow
+            Color.red, new Color(0.3f, 0.5f, 1f), Color.green, Color.yellow
         }[new Random().nextInt(4)];
     }
 
     /**
-     * Create a new Bubble.
+     * Create a new Bubble with custom color. (for testing)
      *
      * @param color color of the bubble
      * @param x

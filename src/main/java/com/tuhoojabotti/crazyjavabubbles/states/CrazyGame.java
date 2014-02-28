@@ -23,11 +23,11 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.states;
 
-import com.tuhoojabotti.crazyjavabubbles.Game;
-import static com.tuhoojabotti.crazyjavabubbles.Util.fatalError;
-import com.tuhoojabotti.crazyjavabubbles.gui.Settings;
+import com.tuhoojabotti.crazyjavabubbles.main.Game;
+import com.tuhoojabotti.crazyjavabubbles.main.Settings;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogic;
+import com.tuhoojabotti.crazyjavabubbles.main.Util;
 import com.tuhoojabotti.crazyjavabubbles.renderer.CrazyGameRenderer;
 import com.tuhoojabotti.crazyjavabubbles.renderer.GameOverRenderer;
 import java.io.IOException;
@@ -89,7 +89,7 @@ public class CrazyGame extends StateWrapper {
                 blimSound = AudioLoader.getAudio("OGG",
                     ResourceLoader.getResourceAsStream("sounds/blim.ogg"));
             } catch (IOException e) {
-                fatalError("Could not load sounds.", this.getClass(), e);
+                Util.fatalError("Could not load sounds.", this.getClass(), e);
             }
         }
     }

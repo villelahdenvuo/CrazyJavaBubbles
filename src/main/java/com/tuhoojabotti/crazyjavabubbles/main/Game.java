@@ -21,20 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.tuhoojabotti.crazyjavabubbles;
+package com.tuhoojabotti.crazyjavabubbles.main;
 
-import static com.tuhoojabotti.crazyjavabubbles.Util.fatalError;
+import static com.tuhoojabotti.crazyjavabubbles.main.Util.fatalError;
 import com.tuhoojabotti.crazyjavabubbles.states.SplashScreen;
 import com.tuhoojabotti.crazyjavabubbles.states.CrazyGame;
-import com.tuhoojabotti.crazyjavabubbles.gui.Settings;
-import java.io.IOException;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.openal.AudioLoader;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.util.ResourceLoader;
 
 /**
  * The game's main class.
@@ -48,7 +44,7 @@ public class Game extends StateBasedGame {
     }
 
     /**
-     * The game state IDs. Used for enterState(ID)
+     * The game state IDs. Used for example for enterState(ID).
      */
     public static final int SPLASHSCREEN = 0;
     public static final int GAME = 1;
@@ -92,7 +88,7 @@ public class Game extends StateBasedGame {
     private void setIcons(AppGameContainer app) {
         try {
             app.setIcons(new String[]{"graphics/icon16.png",
-                "graphics/icon24.png", "graphics/icon32.png"});
+                "graphics/icon32.png"});
         } catch (SlickException e) {
         }
     }

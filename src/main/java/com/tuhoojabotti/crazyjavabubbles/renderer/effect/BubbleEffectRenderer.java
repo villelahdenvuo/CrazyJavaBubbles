@@ -23,7 +23,7 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.renderer.effect;
 
-import com.tuhoojabotti.crazyjavabubbles.gui.Settings;
+import com.tuhoojabotti.crazyjavabubbles.main.Settings;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import java.io.IOException;
 import org.newdawn.slick.Image;

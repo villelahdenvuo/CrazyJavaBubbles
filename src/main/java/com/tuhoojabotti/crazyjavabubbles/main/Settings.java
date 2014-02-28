@@ -21,14 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.tuhoojabotti.crazyjavabubbles.gui;
+package com.tuhoojabotti.crazyjavabubbles.main;
 
-import com.tuhoojabotti.crazyjavabubbles.Util;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Iterator;
 import net.sf.json.JSONException;
@@ -55,18 +54,25 @@ public class Settings {
 
         String txt = loadSettingsFile(file);
 
+        // Failed to load settings file, try to reset defaults.
         if (txt == null) {
-            resetDefaultSettings(file);
+            txt = resetDefaultSettings(file);
         }
 
-        txt = loadSettingsFile(file);
-
-        if (txt == null) {
+        if (txt != null) {
+            parseSettings(txt);
+        } else {
             Util.fatalError("Failed to load settings!", Settings.class, null);
         }
+    }
 
+    /**
+     * Parse a JSON string containing settings.
+     * @param str the JSON string
+     */
+    private static void parseSettings(String str) {
         try {
-            JSONObject config = (JSONObject) JSONSerializer.toJSON(txt);
+            JSONObject config = (JSONObject) JSONSerializer.toJSON(str);
             // Load all settings.
             for (Iterator it = config.keySet().iterator(); it.hasNext();) {
                 String key = (String) it.next();
@@ -74,38 +80,48 @@ public class Settings {
                 settings.put(key, config.get(key));
             }
         } catch (JSONException e) {
-            Util.fatalError("Syntax erro in config file, remove it to load defaults.", Settings.class, e);
+            Util.fatalError("Syntax error in config file, remove it to reset defaults.", Settings.class, e);
         }
     }
 
+    /**
+     * Load settings from a file.
+     * @param file File where to load settings
+     * @return JSON string or null if failed
+     */
     private static String loadSettingsFile(File file) {
         StringBuilder txt = new StringBuilder();
-        try {
-            for (String s : Files.readAllLines(file.toPath(), StandardCharsets.UTF_8)) {
-                txt.append(s);
+        String line;
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            while ((line = br.readLine()) != null) {
+                txt.append(line);
             }
-        } catch (IOException ex) {
+        } catch (IOException e) {
             return null;
         }
         return txt.toString();
     }
 
-    private static void resetDefaultSettings(File file) {
-        System.out.println("Resetting default settings.");
-        StringBuilder txt = new StringBuilder();
-
+    /**
+     * Reset default settings and return them.
+     * @param file where to save them
+     * @return JSON string or null if failed
+     */
+    private static String resetDefaultSettings(File file) {
         try (FileWriter fw = new FileWriter(file, false)) {
-            fw.write(IOUtils.toString(ResourceLoader.getResourceAsStream("config.default.json")));
+            fw.write(IOUtils.toString(ResourceLoader.
+                getResourceAsStream("config.default.json")));
         } catch (IOException e) {
             Util.fatalError("Failed to reset default settings!", Settings.class, e);
         }
+        return loadSettingsFile(file);
     }
 
-    // Here are the getters and setters for the settings.
     public static Object get(String key) {
         return settings.get(key);
     }
 
+    // A simple wrapper for boolean values.
     public static boolean is(String key) {
         return (boolean) settings.get(key);
     }
@@ -123,7 +139,7 @@ public class Settings {
     public static final int BUBBLE_RADIUS = 32;
 
     /**
-     * How much do the bubbles move?
+     * How much do the bubbles move.
      */
     public static final float BUBBLE_WOBBLE = 0.04f;
 
@@ -131,11 +147,6 @@ public class Settings {
      * Margin where to draw the {@link Board}.
      */
     public static final int BOARD_MARGIN = 15;
-
-    /**
-     * Render debug stuff on the screen.
-     */
-    public static final boolean DEBUG = false;
 
     /**
      * Width of the window.

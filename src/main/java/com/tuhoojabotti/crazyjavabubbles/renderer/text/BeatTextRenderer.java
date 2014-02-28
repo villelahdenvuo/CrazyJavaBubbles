@@ -21,57 +21,109 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.tuhoojabotti.crazyjavabubbles.gui;
+package com.tuhoojabotti.crazyjavabubbles.renderer.text;
 
 import org.newdawn.slick.Color;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 
 /**
- *
+ * A text renderer that renders text that jumps to a beat.
  * @author Ville Lahdenvuo <tuhoojabotti@gmail.com>
  */
-public class WobbleTextRenderer extends TextRenderer {
+public class BeatTextRenderer extends AbstractTextRenderer {
 
-    private float wobbleplier;
+    /**
+     * How much does the text jump.
+     */
+    private float jumpHeight;
+    /**
+     * The text to render.
+     */
     private String text;
+    /**
+     * Characters of the text.
+     */
     private String[] chars;
+    /**
+     * The width of the text up to i letters.
+     */
     private float[] widths;
-    private float length;
+    /**
+     * The length of the string.
+     */
+    private int length;
+    /**
+     * How fast to jump.
+     */
+    private final double beatFrequency = 220.0;
 
-    public WobbleTextRenderer(String fontName, int size, String text) throws SlickException {
-        this(fontName, size, text, 1f);
+    /**
+     * Create a new text with default jump height.
+     *
+     * @param fontName name of the font
+     * @param size size of the text
+     * @param text the text to draw
+     */
+    public BeatTextRenderer(String fontName, int size, String text) {
+        this(fontName, size, text, 50f);
     }
 
-    public WobbleTextRenderer(String fontName, int size, String msg, float wobble) throws SlickException {
-        super(fontName, size);
-        wobbleplier = wobble;
-        text = msg;
+    /**
+     * Create a new text with custom jump height.
+     *
+     * @param font name of the font
+     * @param size size of the text
+     * @param text the text to draw
+     * @param height how much to boost or reduce the height
+     */
+    public BeatTextRenderer(String font, int size, String text, float height) {
+        super(font, size);
+        this.text = text;
+        jumpHeight = height;
+        precalculate();
+    }
+
+    /**
+     * Calculate things for faster rendering.
+     */
+    private void precalculate() {
         length = text.length();
-        chars = new String[(int) length];
-        widths = new float[(int) length];
+        chars = new String[length];
+        widths = new float[length];
         for (int i = 0; i < length; i++) {
             widths[i] = font.getWidth(text.substring(0, i));
             chars[i] = "" + text.charAt(i);
         }
     }
 
+    /**
+     * Draw the text with white color.
+     *
+     * @param x
+     * @param y
+     */
     public void render(int x, int y) {
         render(x, y, Color.white);
     }
 
+    /**
+     * Draw the text with any color.
+     *
+     * @param x
+     * @param y
+     * @param color
+     */
     public void render(int x, int y, Color color) {
-        double ti = (System.currentTimeMillis() / 220.0);
+        double ti = (System.currentTimeMillis() / beatFrequency);
         Vector2f position = calculateAlignment(x, y, text);
         for (int i = 0; i < length; i++) {
             font.drawString(
                 position.x + widths[i],
+                // Just calculate y-coord with this simple equation.
                 (float) (position.y - Math.sin(
-                    Math.max(Math.min(
-                            (i * (Math.PI / (length * 2.0)))
-                            + (ti % Math.PI),
-                            Math.PI), 0)
-                ) * 50.0 * wobbleplier),
+                    Math.max(Math.min((i * (Math.PI / (length * 2.0)))
+                            + (ti % Math.PI), Math.PI), 0)
+                ) * jumpHeight),
                 chars[i], color);
         }
     }

@@ -23,10 +23,10 @@
  */
 package com.tuhoojabotti.crazyjavabubbles.renderer;
 
-import static com.tuhoojabotti.crazyjavabubbles.Util.curveValue;
-import static com.tuhoojabotti.crazyjavabubbles.Util.fatalError;
-import com.tuhoojabotti.crazyjavabubbles.gui.TextRenderer;
-import com.tuhoojabotti.crazyjavabubbles.gui.WobbleTextRenderer;
+import static com.tuhoojabotti.crazyjavabubbles.main.Util.curveValue;
+import static com.tuhoojabotti.crazyjavabubbles.main.Util.fatalError;
+import com.tuhoojabotti.crazyjavabubbles.renderer.text.TextRenderer;
+import com.tuhoojabotti.crazyjavabubbles.renderer.text.BeatTextRenderer;
 import com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogic;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -43,7 +43,7 @@ public class GameOverRenderer extends Vector2f {
     private GameContainer gameContainer;
     private Graphics graphics;
 
-    private WobbleTextRenderer titleText;
+    private BeatTextRenderer titleText;
     private TextRenderer scoreText;
     private CrazyGameLogic logic;
     private boolean canSkip;
@@ -54,13 +54,9 @@ public class GameOverRenderer extends Vector2f {
         logic = game;
         gameContainer = gc;
         graphics = gfx;
-        try {
-            titleText = new WobbleTextRenderer("sweet-as-candy.regular", 34, "Game Over!", 0.4f);
-            titleText.setHorizontalAlign(TextRenderer.ALIGN_CENTER);
-            scoreText = new TextRenderer("goodtimes.regular", 16);
-        } catch (SlickException e) {
-            fatalError("Failed to load text.", this.getClass(), e);
-        }
+        titleText = new BeatTextRenderer("sweet-as-candy.regular", 34, "Game Over!", 20f);
+        titleText.setHorizontalAlign(TextRenderer.Align.CENTER);
+        scoreText = new TextRenderer("goodtimes.regular", 16);
     }
 
     public void render() {

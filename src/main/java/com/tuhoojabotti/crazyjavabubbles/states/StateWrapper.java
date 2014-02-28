@@ -37,10 +37,23 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public abstract class StateWrapper extends BasicGameState {
 
+    /**
+     * Mouse cursor position
+     */
     private Vector2f mousePosition;
+    /**
+     * ID of this state
+     */
     private final int ID;
+    /**
+     * Did user press ESC?
+     */
     private boolean exitRequested;
 
+    /**
+     * Create a new state
+     * @param ID
+     */
     public StateWrapper(int ID) {
         this.ID = ID;
         mousePosition = new Vector2f();

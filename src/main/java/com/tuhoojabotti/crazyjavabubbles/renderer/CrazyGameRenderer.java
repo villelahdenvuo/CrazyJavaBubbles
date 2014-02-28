@@ -24,13 +24,13 @@
 package com.tuhoojabotti.crazyjavabubbles.renderer;
 
 import com.tuhoojabotti.crazyjavabubbles.renderer.effect.BubbleEffectRenderer;
-import com.tuhoojabotti.crazyjavabubbles.gui.TextRenderer;
-import com.tuhoojabotti.crazyjavabubbles.gui.Settings;
-import static com.tuhoojabotti.crazyjavabubbles.Util.fatalError;
-import com.tuhoojabotti.crazyjavabubbles.gui.WobbleTextRenderer;
+import com.tuhoojabotti.crazyjavabubbles.renderer.text.TextRenderer;
+import com.tuhoojabotti.crazyjavabubbles.main.Settings;
+import static com.tuhoojabotti.crazyjavabubbles.main.Util.fatalError;
+import com.tuhoojabotti.crazyjavabubbles.renderer.text.BeatTextRenderer;
 import com.tuhoojabotti.crazyjavabubbles.logic.Bubble;
 import com.tuhoojabotti.crazyjavabubbles.logic.CrazyGameLogic;
-import com.tuhoojabotti.crazyjavabubbles.renderer.effect.ScoreEffectRenderer;
+import com.tuhoojabotti.crazyjavabubbles.renderer.text.TextParticleRenderer;
 import com.tuhoojabotti.crazyjavabubbles.states.CrazyGame;
 import java.util.Set;
 import org.newdawn.slick.Color;
@@ -50,10 +50,10 @@ public class CrazyGameRenderer {
     private final Graphics graphics;
     private final BoardRenderer boardRenderer;
     private TextRenderer text;
-    private WobbleTextRenderer scoreText;
+    private BeatTextRenderer scoreText;
     private final GameContainer gameContainer;
     private BubbleEffectRenderer particleRenderer;
-    private ScoreEffectRenderer scoreRenderer;
+    private TextParticleRenderer scoreRenderer;
     private Vector2f mousePosition;
 
     private final int windowWidth;
@@ -77,17 +77,12 @@ public class CrazyGameRenderer {
         mousePosition = mouse;
 
         boardRenderer = new BoardRenderer(game.getBoard(), gfx, mouse);
-
-        try {
-            scoreText = new WobbleTextRenderer("goodtimes.regular", 16, "score:", 0.15f);
-            text = new TextRenderer("goodtimes.regular", 16);
-        } catch (SlickException e) {
-            fatalError("Failed to load text.", this.getClass(), e);
-        }
+        scoreText = new BeatTextRenderer("goodtimes.regular", 16, "score:", 7.5f);
+        text = new TextRenderer("goodtimes.regular", 16);
 
         particleRenderer = new BubbleEffectRenderer();
         particleRenderer.initParticleSystem();
-        scoreRenderer = new ScoreEffectRenderer();
+        scoreRenderer = new TextParticleRenderer();
     }
 
     /**
@@ -107,7 +102,7 @@ public class CrazyGameRenderer {
             for (Bubble bubble : bubbles) {
                 scoreRenderer.applyForce(bubble.getScreenPosition());
             }
-            scoreRenderer.addScoreEffect(game.calculateScore(bubbles.size()), mousePosition);
+            scoreRenderer.addParticleEffect(""+game.calculateScore(bubbles.size()), mousePosition);
         }
     }
 

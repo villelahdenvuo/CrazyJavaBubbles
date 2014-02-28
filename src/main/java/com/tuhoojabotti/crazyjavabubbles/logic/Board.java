@@ -35,17 +35,29 @@ import java.util.Set;
  */
 public class Board {
 
-    // The content of the board
+    /**
+     * Contents of the whole board
+     */
     private Bubble[][] bubbles;
-    // The content of the selection
+    /**
+     * Contents of the selection
+     */
     private Set<Bubble> selection;
+    /**
+     * Width of the board
+     */
     private int width;
+    /**
+     * Height of the board
+     */
     private int height;
-    // Is the game over or not?
+    /**
+     * Does the board contain any valid moves?
+     */
     private boolean hasMoreMoves;
 
     /**
-     * Create new game board.
+     * Create new board.
      *
      * @param w width
      * @param h height
@@ -57,7 +69,7 @@ public class Board {
     }
 
     /**
-     * initialize game board.
+     * initialize the board.
      */
     protected void init() {
         selection = new HashSet<>();
@@ -77,7 +89,7 @@ public class Board {
     /**
      * Pop (remove) selected {@link Bubble}s from the board.
      *
-     * @return amount of bubbles popped
+     * @return the set of bubbles that were removed
      */
     protected Set<Bubble> pop() {
         if (selection.size() < 2) {
@@ -126,7 +138,7 @@ public class Board {
      */
     protected void select(int x, int y) {
         updateSelection(x, y);
-
+        // Tell the individual bubbles if they're selected or not for rendering.
         for (y = 0; y < height; y++) {
             for (x = 0; x < width; x++) {
                 Bubble b = bubbles[y][x];
@@ -158,6 +170,12 @@ public class Board {
                 && y >= 0 && y < height && bubbles[y][x] != null;
     }
 
+    /**
+     * Get a bubble. 
+     * @param x
+     * @param y
+     * @return a Bubble from the board or null if out of bounds
+     */
     private Bubble get(int x, int y) {
         if (!isOnBoard(x, y)) {
             return null;
@@ -167,6 +185,7 @@ public class Board {
 
     /**
      * Update bubble selection.
+     * USes breadth-first search algorithm.
      *
      * @param startX the x-coordinate of the new selection
      * @param startY the y-coordinate of the new selection
@@ -204,6 +223,13 @@ public class Board {
         }
     }
 
+    /**
+     * Add Bubble to BFS queue if matches with current one.
+     * @param current current Bubble processed
+     * @param queue the queue
+     * @param x the new Bubble's x-coordinate
+     * @param y the new Bubble's y-coordinate
+     */
     private void queueIfMatches(Bubble current, Queue<Bubble> queue, float x, float y) {
         Bubble next = get((int) x, (int) y);
         if (current.equals(next) && !selection.contains(next)) {
@@ -212,7 +238,7 @@ public class Board {
     }
 
     /**
-     * Update board, just for testing purposes.
+     * Update the Bubbles on the board.
      */
     protected void updateBubblePositions() {
         // Run updateBubblePositions until we didn't move anything.
@@ -225,7 +251,7 @@ public class Board {
     /**
      * Move bubbles hanging in the air down.
      *
-     * @return was something moved
+     * @return true if something moved
      */
     private boolean moveBubblesDown() {
         boolean moved = false;
@@ -244,7 +270,7 @@ public class Board {
     /**
      * Pack bubbles to the left.
      *
-     * @return
+     * @return true if something moved
      */
     private boolean moveBubblesLeft() {
         boolean moved = false;
@@ -262,7 +288,7 @@ public class Board {
     }
 
     /**
-     * Move a single bubble to a new location.
+     * Move a bubble to a new location on the board.
      *
      * @param bubble the bubble to move
      * @param x new x-coordinate
@@ -285,7 +311,7 @@ public class Board {
                 if (b != null && (b.equals(get(x + 1, y))
                         || b.equals(get(x, y + 1)))) {
                     hasMoreMoves = true;
-                    return;
+                    return; // No need to check further.
                 }
             }
         }
